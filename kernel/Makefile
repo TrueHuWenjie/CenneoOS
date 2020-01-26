@@ -21,8 +21,8 @@ OBJS += $(patsubst %.asm, %.o, $(ASM_SRCS))
 OBJCOPYFLAGS := -R .note -R .comment -S
 
 LDFLAGS  := -m elf_i386
-CFLAGS   := -fno-stack-protector -I $(CURDIR)/include
-CPPFLAGS := -fno-stack-protector -I $(CURDIR)/include
+CFLAGS   := -m32 -fno-stack-protector -I $(CURDIR)/include
+CPPFLAGS := -m32 -fno-stack-protector -I $(CURDIR)/include
 ASMFLAGS := -f elf
 
 TARGET = KERNEL
