@@ -1,0 +1,5 @@
+*.o
+*.d
+*.bin
+/tools/gfr/gfr
+/loader/boot/BOOT
