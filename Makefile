@@ -15,7 +15,7 @@ LD      = ld
 OBJCOPY = objcopy
 GFR     = gfr
 qemu = qemu-system-i386
-image = image/image.vhd
+image = $(CURDIR)/image/image.vhd
 compress = zip
 depress = unzip
 
@@ -41,7 +41,7 @@ kernel:
 	cd kernel && make all
 
 prepare:$(image:.vhd = .zip) $(image)
-	$(depress) $(image:.vhd=.zip) 
+	$(depress) $(image:.vhd=.zip) -d image/ 
 
 clean_loader:
 	cd loader && make clean
@@ -58,8 +58,7 @@ clean:
 	cd kernel && make clean
 
 dist:clean
-	$(compress) -r $(image:.vhd=.zip) $(image)
-	$(RM) $(image)
+	$(compress) -m -r -j $(image:.vhd=.zip) $(image)
 	
 install:
 	cd loader && make install
