@@ -3,3 +3,4 @@
 *.bin
 /tools/gfr/gfr
 /loader/boot/BOOT
+*.swp
