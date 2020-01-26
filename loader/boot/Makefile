@@ -18,7 +18,7 @@ OBJS := ./boota.o ./MMU.o  ./bootc.o  ./VI.o  ./fs.o  ./storage.o \
 OBJCOPYFLAGS := -R .note -R .comment -S
 
 LDFLAGS  := -m elf_i386 -e _start
-CFLAGS   := -fno-stack-protector -I $(CURDIR)/include
+CFLAGS   := -m32 -fno-stack-protector -I $(CURDIR)/include
 ASMFLAGS := -f elf
 
 TARGET = BOOT
