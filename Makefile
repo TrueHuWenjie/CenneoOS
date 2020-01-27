@@ -41,7 +41,7 @@ kernel:
 	cd kernel && make all
 
 prepare:$(image:.vhd = .zip) $(image)
-	$(depress) $(image:.vhd=.zip) -d image/ 
+	$(depress) $(image:.vhd=.zip)
 
 clean_loader:
 	cd loader && make clean
@@ -62,10 +62,10 @@ dist:clean
 	
 install:
 	cd loader && make install
-	
+	cd kernel && make install
 all:
-	cd loader && make all
-	
+	make loader
+	make kernel
 run:all install
 	$(qemu) -drive file=$(image),format=vpc
 
