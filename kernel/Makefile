@@ -29,6 +29,17 @@ TARGET = KERNEL
 
 sinclude $(OBJS:.o=.d)
 
+install:$(TARGET)
+	modprobe nbd
+	qemu-nbd -c /dev/nbd0 $(image) -f vpc
+	sleep 0.1
+	mount /dev/nbd0p1 /mnt
+	cp $(TARGET) /mnt
+	umount /mnt
+	qemu-nbd -d /dev/nbd0
+	sleep 0.1
+	rmmod nbd
+
 all: $(TARGET)
 
 $(TARGET): kernel.o
