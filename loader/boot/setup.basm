@@ -32,7 +32,7 @@ VIDEO_1280_1024	EQU 0x411b
 VIDEO_VMWARE_800_600	EQU	0x4140
 
 ; VBE Mode
-	vbe_mode	EQU	VIDEO_1024_768
+	vbe_mode	EQU	VIDEO_800_600
 
 	org		0x10200			;loaded into 0x10200
 [bits 16]
