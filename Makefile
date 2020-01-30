@@ -67,7 +67,7 @@ all:
 	make loader
 	make kernel
 run:all install
-	$(qemu) -drive file=$(image),format=vpc
+	$(qemu) -drive file=$(image),format=vpc -m 4096
 
 help:
 	clear
