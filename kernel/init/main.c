@@ -57,7 +57,7 @@ void main(void)
 	{
 		reset();		/**系统重置*/
 	}
-	
+
 	// int *ptr = (int *)0xe0000000;
 	// unsigned int n;
 	// for (n = 0; n < 1024 * 768; n ++)
@@ -74,10 +74,9 @@ void main(void)
 	init_time();
 	init_Interrupt();
 	init_task();
-	// init_CPU();
+	init_CPU();
 	init_PIC();
 	init_PIT();
-	
 	/**初始化图形*/
 	Inti_Graph();				// 初始化图形系统
 	init_Font();				// 初始化字库管理
@@ -100,7 +99,7 @@ void main(void)
 	printk("Hello, world!asfasfd");
 	
 	/**GUI初始化*/
-	// init_GUI();
+	//init_GUI();
 }
 
 /**输出内核信息*/
