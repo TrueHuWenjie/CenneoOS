@@ -342,28 +342,27 @@ void BOOT_main(const struct boot_info *boot_info)
 	description_node = script_child(item_node, "description");
 	location_node = script_child(item_node, "location");
 	address_node = script_child(item_node, "address");
+	printk("CONFIG.LDR size = %dBytes.\n", loaderconfig_file_info.size);
 	
-
-
-	// Example
+	/**配置启动项*/
 	printak("<0xaaaaff>Hello, This is Explorer loader!\n</>");
 	select_register(0, callback, "Ghost Bird OS 0.02(Explorer kernel)");
 	select_register(1, callback, "Dragon 0.40 Beta");
 	select_register(2, callback, "DolphinOS");
 	
+	/**切换到启动项选择界面*/
 	VI_active(VI_page_select);
 	
-	
-	printk("CONFIG.LDR size = %dBytes.\n", loaderconfig_file_info.size);
-	io_hlt();
-	io_hlt();
-	fin:goto fin;
 	/**加载内核*/
 	read_file(0, 0, KERNEL_NAME, KERNEL_ADDR, 1);
 	
-	printk("Kernel address:%#X", kernel_start);
+	printk("Kernel address:%#X\n", kernel_start);
+	
+	printk("This is me:%c\n", 1);
 	
 	/**运行内核*/
 	kernel_start(boot_info);
+	
+	
 }
 
