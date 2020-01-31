@@ -12,6 +12,7 @@
 #include <GUI.h>
 #include <lib/mem.h>
 #include <lib/graphics.h>
+#include <info.h>
 #include "layer.h"
 
 /**GUI根图层*/
@@ -51,8 +52,8 @@ void init_GUI(void)
 	
 	/**信息输出*/
 	GUI_put_string(layer_root, 0xffffffff, 0, 00, 0, 0, font("simsun"), "Explorer Graphical User Interface.");
-	GUI_put_string(layer_root, 0xffffffff, 0, 16, 0, 0, font("simsun"), "Version:1.0");
-	GUI_put_string(layer_root, 0xffffffff, 0, 32, 0, 0, font("simsun"), "Copyright 2015 Ghost Bird OS Developers.");
+	GUI_put_string(layer_root, 0xffffffff, 0, 16, 0, 0, font("simsun"), "Kernel version:" KERNEL_VERSION);
+	GUI_put_string(layer_root, 0xffffffff, 0, 32, 0, 0, font("simsun"), COPYRIGHT);
 
 	/**This function in window.c*/
 	init_Window();

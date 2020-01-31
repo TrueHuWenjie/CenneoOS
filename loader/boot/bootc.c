@@ -257,7 +257,7 @@ int callback(int n, int type)
 		switch (n)
 		{
 			case 0:
-				printk("Select Ghost Bird OS 0.02(Explorer kernel).\n");
+				printk("Select Cenneo OS 0.02(Explorer kernel).\n");
 				break;
 			case 1:
 				printk("Select Dragon 0.40 Beta.\n");
@@ -346,7 +346,7 @@ void BOOT_main(const struct boot_info *boot_info)
 	
 	/**配置启动项*/
 	printak("<0xaaaaff>Hello, This is Explorer loader!\n</>");
-	select_register(0, callback, "Ghost Bird OS 0.02(Explorer kernel)");
+	select_register(0, callback, "Cenneo OS 0.02(Explorer kernel)");
 	select_register(1, callback, "Dragon 0.40 Beta");
 	select_register(2, callback, "DolphinOS");
 	

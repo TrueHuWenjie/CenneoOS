@@ -1,6 +1,6 @@
 # Date:2017/6/20 16:10
-# Author:HuWenjie<1@hwj.me>
-# Ghost Bird OS
+# Author:HuWenjie<huwenjie@cenneo.com>
+# Cenneo OS
 # Makefile
 # 
 # BSD 2-Clause License

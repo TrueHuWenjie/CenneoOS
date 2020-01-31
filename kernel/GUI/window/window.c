@@ -229,7 +229,7 @@ void init_Window(void)
 	new_task(&load_background, "WALLPAP2.BMP");
 	
 	/**窗口测试*/
-	new_window_2 = GUI_window("Ghost Bird OS", WINDOW_NORMAL, 0, 0, 300, 300);
+	new_window_2 = GUI_window("Cenneo OS", WINDOW_NORMAL, 0, 0, 300, 300);
 	window_string(new_window_2, 0, 50, "Explorer 0.84 Window system testing...");
 	unit_new_botton(new_window_2, 125, 200, 60, 25, "botton1");
 }

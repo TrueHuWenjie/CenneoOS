@@ -1,5 +1,5 @@
 # Date:Miss
-# Author:HuWenjie<1@hwj.me>
+# Author:HuWenjie<huwenjie@cenneo.com>
 # Explorer Loader
 # makefile for Explorer Loader Boot
 # 
