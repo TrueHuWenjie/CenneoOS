@@ -25,19 +25,19 @@ CFLAGS   := -m32 -fno-stack-protector -I $(CURDIR)/include
 CPPFLAGS := -m32 -fno-stack-protector -I $(CURDIR)/include
 ASMFLAGS := -f elf
 
-TARGET = KERNEL
+TARGET = KERNEL.BIN
 
 sinclude $(OBJS:.o=.d)
 
 install:$(TARGET)
 	modprobe nbd
 	qemu-nbd -c /dev/nbd0 $(image) -f vpc
-	sleep 0.1
+	sleep 0.2
 	mount /dev/nbd0p1 /mnt
 	cp $(TARGET) /mnt
 	umount /mnt
 	qemu-nbd -d /dev/nbd0
-	sleep 0.1
+	sleep 0.2
 	rmmod nbd
 
 all: $(TARGET)
@@ -45,8 +45,11 @@ all: $(TARGET)
 $(TARGET): kernel.o
 	$(OBJCOPY) -O binary kernel.o $(TARGET)
 
-kernel.o: $(OBJS)
-	$(LD) $(LDFLAGS) -o kernel.o -Ttext 0x10000 $(OBJS)
+kernel.o: $(OBJS) ./arch/x86/kernel/_start.o
+	$(LD) $(LDFLAGS) -o kernel.o -Ttext 0x400000 ./arch/x86/kernel/_start.o $(OBJS)
+
+./arch/x86/kernel/_start.o: ./arch/x86/kernel/_start.basm
+	$(NS) $(ASMFLAGS) -o $@ $<
 
 %.o: %.asm
 	$(NS) $(ASMFLAGS) -o $@ $<
