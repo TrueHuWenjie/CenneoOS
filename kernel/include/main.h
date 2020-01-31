@@ -116,13 +116,22 @@ struct boot_info
 {
 	/**信息一定要是"EBI"(Explorer Boot Information)*/
 	char flag[BOOT_FLAG_MAX];
+
 	/**启动信息长度*/
 	unsigned int size;
+
+	/**保护模式 32位 0-4GB 代码段段选择子*/
+	unsigned short code_sel;
+	
+	/**保护模式 32位 0-4GB 数据段段选择子*/
+	unsigned short data_sel;
+
 	/**内存分布信息*/
 	struct Address_Range_Descriptor_Structure ARDS[BOOT_ARDS_NUM];
 	
 	/**VBE信息块结构体*/
 	struct VbeInfoBlock VbeInfoBlock;
+
 	/**VBE模式信息结构体*/
 	struct ModeInfoBlock ModeInfoBlock;
 };
