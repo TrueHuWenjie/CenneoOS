@@ -19,8 +19,8 @@ void init_Architecture(void)
 {
 	/**准备GDT表*/
 	write_GDTR(GDT_addr, GDT_size - 1);
-	clean_GDT();
-	
+	// clean_GDT();
+
 	/**创建数据段和代码段*/
 	code_0_selector = set_GDT(0, 0xfffff, GDT_G + GDT_P + GDT_DPL_0 + GDT_code_32_non_conforming);
 	code_3_selector = set_GDT(0, 0xfffff, GDT_G + GDT_P + GDT_DPL_3 + GDT_code_32_conforming);
