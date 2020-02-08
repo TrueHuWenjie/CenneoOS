@@ -738,12 +738,5 @@ void init_VI(void)
 	// printi("No Option can be selected.", 24, 25);
 	printn("F1 output page            F2 select page            Esc reset");
 	printak("<0xFF0000>" copyright "</> <0xFF4500>" author "</>.\n<0x87CEFF>" software_name "</> <0xffff00>" version "</> <0xEE9A00>" build "</>\n" info "\n");
-	
-	/**模拟测试*/
-	// select_register(0, "Ghost Bird test1");
-	// select_register(1, "Ghost Bird test2");
-	// select_register(2, "Ghost Bird 0.02(Explorer kernel version)");
-	// select_register(5, "line 5");
-	// select_register(10, "line 10");
-	// select_set_active(2);
 }
+
