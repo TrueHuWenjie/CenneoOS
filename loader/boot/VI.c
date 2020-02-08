@@ -620,7 +620,7 @@ int error(unsigned int errcode, const char *fmt, ...)
 	unsigned long n;
 	
 	/**关闭中断*/
-	disallow_interrupt();
+	interrupt_close();
 	
 	/**使VI切换到输出界面*/
 	VI_active(VI_page_output);
@@ -639,7 +639,7 @@ int error(unsigned int errcode, const char *fmt, ...)
 	va_end(arg);
 	
 	/**不可返回*/
-	stillhalt();
+	idle();
 }
 
 /**警告输出函数*/

@@ -2,17 +2,11 @@
 ; /boot/boota.asm
 ; ASM file of the Explorer Boot
 
-; 主函数
-extern	BOOT_main
 
 ; 起始及初始化函数
-global	_start
 global	init_IDT
 
-; 输入输出函数
-global	io_hlt,io_cli,io_sti			; (在新的硬中断发生之前)停机、关中断、开中断
-global	io_in8,io_in16,io_in32			; 读端口8位、16位和32位
-global	io_out8,io_out16,io_out32		; 写端口8位、16位和32位
+extern IDTR.base
 
 ; 中断入口函数
 extern	keyboard_handle
@@ -50,66 +44,6 @@ global	create_ID
 
 [section .text]
 
-_start:
-	; 将EAX作为参数调用BOOT_main
-	push	eax
-	call	BOOT_main
-	add	esp,4
-	
-	; 休机
-	call	io_hlt
-
-; 中断操作函数
-io_cli:
-	cli
-	ret
-io_sti:
-	sti
-	ret
-	
-; 输入输出函数
-io_hlt:
-	hlt
-	jmp		io_hlt
-io_in8:
-	mov		edx,[esp+4]
-	xor		eax,eax
-	in		al,dx
-	ret
-io_in16:
-	mov		edx,[esp+4]
-	xor		eax,eax
-	in		ax,dx
-	ret
-io_in32:
-	mov		edx,[esp+4]
-	in		eax,dx
-	ret
-io_out8:
-	mov		edx,[esp+4]
-	mov		al,[esp+8]
-	out		dx,al
-	ret
-io_out16:
-	mov		edx,[esp+4]
-	mov		eax,[esp+8]
-	out		dx,ax
-	ret
-io_out32:
-	mov		edx,[esp+4]
-	mov		eax,[esp+8]
-	out		dx,eax
-	ret
-
-; 操作IDTR函数
-write_IDTR:
-;void write_IDT(unsigned int base, unsigned short size)
-	mov		eax,[esp+4]
-	mov		[IDTR.base],eax
-	mov		ax,[esp+8]
-	mov		[IDTR.size],ax
-	lidt	[cs:IDTR]		;加载IDTR
-	ret
 	
 ; 创建一个中断描述符函数*/
 create_ID:
@@ -182,11 +116,3 @@ int_0x2F:
 	call	i8259A_auto_return
 	iret
 
-; Data section
-[section .data]
-
-;IDTR
-IDTR:
-	.size		dw	0			;IDT的长度
-	.base		dd	0			;IDT的物理地址
-	

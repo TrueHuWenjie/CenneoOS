@@ -23,20 +23,6 @@ void reset(void)
 	io_out8(0x64,0xfe);
 }
 
-/**停机函数*/
-void halt(void)
-{
-	io_hlt();
-}
-
-/**持续停机函数*/
-void stillhalt(void)
-{
-	loop:
-		io_hlt();
-	goto loop;
-}
-
 extern int_0x20, int_0x21, int_0x22, int_0x23;
 extern int_0x24, int_0x25, int_0x26, int_0x27;
 extern int_0x28, int_0x29, int_0x2A, int_0x2B;
@@ -58,12 +44,12 @@ void clean_IDT(void)
 /**中断初始化函数*/
 void init_interrupt(void)
 {
-	extern void write_IDTR(void *base, unsigned short size);
+	extern void IDTR_write(void *base, unsigned short size);
 	/**若分配内存不成功则输出错误信息*/
 	IDT_base = bmalloc(IDT_size);
 	if (IDT_base == NULL) error (ERR_NO_MEM_FOR_ID, "No memory for Interrupt Description Table.");
 	/**初始化中断描述符表*/
-	write_IDTR(IDT_base, IDT_size - 1);
+	IDTR_write(IDT_base, IDT_size - 1);
 	
 	clean_IDT();
 	/**创建中断描述符*/
@@ -83,18 +69,6 @@ void init_interrupt(void)
 	create_ID(0x2D , 0x08, &int_0x2D , interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
 	create_ID(0x2E , 0x08, &int_0x2E , interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
 	create_ID(0x2F , 0x08, &int_0x2F , interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
-}
-
-/**允许中断*/
-void allow_interrupt(void)
-{
-	io_sti();
-}
-
-/**不允许中断*/
-void disallow_interrupt(void)
-{
-	io_cli();
 }
 
 #define PORT_8042_DATA		0x60
@@ -288,6 +262,7 @@ void BOOT_main(const struct boot_info *boot_info)
 	{
 		reset();		/**系统重置*/
 	}
+	
 	/**初始化图形模式*/
 	init_graphics
 		(boot_info->ModeInfoBlock.XResolution , boot_info->ModeInfoBlock.YResolution,
@@ -303,7 +278,7 @@ void BOOT_main(const struct boot_info *boot_info)
 	init_keyboard();
 	
 	/**允许中断*/
-	allow_interrupt();	
+	interrupt_start();	
 	
 	/**初始化储存器管理*/
 	init_storage();
@@ -356,13 +331,7 @@ void BOOT_main(const struct boot_info *boot_info)
 	/**加载内核*/
 	read_file(0, 0, KERNEL_NAME, KERNEL_ADDR, 1);
 	
-	printk("Kernel address:%#X\n", kernel_start);
-	
-	printk("This is me:%c\n", 1);
-	
 	/**运行内核*/
 	kernel_start(boot_info);
-	
-	
 }
 

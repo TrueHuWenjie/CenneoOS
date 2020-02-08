@@ -107,8 +107,7 @@ TASK_SIZE	equ	8192
 ;整个内核的入口函数
 _start:
 	;将eax代表的启动信息放入启动信息指针中
-	pop		eax
-	pop		eax
+	mov		eax, [esp + 4]
 	mov		[boot_info_ptr],eax
 	
 	;初始化堆栈指针指向内核栈

@@ -58,14 +58,6 @@ void main(void)
 		reset();		/**系统重置*/
 	}
 
-	// int *ptr = (int *)0xe0000000;
-	// unsigned int n;
-	// for (n = 0; n < 1024 * 768; n ++)
-	// {
-		// ptr[n] = 0xffff0000;
-	// }
-	// fin:goto fin;
-	
 	/**初始化内存管理单元*/
 	init_MMU(boot_info_ptr);
 	
@@ -80,6 +72,7 @@ void main(void)
 	/**初始化图形*/
 	Inti_Graph();				// 初始化图形系统
 	init_Font();				// 初始化字库管理
+
 	enable_shell();				// 开启shell
 	
 	/**打印信息*/
@@ -104,7 +97,7 @@ void main(void)
 
 /**输出内核信息*/
 void output_kernel_info(void)
-{	
+{
 	/**内核名称、版本、作者、版权*/
 	printk("Kernel Name:" KERNEL_NAME " ");
 	printk(KERNEL_VERSION "\n");
