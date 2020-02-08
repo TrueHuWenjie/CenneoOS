@@ -672,6 +672,12 @@ int warning(unsigned int warncode, const char *fmt, ...)
 	return n;
 }
 
+void deinit_VI(void)
+{
+	// Clear the screen
+	rectangle(0, 0, Video_Info.xres, Video_Info.yres, 0x000000);
+}
+
 /**初始化可视化界面*/
 void init_VI(void)
 {

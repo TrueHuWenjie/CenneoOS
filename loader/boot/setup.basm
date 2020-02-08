@@ -112,10 +112,11 @@ setup:
 	mov		es, ax
 	mov		fs, ax
 	mov		gs, ax
-	; init for stack
+	; Init for stack
 	mov		ss, ax
-	mov		esp, STACK_TOP	;stack top pointer to top of the segment 0x0000(0xffff)
-	; prepare boot_info for next step
+	; Stack top pointer to the top of the segment 0x0000(0xffff)
+	mov		esp, STACK_TOP
+	; Prepare boot_info for next step
 	mov		word[code_sel], 0x08
 	mov		word[data_sel], 0x10
 
@@ -187,12 +188,12 @@ stack:
 	STACK_TOP_SEG		equ	0
 	STACK_TOP_OFFSET	equ	0
 	STACK_TOP		equ	0x10000
-	
+
 ; Filled with zeros
 	times	4096-($-$$)-512	db	0
 
 
-; loader program's body
+; loader program's head
 _start:
 	; this function is located in /boot/arch/x86/_start.asm,
 	; running in 32-bit Protect-mode.

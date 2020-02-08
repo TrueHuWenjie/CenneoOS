@@ -64,6 +64,8 @@ int error(unsigned int errcode, const char *fmt, ...);
 /**警告输出函数*/
 int warning(unsigned int errcode, const char *fmt, ...);
 
+void deinit_VI(void);
+
 /**初始化可视化界面*/
 void init_VI(void);
 

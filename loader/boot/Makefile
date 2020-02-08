@@ -11,7 +11,7 @@
 # Note that there is a boota.asm, which is boota.o in the first element
 # of $(OBJ), because it has entry "_start"
 
-OBJS := ./arch/x86/_start.o ./arch/x86/io.o ./arch/x86/halt.o ./arch/x86/interrupt/entry.o ./arch/x86/interrupt/trap.o ./boota.o ./MMU.o  ./bootc.o  ./VI.o  ./fs.o  ./storage.o \
+OBJS := ./arch/x86/_start.o ./arch/x86/io.o ./arch/x86/halt.o ./arch/x86/interrupt/entry.o ./arch/x86/interrupt/trap.o ./boota.o ./MMU.o  ./bootc.o  ./VI.o  ./fs.o  ./storage.o ./elf.o \
 ./lib/string.o  ./lib/font.o  ./lib/vsprintf.o  ./lib/mem.o ./script.o \
 ./lib/graphics.o ./lib/math.o
 

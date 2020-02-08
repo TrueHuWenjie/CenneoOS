@@ -331,6 +331,9 @@ void BOOT_main(const struct boot_info *boot_info)
 	/**加载内核*/
 	read_file(0, 0, KERNEL_NAME, KERNEL_ADDR, 1);
 	
+	interrupt_close();
+	deinit_VI();
+
 	/**运行内核*/
 	kernel_start(boot_info);
 }
