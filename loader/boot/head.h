@@ -75,7 +75,7 @@ struct ModeInfoBlock
 	unsigned short WinBSegment;
 	unsigned int WinFuncPtr;
 	unsigned short BytesPerScanLine;
-	
+
 	/**Mandatory information for VBE 1.2 and above*/
 	unsigned short XResolution;
 	unsigned short YResolution;
@@ -88,7 +88,7 @@ struct ModeInfoBlock
 	unsigned char BankSize;
 	unsigned char NUmberOfImagePages;
 	unsigned char Reserved1;
-	
+
 	/**Direct Color fields(required for direct/6 and YUV/7 memory models)*/
 	unsigned char RedMaskSize;
 	unsigned char RedFieldPosition;
@@ -99,12 +99,12 @@ struct ModeInfoBlock
 	unsigned char RsvdMaskSize;
 	unsigned char RsvdFieldPosition;
 	unsigned char DirectColorModeInfo;
-	
+
 	/**Mandatory infomation for VBE 2.0 and above*/
 	unsigned int PhysBasePtr;
 	unsigned int Reserved2;
 	unsigned short Reserved3;
-	
+
 	/**Mandatory information for VBE 3.0 and above*/
 	unsigned short LinBytesPerScanLine;
 	unsigned char BnkNumberOfImagePages;
@@ -132,16 +132,16 @@ struct boot_info
 
 	/**启动信息长度*/
 	unsigned int size;
-	
+
 	/**保护模式 32位 0-4GB 代码段段选择子*/
 	unsigned short code_sel;
-	
+
 	/**保护模式 32位 0-4GB 数据段段选择子*/
 	unsigned short data_sel;
-	
+
 	/**内存分布信息*/
 	struct Address_Range_Descriptor_Structure ARDS[BOOT_ARDS_NUM];
-	
+
 	/**VBE信息块结构体*/
 	struct VbeInfoBlock VbeInfoBlock;
 
@@ -150,17 +150,6 @@ struct boot_info
 };
 
 #pragma pack(pop)					//恢复原来的对齐单位
-
-// 中断描述符表属性
-#define IDT_P		0x8000
-#define IDT_DPL_0	0x00
-#define IDT_DPL_1	0x2000
-#define IDT_DPL_2	0x4000
-#define IDT_DPL_3	0x6000
-#define IDT_16		0x00
-#define IDT_32		0x800
-#define trap_gate		0x700
-#define interrupt_gate	0x600
 
 // 主从PIC的寄存器端口定义
 #define PIC0_ICW1		0x0020
