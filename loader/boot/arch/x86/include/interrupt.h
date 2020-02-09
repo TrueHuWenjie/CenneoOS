@@ -20,14 +20,14 @@ void create_ID
   (X86U32 number, X86U32 selector, X86Addr offset, X86U32 attribute);
 
 // 中断描述符表属性
-#define IDT_P     0x8000
-#define IDT_DPL_0	0x00
-#define IDT_DPL_1	0x2000
-#define IDT_DPL_2	0x4000
-#define IDT_DPL_3	0x6000
-#define IDT_16		0x00
-#define IDT_32		0x800
-#define IDT_TRAP  0x700
-#define IDT_ITRP	0x600
+#define IDT_P       0x8000
+#define IDT_DPL_0   0x00
+#define IDT_DPL_1   0x2000
+#define IDT_DPL_2   0x4000
+#define IDT_DPL_3   0x6000
+#define IDT_16      0x00
+#define IDT_32      0x800
+#define IDT_TRAP    0x700
+#define IDT_ITRP    0x600
 
 #endif
