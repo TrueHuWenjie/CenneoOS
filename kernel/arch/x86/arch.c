@@ -2,6 +2,7 @@
 // /kernel/arch/x86/arch.c
 // HAL layer's initialization 'init_arch'
 
+#include "include/x86types.h"
 #include "include/function.h"
 #include "include/address.h"
 #include <task.h>
