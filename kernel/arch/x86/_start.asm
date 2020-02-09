@@ -1,3 +1,6 @@
+; Cenneo OS
+; /kernel/arch
+
 ;Copyright 2013-2015 by Explorer Developers.
 ;made by Lab Explorer Developers<1@GhostBirdOS.org>
 ;Explorer function _start
@@ -8,7 +11,7 @@
 ;1/18/2015 12:18 PM:add init for arch code from fun_c.c
 
 ;Explorer在x86平台地址管理的相关信息*/
-	
+
 ;全局描述符表(64KB)
 GDT_addr		equ	0x60000
 GDT_size		equ	65536
@@ -109,7 +112,7 @@ _start:
 	;将eax代表的启动信息放入启动信息指针中
 	mov		eax, [esp + 4]
 	mov		[boot_info_ptr],eax
-	
+
 	;初始化堆栈指针指向内核栈
 	mov		esp,task_0 + TASK_SIZE
 
@@ -118,7 +121,7 @@ _start:
 
 	;调用主函数开始进行各项的初始化
 	call	main
-	
+
 	;怠速运行
 .sleep:
 	hlt
@@ -248,7 +251,7 @@ set_GDT:
 	pop		esi
 	pop		ebp
 	ret
-	
+
 ;控制寄存器的读写
 read_CR0:
 	mov		eax,cr0
@@ -273,7 +276,7 @@ write_CR3:
 	ret
 
 
-	
+
 write_mem24:
 	mov		edx,[esp+8]
 	mov		ecx,[esp+4]
@@ -281,7 +284,7 @@ write_mem24:
 	shr		dx,16
 	mov		[ecx+2],dl
 	ret
-	
+
 ;数据区
 [section .data]
 ;启动信息结构体指针*/

@@ -2,9 +2,9 @@
 # Author:HuWenjie<huwenjie@cenneo.com>
 # Ghost Bird File System Reader
 # Makefile
-# 
+#
 # BSD 2-Clause License
-# 
+#
 # Copyright (c) 2017, Ghost Bird Operating System Project Developers.
 # All rights reserved.
 
@@ -17,6 +17,7 @@ ASM_SRCS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.asm))
 OBJS := $(patsubst %.c, %.o, $(C_SRCS))
 OBJS += $(patsubst %.cpp, %.o, $(CPP_SRCS))
 OBJS += $(patsubst %.asm, %.o, $(ASM_SRCS))
+OBJS := $(filter %_start.o, $(OBJS)) $(filter-out %_start.o, $(OBJS))
 
 OBJCOPYFLAGS := -R .note -R .comment -S
 
@@ -45,11 +46,8 @@ all: $(TARGET)
 $(TARGET): kernel.o
 	$(OBJCOPY) -O binary kernel.o $(TARGET)
 
-kernel.o: $(OBJS) ./arch/x86/kernel/_start.o
-	$(LD) $(LDFLAGS) -o kernel.o -Ttext 0x400000 ./arch/x86/kernel/_start.o $(OBJS)
-
-./arch/x86/kernel/_start.o: ./arch/x86/kernel/_start.basm
-	$(NS) $(ASMFLAGS) -o $@ $<
+kernel.o: $(OBJS)
+	$(LD) $(LDFLAGS) -o kernel.o -Ttext 0x400000 $(OBJS)
 
 %.o: %.asm
 	$(NS) $(ASMFLAGS) -o $@ $<
