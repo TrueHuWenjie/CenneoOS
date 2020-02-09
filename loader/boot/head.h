@@ -8,26 +8,6 @@
 /**重置函数*/
 void reset(void);
 
-/**停机函数
- * 该函数执行实体是汇编指令hlt
- * 执行该函数后，计算机会一直处于停机状态(低功耗)，
- * 直到有硬件中断的发生
- */
-void io_hlt(void);
-
-/**关闭打开中断位函数
- * 这两个函数执行实体是汇编指令cli和sti
- * io_cli函数执行后，会将PSW寄存器的中断位置0，关闭硬件中断
- * io_sti函数执行后，会将PSW寄存器的中断位置1，接收硬件中断
- */
-void io_cli(void);
-void io_sti(void);
-
-/**输入函数*/
-unsigned char io_in8(unsigned long port);
-unsigned short io_in16(unsigned long port);
-unsigned long io_in32(unsigned long port);
-
 #pragma pack(push)					//保存当前对齐信息
 #pragma pack(1)						//设定结构体以一个字节为单位对齐
 
