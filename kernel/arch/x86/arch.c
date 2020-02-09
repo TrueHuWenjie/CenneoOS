@@ -10,7 +10,7 @@
 struct TSS_32 TSS;
 
 /**架构初始化*/
-void init_Architecture(void)
+void init_arch(void)
 {
 	/**准备GDT表*/
 	write_GDTR(GDT_addr, GDT_size - 1);

@@ -11,7 +11,7 @@ GDT_size		equ	65536
 
 ;全局变量及全局函数
 extern	task_0				;任务0的联合体，在Explorer/arch/x86/kernel/task/task.c中定义
-extern	init_Architecture	;初始化架构函数，在Explorer/arch/x86/Architecture.c中实现
+extern	init_arch			;初始化架构函数，在Explorer/arch/x86/Architecture.c中实现
 extern	main				;内核的主函数，位于Explorer/init/main.c中实现
 global	_start				;内核的入口函数
 global	boot_info_ptr		;指向boot_info的指针*/
@@ -109,7 +109,7 @@ _start:
 	mov		esp,task_0 + TASK_SIZE
 
 	;初始化平台相关信息
-	call	init_Architecture
+	call	init_arch
 
 	;调用主函数开始进行各项的初始化
 	call	main
