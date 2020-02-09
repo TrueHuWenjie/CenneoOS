@@ -1,14 +1,6 @@
 ; Cenneo OS
-; /kernel/arch
-
-;Copyright 2013-2015 by Explorer Developers.
-;made by Lab Explorer Developers<1@GhostBirdOS.org>
-;Explorer function _start
-;Explorer/arch/kernel/_start.asm
-;version:Alpha
-;7/9/2014 8:25 AM:created
-;1/3/2015 3:23 PM:cancel function kernel_start
-;1/18/2015 12:18 PM:add init for arch code from fun_c.c
+; /kernel/arch/x86/_start.asm
+; the entrypoint of kernel
 
 ;Explorer在x86平台地址管理的相关信息*/
 
