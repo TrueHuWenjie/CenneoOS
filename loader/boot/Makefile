@@ -11,11 +11,14 @@
 # Note that there is a boota.asm, which is boota.o in the first element
 # of $(OBJ), because it has entry "_start"
 
-OBJS := ./arch/x86/_start.o ./arch/x86/io.o ./arch/x86/halt.o \
-./arch/x86/interrupt/handle.o ./arch/x86/interrupt/entry.o \
-./arch/x86/interrupt/trap.o ./boota.o ./MMU.o ./bootc.o ./VI.o ./fs.o \
-./storage.o ./elf.o ./lib/string.o ./lib/font.o ./lib/vsprintf.o ./lib/mem.o \
-./script.o ./lib/graphics.o ./lib/math.o
+DIRS := $(shell find . -maxdepth 9 -type d)
+
+C_SRCS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))
+ASM_SRCS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.asm))
+
+OBJS := $(patsubst %.c, %.o, $(C_SRCS))
+OBJS += $(patsubst %.asm, %.o, $(ASM_SRCS))
+OBJS := $(filter %_start.o, $(OBJS)) $(filter-out %_start.o %setup.o, $(OBJS))
 
 OBJCOPYFLAGS := -R .note -R .comment -S
 
@@ -43,8 +46,8 @@ boot.bin:boot.o
 boot.o:$(OBJS)
 	$(LD) $(LDFLAGS) -o $@ -Ttext 0x11000 $(OBJS)
 
-setup.bin:setup.basm
-	nasm setup.basm -o setup.bin
+setup.bin:setup.asm
+	$(NS) -o $@ $<
 
 %.o: %.asm
 	$(NS) $(ASMFLAGS) -o $@ $<
