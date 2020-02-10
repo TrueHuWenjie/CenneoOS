@@ -4,11 +4,23 @@
 
 #include "../include/x86types.h"
 #include "../include/x86ebi.h"
-#include "kvi.h"
 #include <stdbool.h>
 #include <stdarg.h>
 #include <lib/graphics.h>
 #include <info.h>
+
+#define WIDTH_MAX 100
+#define HEIGHT_MAX 37
+#define DEFAULT_FONT "Standard Font"
+#define SCR_W kvi_sm.xres
+#define SCR_H kvi_sm.yres
+#define BYTEPERPIXEL 3
+#define FONT_W 8
+#define FONT_H 16
+#define VIDEO_MEM_ADDR 0xe0000000
+#define BGCOLOR 0x00000000
+#define FGCOLOR 0xffd700
+#define SIZE_OF_BUFFER 256
 
 // kvi's state machine
 struct kvi_sm

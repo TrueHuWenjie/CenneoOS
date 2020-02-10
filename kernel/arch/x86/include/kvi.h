@@ -5,6 +5,11 @@
 #ifndef KVI_H_
 #define KVI_H_
 
+void kvi_clrscr(void);
+void kvi_put_char(char ascii);
+void kvi_roll_screen(void);
+int printk(const char *fmt, ...);
+
 //Open kvi
 void kvi_open(void);
 
