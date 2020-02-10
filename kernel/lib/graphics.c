@@ -20,13 +20,13 @@ void (*putpixel)(unsigned int x, unsigned int y, unsigned int color);
 unsigned int (*getpixel)(unsigned int x, unsigned int y);
 
 /**graphical initialization*/
-void Inti_Graph(void)
+void init_graph(void)
 {
 	extern void init_VESA(void);
-	
+
 	/**初始化VBE模式*/
 	init_VESA();
-	
+
 	/**根据BPP判断所需要的相应显示像素函数*/
 	if (Video_Info.bit_per_pixel == 24)
 	{
@@ -74,12 +74,12 @@ void draw_font(unsigned long x, unsigned long y, unsigned int color, struct font
 }
 
 /*在屏幕指定地方画方块*/
-void rectangle(unsigned long x, unsigned long y, unsigned long height, unsigned long width, unsigned int color)
+void rectangle(unsigned long x, unsigned long y, unsigned long width, unsigned long height, unsigned int color)
 {
 	unsigned long m, n;
-	for (n = 0; n != width; n ++)
+	for (n = 0; n != height; n ++)
 	{
-		for (m = 0; m != height; m ++)
+		for (m = 0; m != width; m ++)
 		{
 			putpixel(x + m, y + n, color);
 		}
@@ -93,7 +93,7 @@ void line(unsigned long x0, unsigned long y0, unsigned long x1, unsigned long y1
 	dx=abs(x1-x0);
 	dy=abs(y1-y0);
 	n=dx+dy;
-	
+
 	/**根据x1和x0的关系，选择合适的k运算方法*/
 	if (x1 == x0)
 	{
@@ -133,7 +133,7 @@ void line(unsigned long x0, unsigned long y0, unsigned long x1, unsigned long y1
 unsigned int getpixel24(unsigned int x, unsigned int y)
 {
 	unsigned int i;
-	
+
 	/**先判断该像素是否在屏幕上*/
 	if (x < Video_Info.xres & y < Video_Info.yres)
 	{
@@ -157,7 +157,7 @@ void putpixel24(unsigned int x, unsigned int y, unsigned int color)
 {
 	int i;
 	unsigned char *vram = Video_Info.vram;
-	
+
 	/**先判断该像素是否在屏幕上*/
 	if ((x < Video_Info.xres) & (y < Video_Info.yres))
 	{
@@ -180,5 +180,5 @@ void putpixel32(unsigned int x, unsigned int y, unsigned int color)
 /**清除屏幕函数*/
 void clear_screen(void)
 {
-	memset(Video_Info.vram, 0, Video_Info.vram_length);	
+	memset(Video_Info.vram, 0, Video_Info.vram_length);
 }
