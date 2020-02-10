@@ -22,24 +22,24 @@ void error(const char *info, ...)
 {
 	/**禁止中断*/
 	io_cli();
-	
+
 	va_list arg;
-	
+
 	/**缓冲区*/
 	char buffer[NUM_BUFFER];
-	
+
 	/**初始化参数指针*/
 	va_start(arg, info);
-	
+
 	/**格式化输出*/
 	vsprintf(buffer, info, arg);
-	
+
 	/**启动shell*/
-	enable_shell();
-	
+	kvi_open();
+
 	/**打印至屏幕上*/
 	printk(buffer);
-	
+
 	/**halt*/
 	for (;;) io_hlt();
 }

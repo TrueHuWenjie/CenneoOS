@@ -4,6 +4,7 @@
 
 #include "include/x86types.h"
 #include "include/x86ebi.h"
+#include "include/kvi.h"
 #include "include/function.h"
 #include "include/address.h"
 #include <task.h>
@@ -17,6 +18,13 @@ void init_arch(void)
 	// EBI check
 	X86EBI_CHECK
 
+	// Temporary
+	init_graph();
+	init_font();
+
+	// Open kvi
+	kvi_open();
+	fin:io_hlt();goto fin;
 	/**准备GDT表*/
 	write_GDTR(GDT_addr, GDT_size - 1);
 	// clean_GDT();

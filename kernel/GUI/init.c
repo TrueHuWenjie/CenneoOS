@@ -23,18 +23,18 @@ struct layer *layer_root = NULL;
 /**initialization GUI*/
 void init_GUI(void)
 {
-	/**关闭shell*/
-	disable_shell();
-	
+	// Close kvi
+	kvi_close();
+
 	/**清除屏幕*/
 	clear_screen();
-	
+
 	/**创建GUI根图层*/
 	for (;layer_root == NULL;) layer_root = kmalloc(sizeof(struct layer), 0);
-	
+
 	/**清空获得的内存*/
 	memset(layer_root, 0, sizeof(struct layer));
-	
+
 	/**填充相应数据*/
 	for (;layer_root->buf == NULL;) layer_root->buf = vmalloc (LAYER_ROOT_LENGTH * LAYER_ROOT_WIDTH * 4);
 	layer_root->visiable = true;
@@ -45,11 +45,11 @@ void init_GUI(void)
 	layer_root->top = layer_root;
 	layer_root->bottom = layer_root;
 	layer_root->winptr = NULL;
-	
+
 	/**填充矩形*/
 	GUI_put_square(layer_root, 0x400000ff, 0, 0, LAYER_ROOT_LENGTH, LAYER_ROOT_WIDTH);
 	// GUI_put_square(layer_root, 0x40000000, 0, 0, LAYER_ROOT_LENGTH, LAYER_ROOT_WIDTH);
-	
+
 	/**信息输出*/
 	GUI_put_string(layer_root, 0xffffffff, 0, 00, 0, 0, font("simsun"), "Explorer Graphical User Interface.");
 	GUI_put_string(layer_root, 0xffffffff, 0, 16, 0, 0, font("simsun"), "Kernel version:" KERNEL_VERSION);
@@ -62,5 +62,5 @@ void init_GUI(void)
 /**禁用GUI*/
 void disable_GUI(void)
 {
-	
+
 }

@@ -21,7 +21,6 @@
 #include <main.h>
 #include <types.h>
 #include <task.h>
-#include <info.h>
 #include <arch.h> // Archtecture - 架构层
 #include <keyboard.h>
 #include <memory.h>
@@ -55,9 +54,6 @@ void main(void)
 	init_CPU();
 	init_PIC();
 	init_PIT();
-	/**初始化图形*/
-	Inti_Graph();				// 初始化图形系统
-	init_Font();				// 初始化字库管理
 
 	/**打印信息*/
 	// output_CPU_info();			// 打印处理器信息
@@ -77,19 +73,6 @@ void main(void)
 
 	/**GUI初始化*/
 	//init_GUI();
-}
-
-/**输出内核信息*/
-void output_kernel_info(void)
-{
-	/**内核名称、版本、作者、版权*/
-	printk("Kernel Name:" KERNEL_NAME " ");
-	printk(KERNEL_VERSION "\n");
-	printk("Kernel Author:" AUTHOR "\n");
-	printk(COPYRIGHT "\n");
-
-	/**其他信息的输出*/
-	if (BASE != NULL) printk("It is based on " BASE ".\n");
 }
 
 /**内存管理相关信息输出函数*/

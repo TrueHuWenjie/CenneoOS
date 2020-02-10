@@ -3,7 +3,7 @@
  * made by Rize<heseri@GhostBirdOS.org>
  * Explorer Shell Header
  */
- 
+
 #ifndef SHELL_H_
 #define SHELL_H_
 
@@ -22,13 +22,6 @@
 
 // These temporary values should be judged.
 // In order to finish new shell in time, they were defined as normal values.
-
-
-//open the shell
-void enable_shell(void);
-
-//close the shell
-void disable_shell(void);
 
 void clrscr(void);
 void put_char(char ascii);
