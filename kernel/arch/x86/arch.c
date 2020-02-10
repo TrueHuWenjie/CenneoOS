@@ -3,6 +3,7 @@
 // HAL layer's initialization 'init_arch'
 
 #include "include/x86types.h"
+#include "include/x86ebi.h"
 #include "include/function.h"
 #include "include/address.h"
 #include <task.h>
@@ -13,6 +14,9 @@ struct TSS_32 TSS;
 /**架构初始化*/
 void init_arch(void)
 {
+	// EBI check
+	X86EBI_CHECK
+
 	/**准备GDT表*/
 	write_GDTR(GDT_addr, GDT_size - 1);
 	// clean_GDT();
