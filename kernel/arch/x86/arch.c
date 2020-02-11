@@ -48,7 +48,6 @@ void init_arch(void)
 
 	// Open kvi
 	kvi_open();
-	fin:io_hlt();goto fin;
 
 	output_mem_info();
 
