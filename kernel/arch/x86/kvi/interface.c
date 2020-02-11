@@ -1,25 +1,23 @@
 // Cenneo OS
-// /kernel/arch/x86/kvi/kvi.c
+// /kernel/arch/x86/kvi/interface.c
 // Kernel-support visual interface
 
 #include "../include/x86types.h"
 #include "../include/x86ebi.h"
+#include "../include/kvi.h"
+#include "theme.h"
 #include <stdbool.h>
-#include <stdarg.h>
 #include <lib/graphics.h>
 #include <info.h>
 
 #define WIDTH_MAX 100
 #define HEIGHT_MAX 37
-#define DEFAULT_FONT "Standard Font"
 #define SCR_W kvi_sm.xres
 #define SCR_H kvi_sm.yres
 #define BYTEPERPIXEL 3
 #define FONT_W 8
 #define FONT_H 16
 #define VIDEO_MEM_ADDR 0xe0000000
-#define BGCOLOR 0x00000000
-#define FGCOLOR 0xffd700
 #define SIZE_OF_BUFFER 256
 
 // kvi's state machine
@@ -31,6 +29,8 @@ struct kvi_sm
 	X86U32 cursor_row;
 	X86U32 width;
 	X86U32 height;
+	X86U32 bg_color;
+	X86U32 fg_color;
 	bool enable;
 } kvi_sm = {.enable = false};
 
@@ -54,7 +54,7 @@ void kvi_put_char(char ascii)
 	}else{
 		/**在光标处位置显示字*/
 		draw_font(kvi_sm.cursor_column * FONT_W, kvi_sm.cursor_row * FONT_H, \
-			FGCOLOR, font(DEFAULT_FONT), ascii);
+			kvi_sm.fg_color, font(DEFAULT_FONT), ascii);
 
 		/**将光标移动到下一个位置*/
 		kvi_sm.cursor_column ++;
@@ -92,38 +92,17 @@ void kvi_roll_screen(void)
 	{
 		for (x = 0; x < kvi_sm.xres; x ++)
 		{
-			putpixel(x, y, BGCOLOR);
+			putpixel(x, y, kvi_sm.bg_color);
 		}
 	}
 
 	kvi_sm.cursor_row --;
 }
 
-/**printk函数，格式化输出字符串到屏幕上*/
-int printk(const char *fmt, ...)
+void kvi_color(X86U32 fg_color, X86U32 bg_color)
 {
-	/**停止调度*/
-	// disable_schedule();
-
-	char buffer[256];
-	va_list arg;
-	unsigned long n;
-
-	/**format*/
-	va_start(arg, fmt);/*init argument point*/
-	vsprintf(buffer, fmt, arg);/*write format & get width*/
-
-	/**循环将字写入屏幕*/
-	for (n = 0; buffer[n] != 0; n ++) kvi_put_char(buffer[n]);
-
-	/**防止空指针引发危险*/
-	va_end(arg);
-
-	/**允许调度*/
-	// enable_schedule();
-
-	/**正常返回*/
-	return n;
+	kvi_sm.fg_color = fg_color;
+	kvi_sm.bg_color = bg_color;
 }
 
 // Basic info output
@@ -151,7 +130,7 @@ void kvi_open(void)
 	if (kvi_sm.enable == true) return;
 
 	// Clear the screen
-	rectangle(0, 0, kvi_sm.xres, kvi_sm.yres, BGCOLOR);
+	rectangle(0, 0, kvi_sm.xres, kvi_sm.yres, kvi_sm.bg_color);
 	kvi_sm.cursor_column = 0;
 	kvi_sm.cursor_row = 0;
 
