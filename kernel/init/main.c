@@ -75,28 +75,6 @@ void main(void)
 	//init_GUI();
 }
 
-/**内存管理相关信息输出函数*/
-void output_mem_info(void)
-{
-	unsigned long n;
-
-	/**空出一行*/
-	printk("\n");
-
-	/**打印内存分布信息*/
-	printk("Address Range Descriptor Structure:\nBaseAddrLow   BaseAddrHigh  LengthLow     LengthHigh    Type\n");
-	/*for (n = 0; n < BOOT_ARDS_NUM; n++)
-	{
-		printk("%#010x    %#010x    %#010x    %#010x    %#010x\n", boot_info_ptr->ARDS[n].BaseAddrLow, boot_info_ptr->ARDS[n].BaseAddrHigh, boot_info_ptr->ARDS[n].LengthLow, boot_info_ptr->ARDS[n].LengthHigh, boot_info_ptr->ARDS[n].Type);
-	}*/
-
-	/**内存信息*/
-	extern unsigned int all_mem, real_mem;
-
-	/**打信息*/
-	printk("Installed memory(RAM):%dMB(%dKB is available).\n", all_mem / 1048576, real_mem / 1024);
-}
-
 /**输出VBE信息*/
 void output_viedo_info(void)
 {

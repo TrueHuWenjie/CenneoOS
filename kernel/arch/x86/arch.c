@@ -12,6 +12,26 @@
 
 struct TSS_32 TSS;
 
+
+/**内存管理相关信息输出函数*/
+void output_mem_info(void)
+{
+	unsigned long n;
+
+	/**空出一行*/
+	printk("\n");
+
+	/**打印内存分布信息*/
+	printk("Address Range Descriptor Structure:\nBaseAddrLow   BaseAddrHigh  LengthLow     LengthHigh    Type\n");
+	for (n = 0; n < BOOT_ARDS_NUM; n++)
+	{
+		printk("%#010x    %#010x    %#010x    %#010x    %#010x\n", \
+		boot_info_ptr->ARDS[n].BaseAddrLow, \
+		boot_info_ptr->ARDS[n].BaseAddrHigh, boot_info_ptr->ARDS[n].LengthLow, \
+		boot_info_ptr->ARDS[n].LengthHigh, boot_info_ptr->ARDS[n].Type);
+	}
+}
+
 /**架构初始化*/
 void init_arch(void)
 {
@@ -25,6 +45,9 @@ void init_arch(void)
 	// Open kvi
 	kvi_open();
 	fin:io_hlt();goto fin;
+
+	output_mem_info();
+
 	/**准备GDT表*/
 	write_GDTR(GDT_addr, GDT_size - 1);
 	// clean_GDT();
