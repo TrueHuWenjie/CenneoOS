@@ -39,53 +39,68 @@ VIDEO_VMWARE_800_600	EQU	0x4140
 
 setup:
 	; init for registers
-	mov		ax,cs
-	mov		ds,ax
-	mov		es,ax
+	mov		ax, cs
+	mov		ds, ax
+	mov		es, ax
 	; init for stack
-	mov		ax,STACK_TOP_SEG
-	mov		ss,ax
-	mov		sp,STACK_TOP_OFFSET	;stack top pointer to top of the segment 0x0000(0xffff)
+	mov		ax, STACK_TOP_SEG
+	mov		ss, ax
+	mov		sp, STACK_TOP_OFFSET	;stack top pointer to top of the segment 0x0000(0xffff)
 	; get memory info
-	mov		ebx,0			;if this is the first call,EBX must contain zero.
-	mov		ecx,20			;size of ARDS
-	mov		edx,0534D4150h	;'SMAP' - Signature to verify correct BIOS revision.
-	mov		di,ARDS0		;ES:DI pointer to an ARDS which the BIOS is to fill in.
-	mov		eax,0xe820		;Function Code
+	mov		ebx, 0			;if this is the first call,EBX must contain zero.
+	mov		ecx, 20			;size of ARDS
+	mov		edx, 0534D4150h	;'SMAP' - Signature to verify correct BIOS revision.
+	mov		di, ARDS0		;ES:DI pointer to an ARDS which the BIOS is to fill in.
+	mov		eax, 0xe820		;Function Code
 	int		15h				;INT 15h, AX=E820h - Query System Address Map
-	mov		di,ARDS1
-	mov		eax,0xe820
+	cmp		ebx, 0
+	jz		.vbe
+	mov		di, ARDS1
+	mov		eax, 0xe820
 	int		15h
-	mov		di,ARDS2
-	mov		eax,0xe820
+	cmp		ebx, 0
+	jz		.vbe
+	mov		di, ARDS2
+	mov		eax, 0xe820
 	int		15h
-	mov		di,ARDS3
-	mov		eax,0xe820
+	cmp		ebx, 0
+	jz		.vbe
+	mov		di, ARDS3
+	mov		eax, 0xe820
 	int		15h
-	mov		di,ARDS4
-	mov		eax,0xe820
+	cmp		ebx, 0
+	jz		.vbe
+	mov		di, ARDS4
+	mov		eax, 0xe820
 	int		15h
-	mov		di,ARDS5
-	mov		eax,0xe820
+	cmp		ebx, 0
+	jz		.vbe
+	mov		di, ARDS5
+	mov		eax, 0xe820
 	int		15h
-	mov		di,ARDS6
-	mov		eax,0xe820
+	cmp		ebx, 0
+	jz		.vbe
+	mov		di, ARDS6
+	mov		eax, 0xe820
 	int		15h
-	mov		di,ARDS7
-	mov		eax,0xe820
-	int		15h 
+	cmp		ebx, 0
+	jz		.vbe
+	mov		di, ARDS7
+	mov		eax, 0xe820
+	int		15h
 	; get vbe info
-	mov		ax,0x4f00
-	mov		di,VbeInfoBlock_struc
+.vbe:
+	mov		ax, 0x4f00
+	mov		di, VbeInfoBlock_struc
 	int		0x10
 	; get mode info
-	mov		ax,0x4f01
-	mov		cx,vbe_mode
-	mov		di,ModeInfoBlock_struc
+	mov		ax, 0x4f01
+	mov		cx, vbe_mode
+	mov		di, ModeInfoBlock_struc
 	int		0x10
 	; init for video
-	mov		ax,0x4F02		;VBE/set video mode
-	mov		bx,vbe_mode		;800*600*24bit
+	mov		ax, 0x4F02		;VBE/set video mode
+	mov		bx, vbe_mode		;800*600*24bit
 	int		0x10
 
 	; close the interruption
@@ -93,13 +108,13 @@ setup:
 	; load GDTR
 	lgdt	[cs:GDTR]
 	; enable A20 line
-	in		al,0x92
-	or		al,0000_0010B
-	out		0x92,al
+	in		al, 0x92
+	or		al, 0000_0010B
+	out		0x92, al
 	; set CR0 bit PE
-	mov		eax,cr0
-	or		eax,1
-	mov		cr0,eax
+	mov		eax, cr0
+	or		eax, 1
+	mov		cr0, eax
 	; far jump:to clean the cs
 	jmp		dword 0x08:.prepare
 
@@ -120,7 +135,7 @@ setup:
 	mov		word[code_sel], 0x08
 	mov		word[data_sel], 0x10
 
-	push		dword boot_info
+	push	dword boot_info
 	jmp		_start
 
 error:
@@ -136,12 +151,12 @@ boot_info:
 	db		"EBI",0x00
 	; The size of boot info structure
 	dd		boot_info_end - boot_info
-	
+
 	; 32-bit 0-4GB Code Segment Descriptor Seletor
 	code_sel resw	1
 	; 32-bit 0-4GB Data Segment Descriptor Seletor
 	data_sel resw	1
-	
+
 	; Address Range DescriptorStructure
 	ARDS0 istruc Address_Range_Descriptor_Structure
 	iend
@@ -159,7 +174,7 @@ boot_info:
 	iend
 	ARDS7 istruc Address_Range_Descriptor_Structure
 	iend
-	
+
 	; VBE info
 	VbeInfoBlock_struc	times 512 db 0x00
 	ModeInfoBlock_struc	times 256 db 0x00
