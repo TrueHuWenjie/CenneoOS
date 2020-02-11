@@ -14,6 +14,7 @@
 #include <lib/mem.h>
 #include <../include/page.h>
 #include "../include/x86ebi.h"
+#include "../include/kvi.h"
 
 /**内存信息*/
 unsigned int all_mem = 0, real_mem = 0;
@@ -132,10 +133,6 @@ void init_MMU(struct boot_info *boot_info)
 		}
 	}
 
-	/**打印信息*/
-	//printk("Register memory done.\n");
-	//printk("Installed memory(RAM):%dMB(%dMB is available).\n", all_mem / 1048576, real_mem / 1048576);
-
 	/**少于256MB的情况不能下一步初始化*/
 	if (all_mem < 268435456)
 	{
@@ -144,6 +141,7 @@ void init_MMU(struct boot_info *boot_info)
 	}
 
 	/**正常返回*/
+	printk("Finished - init_mmu();\n");
 	return;
 }
 
@@ -177,6 +175,11 @@ void init_paging(void)
 
 	/**进入分页模式*/
 	goto_paging(pdt);
+
+	/**打信息*/
+	printk("Installed memory(RAM):%dMB(%dKB is available).\n", all_mem / 1048576, real_mem / 1024);
+	printk("Finished - init_paging();\n");
+	fin:goto fin;
 }
 
 /**虚拟空间映射函数*/
