@@ -1,4 +1,4 @@
-// Loader for Cenneo OS
+// Cenneo OS
 // /kernel/arch/x86/include/x86ebi.h
 // Explorer Boot Information on x86 Architecture
 
