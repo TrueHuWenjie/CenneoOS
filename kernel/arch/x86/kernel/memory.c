@@ -92,24 +92,24 @@ void init_mmu(void)
 	for (n = 0; n < BOOT_ARDS_NUM; n ++)
 	{
 		/**总内存计数*/
-		all_mem += boot_info->ARDS[n].LengthLow;
+		all_mem += boot_info_ptr->ARDS[n].LengthLow;
 
 		/**判断是否是高于4GB的范围*/
-		if (boot_info->ARDS[n].BaseAddrHigh != 0) break;
+		if (boot_info_ptr->ARDS[n].BaseAddrHigh != 0) break;
 
 		/**4KB对齐*/
-		boot_info->ARDS[n].BaseAddrLow = boot_info->ARDS[n].BaseAddrLow & 0xfffff000;
-		boot_info->ARDS[n].LengthLow = boot_info->ARDS[n].LengthLow & 0xfffff000;
+		boot_info_ptr->ARDS[n].BaseAddrLow = boot_info_ptr->ARDS[n].BaseAddrLow & 0xfffff000;
+		boot_info_ptr->ARDS[n].LengthLow = boot_info_ptr->ARDS[n].LengthLow & 0xfffff000;
 
 		/**判断该ARDS是否可用*/
-		if (boot_info->ARDS[n].Type != ARDS_FREE) continue;
+		if (boot_info_ptr->ARDS[n].Type != ARDS_FREE) continue;
 
 		/**判断该ARDS的范围是否为0*/
-		if (boot_info->ARDS[n].LengthLow == 0) continue;
+		if (boot_info_ptr->ARDS[n].LengthLow == 0) continue;
 
 		/**归纳信息*/
-		BaseAddr = boot_info->ARDS[n].BaseAddrLow;
-		Length = boot_info->ARDS[n].LengthLow;
+		BaseAddr = boot_info_ptr->ARDS[n].BaseAddrLow;
+		Length = boot_info_ptr->ARDS[n].LengthLow;
 		real_mem += Length;
 
 		/**打印该范围信息*/
@@ -154,11 +154,11 @@ void init_paging(void)
 	unsigned long ptr;
 
 	/**分配页目录表*/
-	for (pdt = NULL; pdt == NULL; )
+	for (pdt = NULL; !pdt; )
 		pdt = vmalloc(PAGE_SIZE);
-
+	printk("pdt = %#x", pdt);
 	/**分配页表*/
-	for (pt = NULL; pt == NULL; )
+	for (pt = NULL; !pt; )
 		pt = vmalloc((RANG_KERNEL_SIZE / PAGE_SIZE) * sizeof(pt));
 
 	/**将所有页表都注册到页目录表*/
@@ -174,7 +174,7 @@ void init_paging(void)
 	}
 
 	/**进入分页模式*/
-	goto_paging(pdt);
+	//goto_paging(pdt);
 
 	/**打信息*/
 	printk("Installed memory(RAM):%dMB(%dKB is available).\n", all_mem / 1048576, real_mem / 1024);
