@@ -10,10 +10,11 @@
 #define FUNCTION_H_
 
 #include <types.h>
+#include "x86types.h"
 
 /**代码段、数据段、TSS段的选择子*/
-u32 code_0_selector, data_0_selector, TSS_selector;
-u32 code_3_selector, data_3_selector;
+extern X86U16 code_0_selector, data_0_selector, TSS_selector;
+extern X86U16 code_3_selector, data_3_selector;
 
 /**TSS结构体*/
 struct TSS_32
@@ -84,7 +85,7 @@ unsigned long long int read_tsc(void);
 void init_seg_reg(u16 selector);
 //描述符表寄存器操作函数
 void write_IDTR(u32 base, u16 size);
-void write_TR(u16 select);
+u16 write_TR(u16 select);
 void write_GDTR(u32 base, u16 size);
 //GDT操作函数
 void clean_GDT(void);
@@ -110,4 +111,3 @@ void write_mem24(u32 addr, u32 data);
 
 
 #endif
-

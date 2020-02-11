@@ -10,6 +10,10 @@
 #include <task.h>
 #include <types.h>
 
+/**代码段、数据段、TSS段的选择子*/
+X86U16 code_0_selector, data_0_selector, TSS_selector;
+X86U16 code_3_selector, data_3_selector;
+
 struct TSS_32 TSS;
 
 
@@ -78,6 +82,9 @@ void init_arch(void)
 	TSS.ioend = 0xff;
 
 	/**加载TSS*/
+	write_TR(TSS_selector);
+
+	printk("Finished - init();\n");
 }
 
 /**
