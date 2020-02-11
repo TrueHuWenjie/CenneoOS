@@ -178,6 +178,10 @@ boot_info:
 	; VBE info
 	VbeInfoBlock_struc	times 512 db 0x00
 	ModeInfoBlock_struc	times 256 db 0x00
+
+	; kernel file info
+	kernel_addr	resd 1
+	kernel_size	resd 1
 boot_info_end:
 
 ; Global Descriptor Table,GDT

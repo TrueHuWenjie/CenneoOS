@@ -139,6 +139,9 @@ struct boot_info
 
 	/**VBE模式信息结构体*/
 	struct ModeInfoBlock ModeInfoBlock;
+
+    unsigned int kernel_addr;
+    unsigned int kernel_size;
 };
 
 #pragma pack(pop)

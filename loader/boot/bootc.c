@@ -199,7 +199,7 @@ int callback(int n, int type)
 /**configure文件储存内存指针*/
 static char *config_buf;
 /**保留扇区引导程序的主函数*/
-void BOOT_main(const struct boot_info *boot_info)
+void BOOT_main(struct boot_info *boot_info)
 {
 	/**判断是否成功获取启动信息*/
 	if (boot_info->flag[0] != 'E' |
@@ -279,6 +279,12 @@ void BOOT_main(const struct boot_info *boot_info)
 
 	/**切换到启动项选择界面*/
 	VI_active(VI_page_select);
+
+	// Full kernel's address and size
+	file_info kernel_file;
+	kernel_file = read_file_info(0, 0, KERNEL_NAME);
+	boot_info->kernel_size = kernel_file.size;
+	boot_info->kernel_addr = KERNEL_ADDR;
 
 	/**加载内核*/
 	read_file(0, 0, KERNEL_NAME, KERNEL_ADDR, 1);
