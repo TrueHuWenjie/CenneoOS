@@ -88,6 +88,8 @@ int error(const char *fmt, ...)
     /**允许调度*/
     // enable_schedule();
 
+    while (1) io_hlt();
+
     /**正常返回*/
     return n;
 }
