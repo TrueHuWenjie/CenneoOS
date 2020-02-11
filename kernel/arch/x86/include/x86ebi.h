@@ -16,6 +16,12 @@
 /**在_start.asm中放置了boot_info_ptr指针指向boot_info*/
 extern struct boot_info *boot_info_ptr;
 
+/**实模式Segment:Offset地址转换成保护模式地址*/
+// #define real_addr_in_pm(Segment, Offset)	(Segment * 0x10 + Offset)
+
+#pragma pack(push)					//保存当前对齐信息
+#pragma pack(1)						//设定结构体以一个字节为单位对齐
+
 /**地址范围描述符结构体*/
 #define ARDS_FREE	1
 #define ARDS_RESV	2
@@ -27,12 +33,6 @@ struct Address_Range_Descriptor_Structure
 	unsigned int LengthHigh;
 	unsigned int Type;
 };
-
-/**实模式Segment:Offset地址转换成保护模式地址*/
-// #define real_addr_in_pm(Segment, Offset)	(Segment * 0x10 + Offset)
-
-#pragma pack(push)					//保存当前对齐信息
-#pragma pack(1)						//设定结构体以一个字节为单位对齐
 
 /**VBE信息块结构体*/
 #define VBE_SIGN_NUM	4
