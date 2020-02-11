@@ -44,7 +44,7 @@ int task_test()
 void main(void)
 {
 	/**初始化内存管理单元*/
-	init_MMU(boot_info_ptr);
+	init_mmu();
 
 	/**进入分页模式*/
 	init_paging();

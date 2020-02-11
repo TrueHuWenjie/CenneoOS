@@ -65,7 +65,7 @@ void set_ker_bytemap(unsigned long ptr, char flag)
 }
 
 /**初始化内存管理单元函数*/
-void init_MMU(struct boot_info *boot_info)
+void init_mmu(void)
 {
 	unsigned long n;
 	unsigned int BaseAddr, Length;
