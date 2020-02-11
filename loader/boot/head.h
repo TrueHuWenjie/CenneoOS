@@ -103,7 +103,7 @@ struct ModeInfoBlock
 };
 
 #define BOOT_FLAG_MAX	4
-#define BOOT_ARDS_NUM	8
+#define BOOT_ARDS_NUM	10
 /**启动信息结构体*/
 struct boot_info
 {

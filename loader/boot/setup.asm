@@ -88,6 +88,18 @@ setup:
 	mov		di, ARDS7
 	mov		eax, 0xe820
 	int		15h
+	cmp		ebx, 0
+	jz		.vbe
+	mov		di, ARDS8
+	mov		eax, 0xe820
+	int		15h
+	cmp		ebx, 0
+	jz		.vbe
+	mov		di, ARDS9
+	mov		eax, 0xe820
+	int		15h
+	cmp		ebx, 0
+	
 	; get vbe info
 .vbe:
 	mov		ax, 0x4f00
@@ -173,6 +185,10 @@ boot_info:
 	ARDS6 istruc Address_Range_Descriptor_Structure
 	iend
 	ARDS7 istruc Address_Range_Descriptor_Structure
+	iend
+	ARDS8 istruc Address_Range_Descriptor_Structure
+	iend
+	ARDS9 istruc Address_Range_Descriptor_Structure
 	iend
 
 	; VBE info
