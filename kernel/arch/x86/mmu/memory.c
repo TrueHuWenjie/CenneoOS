@@ -21,6 +21,9 @@ unsigned int all_mem = 0, real_mem = 0;
 
 /**内核区域大小*/
 #define RANG_KERNEL_SIZE		268435456
+#if (RANG_KERNEL_SIZE % 4194304)
+	#error The size of range of kernel can not be devided by 4194304!
+#endif
 
 /**内核内存字节页图*/
 #define KER_MEM_BYTEMAP_PTR		0x100000
@@ -37,7 +40,7 @@ unsigned char *ker_mem_bytemap = (unsigned char *) KER_MEM_BYTEMAP_PTR;
 #define KER_MEM_BYTEMAP_END		0b00000100			// 已经使用的内存块的末尾页
 
 /**物理内存位页图*/
-#define PHY_MEM_ALLOC_START		RANG_KERNEL_SIZE
+#define PHY_MEM_ALLOC_START		0
 #define PHY_MEM_BITMAP_PTR		0x30000
 #define PHY_MEM_BITMAP_SIZE		(4294967296 / PAGE_SIZE) / 8
 unsigned int *phy_mem_bitmap = (unsigned int *) PHY_MEM_BITMAP_PTR;
@@ -49,13 +52,13 @@ unsigned int *phy_mem_bitmap = (unsigned int *) PHY_MEM_BITMAP_PTR;
 /**设置页使用函数*/
 void set_phy_page_used(unsigned long ptr)
 {
-	phy_mem_bitmap[ptr >> 17] = phy_mem_bitmap[ptr >> 17] | (1 << ((ptr >> 12) & 0b11111));
+	phy_mem_bitmap[ptr >> 17] |= (1 << ((ptr >> 12) & 0b11111));
 }
 
 /**设置页自由函数*/
 void set_phy_page_free(unsigned long ptr)
 {
-	phy_mem_bitmap[ptr >> 17] = phy_mem_bitmap[ptr >> 17] & ~(1 << ((ptr >> 12) & 0b11111));
+	phy_mem_bitmap[ptr >> 17] &= ~(1 << ((ptr >> 12) & 0b11111));
 }
 
 /**设置内核内存字节页图函数*/
@@ -64,14 +67,62 @@ void set_ker_bytemap(unsigned long ptr, char flag)
 	ker_mem_bytemap[ptr >> 12] = flag;
 }
 
+/**获取一个物理页函数
+ * 返回值：NULL代表获取空闲物理页失败，非NULL代表获取成功。
+ */
+void *get_free_page(void)
+{
+	unsigned long n, n2, new_page;
+	unsigned int bitmap;
+
+	/**先判断phy_mem_bitmap数组中是否有个32位元素不为0xffffffff*/
+	// for (n = 0; n < PHY_MEM_BITMAP_SIZE / sizeof(unsigned int); n ++)
+	for (n = PHY_MEM_ALLOC_START / (PAGE_SIZE * 32); n < PHY_MEM_BITMAP_SIZE / sizeof(unsigned int); n ++)
+	{
+		if (phy_mem_bitmap[n] != 0xffffffff)
+		{
+			/**如果某个元素中表示的页集中有空闲的页，则从中寻找*/
+			bitmap = phy_mem_bitmap[n];
+
+			/**循环看这个页集中哪个页是空闲的*/
+			for (n2 = 0; n2 < 32; n2 ++)
+			{
+				/**进行判断相应描述的位是否为0*/
+				if (((bitmap >> n2) & 1) == 0)
+				{
+					/**这个页的实际地址计算出来*/
+					new_page = (n * 32 * PAGE_SIZE) + (n2 * PAGE_SIZE);
+
+					/**设置这个页为占用*/
+					set_phy_page_used(new_page);
+
+					/**返回这个页*/
+					printk("    New page:%#X.\n", new_page);
+					return (void *)new_page;
+				}
+			}
+		}
+	}
+
+	/**当运行到这里的时候，代表遍历了页位图却无合适的页，暂时只能返回NULL值，以后可以在这里实现页交换*/
+
+	/**无效返回*/
+	return NULL;
+}
+
+/**释放一个物理页函数*/
+void free_page(void *addr)
+{
+	/**将该页设置为自由*/
+	set_phy_page_free((unsigned long)addr);
+	printk("    Free page:%#X.\n", addr);
+}
+
 /**初始化内存管理单元函数*/
 void init_mmu(void)
 {
 	unsigned long n;
 	unsigned int BaseAddr, Length;
-
-	/**内核区域大小必须为4MB的整数倍*/
-	if ((RANG_KERNEL_SIZE % 4194304) != 0) reset();
 
 	/**初始化物理内存位页图*/
 	for (n = 0; n < (PHY_MEM_BITMAP_SIZE / sizeof(unsigned int)); n ++)
@@ -92,40 +143,34 @@ void init_mmu(void)
 	for (n = 0; n < BOOT_ARDS_NUM; n ++)
 	{
 		/**总内存计数*/
-		all_mem += boot_info_ptr->ARDS[n].LengthLow;
+		all_mem += ebi.ARDS[n].LengthLow;
 
 		/**判断是否是高于4GB的范围*/
-		if (boot_info_ptr->ARDS[n].BaseAddrHigh != 0) break;
+		if (ebi.ARDS[n].BaseAddrHigh != 0) break;
 
 		/**4KB对齐*/
-		boot_info_ptr->ARDS[n].BaseAddrLow = boot_info_ptr->ARDS[n].BaseAddrLow & 0xfffff000;
-		boot_info_ptr->ARDS[n].LengthLow = boot_info_ptr->ARDS[n].LengthLow & 0xfffff000;
+		ebi.ARDS[n].BaseAddrLow &= 0xfffff000;
+		ebi.ARDS[n].LengthLow &= 0xfffff000;
 
 		/**判断该ARDS是否可用*/
-		if (boot_info_ptr->ARDS[n].Type != ARDS_FREE) continue;
+		if (ebi.ARDS[n].Type != ARDS_FREE) continue;
 
 		/**判断该ARDS的范围是否为0*/
-		if (boot_info_ptr->ARDS[n].LengthLow == 0) continue;
+		if (ebi.ARDS[n].LengthLow == 0) continue;
 
 		/**归纳信息*/
-		BaseAddr = boot_info_ptr->ARDS[n].BaseAddrLow;
-		Length = boot_info_ptr->ARDS[n].LengthLow;
+		BaseAddr = ebi.ARDS[n].BaseAddrLow;
+		Length = ebi.ARDS[n].LengthLow;
 		real_mem += Length;
 
 		/**打印该范围信息*/
-		//printk("available memory:%#x~%#x.\n", BaseAddr, BaseAddr + Length);
+		printk("    Available memory:%#x~%#x.\n", BaseAddr, BaseAddr + Length);
 
 		/**制作相应的物理内存位页图和内核内存字节页图*/
 		while (Length != 0)
 		{
 			/**设置空闲*/
 			set_phy_page_free(BaseAddr);
-
-			/**判断是否在内核内存区中*/
-			if (BaseAddr < RANG_KERNEL_SIZE)
-			{
-				set_ker_bytemap(BaseAddr, KER_MEM_BYTEMAP_FREE);
-			}
 
 			/**计数增加*/
 			BaseAddr += PAGE_SIZE;
@@ -135,10 +180,7 @@ void init_mmu(void)
 
 	/**少于256MB的情况不能下一步初始化*/
 	if (all_mem < 268435456)
-	{
-		printk("Not enough memory!Please make sure the memory more than 256MB.");
-		reset();
-	}
+		error("Not enough memory!Please make sure the memory more than 256MB.");
 
 	/**正常返回*/
 	printk("Finished - init_mmu();\n");
@@ -177,7 +219,8 @@ void init_paging(void)
 	//goto_paging(pdt);
 
 	/**打信息*/
-	printk("Installed memory(RAM):%dMB(%dKB is available).\n", all_mem / 1048576, real_mem / 1024);
+	printk("Installed memory(RAM):%dMB(%dKB is available).\n", \
+		all_mem / 1048576, real_mem / 1024);
 	printk("Finished - init_paging();\n");
 	fin:goto fin;
 }
@@ -218,55 +261,6 @@ unsigned long new_pdt(void)
 	{
 		new_pdt[ptr] = pdt[ptr];
 	}
-}
-
-/**获取一个物理页函数
- * 返回值：NULL代表获取空闲物理页失败，非NULL代表获取成功。
- */
-void *get_free_page(void)
-{
-	unsigned long n, n2, new_page;
-	unsigned int bitmap;
-
-	/**先判断phy_mem_bitmap数组中是否有个32位元素不为0xffffffff*/
-	// for (n = 0; n < PHY_MEM_BITMAP_SIZE / sizeof(unsigned int); n ++)
-	for (n = PHY_MEM_ALLOC_START / (PAGE_SIZE * 32); n < PHY_MEM_BITMAP_SIZE / sizeof(unsigned int); n ++)
-	{
-		if (phy_mem_bitmap[n] != 0xffffffff)
-		{
-			/**如果某个元素中表示的页集中有空闲的页，则从中寻找*/
-			bitmap = phy_mem_bitmap[n];
-
-			/**循环看这个页集中哪个页是空闲的*/
-			for (n2 = 0; n2 < 32; n2 ++)
-			{
-				/**进行判断相应描述的位是否为0*/
-				if (((bitmap >> n2) & 1) == 0)
-				{
-					/**这个页的实际地址计算出来*/
-					new_page = (n * 32 * PAGE_SIZE) + (n2 * PAGE_SIZE);
-
-					/**设置这个页为占用*/
-					set_phy_page_used(new_page);
-
-					/**返回这个页*/
-					return (void *)new_page;
-				}
-			}
-		}
-	}
-
-	/**当运行到这里的时候，代表遍历了页位图却无合适的页，暂时只能返回NULL值，以后可以在这里实现页交换*/
-
-	/**无效返回*/
-	return NULL;
-}
-
-/**释放一个物理页函数*/
-void free_page(void *addr)
-{
-	/**将该页设置为自由*/
-	set_phy_page_free((unsigned long)addr);
 }
 
 /**大块内存分配函数*/
