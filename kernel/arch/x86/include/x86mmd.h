@@ -9,6 +9,8 @@
 #define KB  * 1024
 #define MB	* 1048576
 
+#define MMD_MINI_MEM    8 MB
+
 // #Notice: Hundreds of test show that the memory between 0x0~0x9fc00 are free
 
 // Design about Physical Memory Bitmap

@@ -8,7 +8,8 @@
  */
 
 #include <lib/mem.h>
-#include "../include/page.h"
+#include "../include/x86types.h"
+#include "../include/mmu.h"
 #include <stdlib.h>
 #include <memory.h>
 #include <types.h>
@@ -44,7 +45,7 @@ void do_page_fault(int error_code)
 		{
 			/**获取一个新页*/
 			for (new_page = NULL; new_page == NULL; )
-				new_page = vmalloc(PAGE_SIZE);
+				new_page = vmalloc(MMU_PAGE_SIZE);
 
 			/**放置新页作为页表（页目录表和页表均在内核态空间中）*/
 			pdt[(cr2 >> 22)] = ((unsigned int)new_page | 0x7);
@@ -57,7 +58,7 @@ void do_page_fault(int error_code)
 		pt = (u32 *)(pdt[(cr2 >> 22)] & 0xfffff000);
 
 		/**无论是否出现缺页表的情况，一定缺少页*/
-		pt[(cr2 & 0x3FF000) >> 12] = (get_free_page() | 0x7);
+		pt[(cr2 & 0x3FF000) >> 12] = ((X86U32)pmb_alloc() | 0x7);
 
 		/*显示信息及返回*/
 		//printk("Page fault:allocated.%X",pdt[(cr2 >> 22)]);

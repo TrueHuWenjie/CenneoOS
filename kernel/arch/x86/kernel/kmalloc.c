@@ -13,7 +13,7 @@
 #include <memory.h>
 #include "kmalloc.h"
 
-#define PAGE_SIZE	4096
+#define MMU_PAGE_SIZE	4096
 
 #define MD_PER_PAGE	4096 / sizeof(struct Memory_Descriptor)
 
@@ -42,7 +42,7 @@ static struct Memory_Descriptor *empty = NULL;
 static void prepare_MD(void)
 {
 	/**分配一个新页储存描述符*/
-	struct Memory_Descriptor *MD = vmalloc(PAGE_SIZE);
+	struct Memory_Descriptor *MD = vmalloc(MMU_PAGE_SIZE);
 	if (MD == NULL) error("fill pool error!");
 	
 	/**初始化该页*/
@@ -64,7 +64,7 @@ void fill_pool(unsigned long n)
 	if (empty == NULL) prepare_MD();
 	
 	/**获得一个页*/
-	void *new_page = vmalloc(PAGE_SIZE);
+	void *new_page = vmalloc(MMU_PAGE_SIZE);
 	
 	/**判断是否获取成功*/
 	if (new_page == NULL) error("No enough memory!");
@@ -75,7 +75,7 @@ void fill_pool(unsigned long n)
 	
 	/**获取相关信息*/
 	size_t size = mem_pool[n].size;
-	unsigned long number = PAGE_SIZE / size;
+	unsigned long number = MMU_PAGE_SIZE / size;
 	
 	/**初始化内存描述符表和这个页*/
 	new_MD->page = new_page;

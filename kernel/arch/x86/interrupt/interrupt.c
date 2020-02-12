@@ -9,7 +9,7 @@
 
 #include "interrupt.h"
 #include <memory.h>
-#include "../include/page.h"
+#include "../include/mmu.h"
 #include "../include/function.h"
 #include <stdlib.h>
 #include <types.h>
