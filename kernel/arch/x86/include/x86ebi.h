@@ -13,8 +13,11 @@
         reset(); \
 }
 
+void x86ebi_store(void);
+
 /**在_start.asm中放置了boot_info_ptr指针指向boot_info*/
 extern struct boot_info *boot_info_ptr;
+extern struct boot_info ebi;
 
 /**实模式Segment:Offset地址转换成保护模式地址*/
 // #define real_addr_in_pm(Segment, Offset)	(Segment * 0x10 + Offset)

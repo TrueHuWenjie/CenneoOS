@@ -78,7 +78,7 @@ void main(void)
 /**输出VBE信息*/
 void output_viedo_info(void)
 {
-	//struct VbeInfoBlock *VbeInfoBlock = &boot_info_ptr->VbeInfoBlock;
+	//struct VbeInfoBlock *VbeInfoBlock = &ebi.VbeInfoBlock;
 
 	/**空出一行*/
 	//printk("\n");
@@ -90,8 +90,8 @@ void output_viedo_info(void)
 	//printk("OEM:%s.\n", real_addr_in_pm(VbeInfoBlock->OemStringPtr_Seg, VbeInfoBlock->OemStringPtr_Off));
 
 	/**详细屏幕信息*/
-	//printk("XResolution:%d, YResolution:%d, BitsPerPixel:%d.\n", boot_info_ptr->ModeInfoBlock.XResolution, boot_info_ptr->ModeInfoBlock.YResolution, boot_info_ptr->ModeInfoBlock.BitsPerPixel);
+	//printk("XResolution:%d, YResolution:%d, BitsPerPixel:%d.\n", ebi.ModeInfoBlock.XResolution, ebi.ModeInfoBlock.YResolution, ebi.ModeInfoBlock.BitsPerPixel);
 
 	/**显存信息*/
-	//printk("PhysBasePtr:%#X, Size of vram:%dBytes, vitual address of vram in kernel:%#X.\n", boot_info_ptr->ModeInfoBlock.PhysBasePtr, Video_Info.vram_length, Video_Info.vram);
+	//printk("PhysBasePtr:%#X, Size of vram:%dBytes, vitual address of vram in kernel:%#X.\n", ebi.ModeInfoBlock.PhysBasePtr, Video_Info.vram_length, Video_Info.vram);
 }

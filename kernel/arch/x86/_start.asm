@@ -101,20 +101,20 @@ TASK_SIZE	equ	8192
 
 ;整个内核的入口函数
 _start:
-	;将eax代表的启动信息放入启动信息指针中
+	; Get ebi_ptr
 	mov		eax, [esp + 4]
-	mov		[boot_info_ptr],eax
+	mov		[boot_info_ptr], eax
 
-	;初始化堆栈指针指向内核栈
+	; 初始化堆栈指针指向内核栈
 	mov		esp,task_0 + TASK_SIZE
 
-	;初始化平台相关信息
+	; 初始化平台相关信息
 	call	init_arch
 
-	;调用主函数开始进行各项的初始化
+	; 调用主函数开始进行各项的初始化
 	call	main
 
-	;怠速运行
+	; 怠速运行
 .sleep:
 	hlt
 	jmp		.sleep

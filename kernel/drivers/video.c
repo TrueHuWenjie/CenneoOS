@@ -15,13 +15,13 @@
 /**Initialize for vesa*/
 void init_VESA(void)
 {
-	Video_Info.xres = boot_info_ptr->ModeInfoBlock.XResolution;
-	Video_Info.yres = boot_info_ptr->ModeInfoBlock.YResolution;
-	Video_Info.bit_per_pixel = boot_info_ptr->ModeInfoBlock.BitsPerPixel;
+	Video_Info.xres = ebi.ModeInfoBlock.XResolution;
+	Video_Info.yres = ebi.ModeInfoBlock.YResolution;
+	Video_Info.bit_per_pixel = ebi.ModeInfoBlock.BitsPerPixel;
 	Video_Info.vram_length = (((Video_Info.xres * Video_Info.yres) * (Video_Info.bit_per_pixel / 8)) & 0xfffff000) + 0x1000;
-	Video_Info.vram = (char *)boot_info_ptr->ModeInfoBlock.PhysBasePtr;
+	Video_Info.vram = (char *)ebi.ModeInfoBlock.PhysBasePtr;
 	// Video_Info.vram = (unsigned char*)vmalloc(Video_Info.vram_length);
 
-	// Video_Info.vram = (unsigned char*)boot_info_ptr->ModeInfoBlock.PhysBasePtr;
-	// kmap(Video_Info.vram, boot_info_ptr->ModeInfoBlock.PhysBasePtr, Video_Info.vram_length);
+	// Video_Info.vram = (unsigned char*)ebi.ModeInfoBlock.PhysBasePtr;
+	// kmap(Video_Info.vram, ebi.ModeInfoBlock.PhysBasePtr, Video_Info.vram_length);
 }

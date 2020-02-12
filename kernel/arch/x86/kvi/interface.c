@@ -134,8 +134,8 @@ void kvi_open(void)
 	kvi_sm.cursor_column = 0;
 	kvi_sm.cursor_row = 0;
 
-	kvi_sm.xres = boot_info_ptr->ModeInfoBlock.XResolution;
-	kvi_sm.yres = boot_info_ptr->ModeInfoBlock.YResolution;
+	kvi_sm.xres = ebi.ModeInfoBlock.XResolution;
+	kvi_sm.yres = ebi.ModeInfoBlock.YResolution;
 
 	/**计算屏幕长度、宽度*/
 	kvi_sm.width = kvi_sm.xres / FONT_W;

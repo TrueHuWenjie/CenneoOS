@@ -30,17 +30,18 @@ void output_mem_info(void)
 	for (n = 0; n < BOOT_ARDS_NUM; n++)
 	{
 		printk("%#010x    %#010x    %#010x    %#010x    %#010x\n", \
-		boot_info_ptr->ARDS[n].BaseAddrLow, \
-		boot_info_ptr->ARDS[n].BaseAddrHigh, boot_info_ptr->ARDS[n].LengthLow, \
-		boot_info_ptr->ARDS[n].LengthHigh, boot_info_ptr->ARDS[n].Type);
+		ebi.ARDS[n].BaseAddrLow, \
+		ebi.ARDS[n].BaseAddrHigh, ebi.ARDS[n].LengthLow, \
+		ebi.ARDS[n].LengthHigh, ebi.ARDS[n].Type);
 	}
 }
 
 /**架构初始化*/
 void init_arch(void)
 {
-	// EBI check
+	// EBI check & store
 	X86EBI_CHECK
+	x86ebi_store();
 
 	// Temporary
 	init_graph();
