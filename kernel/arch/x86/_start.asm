@@ -2,13 +2,6 @@
 ; /kernel/arch/x86/_start.asm
 ; the entrypoint of kernel
 
-;Explorer在x86平台地址管理的相关信息*/
-
-;全局描述符表(64KB)
-GDT_addr		equ	0x60000
-GDT_size		equ	65536
-
-
 ;全局变量及全局函数
 extern	task_0				;任务0的联合体，在Explorer/arch/x86/kernel/task/task.c中定义
 extern	init_arch			;初始化架构函数，在Explorer/arch/x86/Architecture.c中实现

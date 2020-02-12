@@ -4,7 +4,7 @@
 
 #include "include/x86types.h"
 #include "include/x86ebi.h"
-#include "include/x86mem.h"
+#include "include/x86mmd.h"
 #include "include/kvi.h"
 #include "include/function.h"
 #include <task.h>
@@ -53,7 +53,7 @@ void init_arch(void)
 	output_mem_info();
 
 	/**准备GDT表*/
-	write_GDTR(GDT_addr, GDT_size - 1);
+	write_GDTR(MMD_GDT_ADDR, MMD_GDT_SIZE - 1);
 	// clean_GDT();
 
 	/**创建数据段和代码段*/

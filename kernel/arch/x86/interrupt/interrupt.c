@@ -11,7 +11,6 @@
 #include <memory.h>
 #include "../include/page.h"
 #include "../include/function.h"
-#include "../include/x86mem.h"
 #include <stdlib.h>
 #include <types.h>
 
