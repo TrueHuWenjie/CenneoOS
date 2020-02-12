@@ -11,7 +11,7 @@
 #include <memory.h>
 #include "../include/page.h"
 #include "../include/function.h"
-#include "../include/address.h"
+#include "../include/x86mem.h"
 #include <stdlib.h>
 #include <types.h>
 
@@ -23,8 +23,8 @@ void init_Interrupt(void)
 	IDT_addr = (u32 *)vmalloc(IDT_size);
 	write_IDTR((u32)IDT_addr, IDT_size - 1);
 	clean_IDT();
-	
-	
+
+
 	/**初始化irq数组*/
 	unsigned long point;
 	for (point = 0; point < NUMBER_INTERRUPT; point ++)
@@ -32,8 +32,8 @@ void init_Interrupt(void)
 		irqaction[point].name = NULL;
 		irqaction[point].handle = &easy_handle;
 	}
-	
-	
+
+
 	/**创建中断描述符*/
 	create_IDT(0 , code_0_selector, &int_0 , interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
 	create_IDT(1 , code_0_selector, &int_1 , interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
@@ -85,15 +85,15 @@ void init_Interrupt(void)
 	create_IDT(47, code_0_selector, &int_47, interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
 	create_IDT(48, code_0_selector, &int_48, interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
 	create_IDT(49, code_0_selector, &int_49, interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
-	
+
 	/**专门用作系统调用的描述符*/
 	create_IDT(50, code_0_selector, &int_50, interrupt_gate + IDT_32 + IDT_DPL_3 + IDT_P);
-	
-	
+
+
 	/**初始化Intel 386保护模式的相关中断异常处理程序*/
 	init_trap();
-	
-	
+
+
 	/**正常返回*/
 	return;
 }

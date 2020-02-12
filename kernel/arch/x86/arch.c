@@ -4,9 +4,9 @@
 
 #include "include/x86types.h"
 #include "include/x86ebi.h"
+#include "include/x86mem.h"
 #include "include/kvi.h"
 #include "include/function.h"
-#include "include/address.h"
 #include <task.h>
 #include <types.h>
 

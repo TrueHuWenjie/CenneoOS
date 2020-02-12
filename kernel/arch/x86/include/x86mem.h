@@ -5,8 +5,8 @@ File name:Explorer\Kernel\include\address.h
 2014.7.10 2:37 PM
 */
 
-#ifndef ADDRESS_H_
-#define ADDRESS_H_
+#ifndef X86MEM_H_
+#define X86MEM_H_
 
 /*对单位定义*/
 #define KB  * 1024
