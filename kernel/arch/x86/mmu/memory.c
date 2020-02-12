@@ -8,7 +8,6 @@
  */
 
 #include <memory.h>
-#include <main.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <lib/mem.h>
