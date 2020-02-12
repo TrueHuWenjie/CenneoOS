@@ -2,9 +2,9 @@
 # Author:HuWenjie<huwenjie@cenneo.com>
 # Cenneo OS
 # Makefile
-# 
+#
 # BSD 2-Clause License
-# 
+#
 # Copyright (c) 2017, Ghost Bird Operating System Project Developers.
 # All rights reserved.
 
@@ -33,7 +33,7 @@ export PATH += :$(CURDIR)/tools/gfr
 
 gfr:
 	cd tools/gfr && make all
-	
+
 loader:
 	cd loader && make all
 
@@ -59,7 +59,7 @@ clean:
 
 dist:clean
 	$(compress) -m -r -j $(image:.vhd=.zip) $(image)
-	
+
 install:
 	cd loader && make install
 	cd kernel && make install
@@ -67,7 +67,7 @@ all:
 	make loader
 	make kernel
 run:all install
-	$(qemu) -drive file=$(image),format=vpc -m 4096
+	$(qemu) -drive file=$(image),format=vpc -m 9
 
 help:
 	clear
@@ -77,4 +77,3 @@ help:
 	@echo loader		make Explorer Loader
 	@echo clean		make cl
 	@echo loader		make Explorer Loader
-
