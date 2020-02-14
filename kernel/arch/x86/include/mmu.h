@@ -11,13 +11,15 @@
 
 struct pmb_sm
 {
-    X86U32 free;
-    X86U32 total;
+    X86U32 free;                    // In page
+    X86U32 total;                   // In page
+    X86U32 rsvd;                    // In page
 };
 extern struct pmb_sm pmb_sm;
 
 #define PMB_FREE_BYTES  pmb_sm.free  * MMU_PAGE_SIZE
 #define PMB_TOTAL_BYTES pmb_sm.total * MMU_PAGE_SIZE
+#define PMB_RSVD_BYTES pmb_sm.rsvd * MMU_PAGE_SIZE
 
 /**获取一个物理页函数
  * 返回值：NULL代表获取空闲物理页失败，非NULL代表获取成功。

@@ -12,9 +12,10 @@
 #define MMD_MINI_MEM    8 MB
 
 // #Notice: Hundreds of test show that the memory between 0x0~0x9fc00 are free
+#define MMD_DATA_ADDR   0x00000000
 
 // Design about Physical Memory Bitmap
-#define MMD_PMB_ADDR    0x00000000
+#define MMD_PMB_ADDR    MMD_DATA_ADDR
 #define MMD_PMB_SIZE    128 KB
 
 // Design about Kernel Memory Bitmap
@@ -24,5 +25,7 @@
 // Design about Global Descriptor Table
 #define MMD_GDT_ADDR    0x00030000
 #define MMD_GDT_SIZE    64 KB
+
+#define MMD_DATA_SIZE   (MMD_GDT_ADDR + MMD_GDT_SIZE)
 
 #endif
