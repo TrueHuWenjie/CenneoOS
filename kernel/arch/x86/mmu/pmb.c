@@ -154,4 +154,6 @@ void init_pmb(void)
 
 	printk("    Free:%dPages(%dKB), Total:%dPages(%dKB).\n", \
 	pmb_sm.free, PMB_FREE_BYTES / 1024, pmb_sm.total, PMB_TOTAL_BYTES / 1024);
+
+	printk("Finished - init_pmb();\n");
 }
