@@ -84,7 +84,7 @@ void init_arch(void)
 	/**加载TSS*/
 	write_TR(TSS_selector);
 
-	printk("Finished - init();\n");
+	printk("Finished - init_arch();\n");
 }
 
 /**
