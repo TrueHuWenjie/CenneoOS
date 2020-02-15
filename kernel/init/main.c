@@ -44,8 +44,8 @@ int task_test()
 void main(void)
 {
 	/**初始化内存管理单元*/
+	init_interrupt();
 	init_mmu();
-	init_Interrupt();
 	init_kmm();
 	init_time();
 	init_task();
