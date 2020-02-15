@@ -7,8 +7,9 @@
 
 // Unit defination
 #define KB  * 1024
-#define MB	* 1048576
+#define MB  * 1048576
 
+// Minimum memory
 #define MMD_MINI_MEM    8 MB
 
 // #Notice: Hundreds of test show that the memory between 0x0~0x9fc00 are free
@@ -27,5 +28,11 @@
 #define MMD_GDT_SIZE    64 KB
 
 #define MMD_DATA_SIZE   (MMD_GDT_ADDR + MMD_GDT_SIZE)
+
+// Virtual Memory
+#define MMD_VM_ADDR     0x00000000
+#define MMD_VM_PD_ADDR  0xfbff000
+#define MMD_VM_PT_ADDR  0xfc00000
+#define MMD_VM_SIZE     256 MB
 
 #endif

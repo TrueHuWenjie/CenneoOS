@@ -87,20 +87,6 @@ void init_arch(void)
 	printk("Finished - init_arch();\n");
 }
 
-/**
- * 进入分页模式函数
- * 分页模式是保护模式下一种可选的模式，对内存进行分页管理
- * 实现分页模式可以
- */
-void goto_paging(u32 pdt_addr)
-{
-	/**将页目录表的地址写入CR3寄存器*/
-	write_CR3(pdt_addr);
-
-	/**设置CR0的最高位，开启分页模式*/
-	write_CR0(read_CR0() | 0x80000000);
-}
-
 /**重置函数*/
 void reset(void)
 {

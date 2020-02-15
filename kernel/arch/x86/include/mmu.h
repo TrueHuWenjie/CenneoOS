@@ -9,6 +9,10 @@
 
 #define MMU_PAGE_SIZE	4096
 
+#define MMU_SIZE_ALIGN(addr) { \
+  \
+}
+
 struct pmb_sm
 {
     X86U32 free;                    // In page
@@ -31,6 +35,9 @@ void pmb_free(X86Addr addr);
 
 // Initialization for Physical Memory Bitmap
 void init_pmb(void);
+
+/**初始化分页模式函数*/
+void init_paging(void);
 
 /**页故障处理程序*/
 void do_page_fault(int error_code);

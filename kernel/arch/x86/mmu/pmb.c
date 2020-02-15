@@ -84,7 +84,6 @@ void init_pmb(void)
 {
     X86U32 n;
     X86U32 BaseAddr, Length;
-	X86U32 kernel_addr, kernel_size;
 
     // Assuming all physical memory been used first
 	for (n = 0; n < (MMD_PMB_SIZE / sizeof(X86U32)); n ++)
@@ -134,23 +133,23 @@ void init_pmb(void)
         PMB_TOTAL_BYTES / 1024, PMB_RSVD_BYTES / 1024);
 
 	// Marking the place used by kernel and other system data as 'used'
-	kernel_addr = ebi.kernel_addr & 0xfffff000;
+	ebi.kernel_addr = ebi.kernel_addr & 0xfffff000;
 	if (ebi.kernel_size % MMU_PAGE_SIZE)
-		kernel_size = MMU_PAGE_SIZE + ebi.kernel_size & 0xfffff000;
-	else kernel_size = ebi.kernel_size;
+		ebi.kernel_size = MMU_PAGE_SIZE + ebi.kernel_size & 0xfffff000;
+	else ebi.kernel_size = ebi.kernel_size;
 
 	printk("    Data's addr:%#x, size:%dKB.\n", \
 		MMD_DATA_ADDR, MMD_DATA_SIZE / 1024);
-	printk("    Kernel's addr:%#x, size:%d(%d)KB.\n", \
-		kernel_addr, kernel_size / 1024, ebi.kernel_size);
+	printk("    Kernel's addr:%#x, size:%d(Aligned)KB.\n", \
+		ebi.kernel_addr, ebi.kernel_size / 1024);
 
 	for (n = 0; n * MMU_PAGE_SIZE < MMD_DATA_SIZE; n ++)
 		PMB_SETUSED(MMD_DATA_ADDR + n * MMU_PAGE_SIZE);
 
-	for (n = 0; n * MMU_PAGE_SIZE < kernel_size; n ++)
-		PMB_SETUSED(kernel_addr + n * MMU_PAGE_SIZE);
+	for (n = 0; n * MMU_PAGE_SIZE < ebi.kernel_size; n ++)
+		PMB_SETUSED(ebi.kernel_addr + n * MMU_PAGE_SIZE);
 
-	pmb_sm.free -= (kernel_size + MMD_DATA_SIZE) / MMU_PAGE_SIZE;
+	pmb_sm.free -= (ebi.kernel_size + MMD_DATA_SIZE) / MMU_PAGE_SIZE;
 
 	printk("    Free:%dPages(%dKB), Total:%dPages(%dKB).\n", \
 	pmb_sm.free, PMB_FREE_BYTES / 1024, pmb_sm.total, PMB_TOTAL_BYTES / 1024);

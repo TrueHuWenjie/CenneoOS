@@ -45,11 +45,9 @@ void main(void)
 {
 	/**初始化内存管理单元*/
 	init_mmu();
-
-	/**进入分页模式*/
-	init_paging();
-	init_time();
 	init_Interrupt();
+	init_kmm();
+	init_time();
 	init_task();
 	init_CPU();
 	init_PIC();
