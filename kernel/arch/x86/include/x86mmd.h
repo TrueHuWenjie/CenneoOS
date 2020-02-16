@@ -27,7 +27,11 @@
 #define MMD_GDT_ADDR    0x00030000
 #define MMD_GDT_SIZE    64 KB
 
-#define MMD_DATA_SIZE   (MMD_GDT_ADDR + MMD_GDT_SIZE)
+// Design about Interrupt Descriptor Table
+#define MMD_IDT_ADDR    0x00040000
+#define MMD_IDT_SIZE    2 KB
+
+#define MMD_DATA_SIZE   ((MMD_IDT_ADDR + MMD_IDT_SIZE) + 2 KB)
 
 // Virtual Memory
 #define MMD_VM_ADDR     0x00000000
