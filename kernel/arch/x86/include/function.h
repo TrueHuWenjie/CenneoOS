@@ -63,7 +63,6 @@ void goto_paging(u32 pdt_addr);
 #define trap_gate		0x700
 #define interrupt_gate	0x600
 
-u32 IDT_len, *IDT_addr, IDT_size;
 //fun_asm.asm函数
 //全局描述符表属性
 #define GDT_G		0x800000
