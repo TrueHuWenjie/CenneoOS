@@ -19,7 +19,8 @@ OBJS += $(patsubst %.cpp, %.o, $(CPP_SRCS))
 OBJS += $(patsubst %.asm, %.o, $(ASM_SRCS))
 OBJS := $(filter %_start.o, $(OBJS)) $(filter-out %_start.o, $(OBJS))
 
-OBJCOPYFLAGS := -R .note -R .comment -S
+OBJCOPYFLAGS := binary -R .note -R .comment -S \
+--set-section-flags .bss=alloc,load,contents
 
 LDFLAGS  := -m elf_i386
 CFLAGS   := -m32 -fno-stack-protector -I $(CURDIR)/include
@@ -44,7 +45,7 @@ install:$(TARGET)
 all: $(TARGET)
 
 $(TARGET): kernel.o
-	$(OBJCOPY) -O binary kernel.o $(TARGET)
+	$(OBJCOPY) -O $(OBJCOPYFLAGS) kernel.o $(TARGET)
 
 kernel.o: $(OBJS)
 	$(LD) $(LDFLAGS) -o kernel.o -Ttext 0x400000 $(OBJS)
