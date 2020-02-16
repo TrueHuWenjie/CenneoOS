@@ -21,7 +21,6 @@ global	write_GDTR
 global	clean_IDT
 global	create_IDT
 ;GDT操作函数
-global	clean_GDT
 global	set_GDT
 ;控制寄存器读写
 global	read_CR0,write_CR0
@@ -113,7 +112,6 @@ _start:
 	jmp		.sleep
 strr	db	"_start: window test",0x00
 
-
 ;平台相关控制代码
 
 ;初始化段寄存器函数
@@ -161,16 +159,6 @@ write_GDTR:
 	ret
 
 ;IDT操作函数
-clean_IDT:
-;void clean_IDT(void)
-	mov		edx,[IDTR.base]
-	mov		ecx,IDTR.size
-	shr		ecx,2
-.loop:
-	mov		dword[edx],0x0
-	add		edx,4
-	loop	.loop
-	ret
 create_IDT:
 ;void create_IDT(u32 number, u32 selector, u32 offset, u32 attribute)
 	xor		eax,eax
@@ -188,17 +176,6 @@ create_IDT:
 	add		[eax+4],edx	;加上属性
 	ret
 
-;GDT操作函数
-clean_GDT:
-;void clean_GDT(void)
-	mov		edx,[GDTR.base]
-	mov		ecx,GDTR.size
-	shr		ecx,2
-.loop:
-	mov		dword[edx],0x0
-	add		edx,4
-	loop	.loop
-	ret
 set_GDT:
 ;u16 set_GDT(u32 segment_base, u32 limit, u32 attribute)
 	push	ebp
@@ -239,35 +216,35 @@ set_GDT:
 
 ;控制寄存器的读写
 read_CR0:
-	mov		eax,cr0
+	mov		eax, cr0
 	ret
 read_CR2:
-	mov		eax,cr2
+	mov		eax, cr2
 	ret
 read_CR3:
-	mov		eax,cr3
+	mov		eax, cr3
 	ret
 write_CR0:
-	mov		eax,[esp+4]
-	mov		cr0,eax
+	mov		eax, [esp+4]
+	mov		cr0, eax
 	ret
 write_CR2:
-	mov		eax,[esp+4]
-	mov		cr2,eax
+	mov		eax, [esp+4]
+	mov		cr2, eax
 	ret
 write_CR3:
-	mov		eax,[esp+4]
-	mov		cr3,eax
+	mov		eax, [esp+4]
+	mov		cr3, eax
 	ret
 
 
 
 write_mem24:
-	mov		edx,[esp+8]
-	mov		ecx,[esp+4]
-	mov		[ecx],dx
-	shr		dx,16
-	mov		[ecx+2],dl
+	mov		edx, [esp+8]
+	mov		ecx, [esp+4]
+	mov		[ecx], dx
+	shr		dx, 16
+	mov		[ecx+2], dl
 	ret
 
 ;数据区

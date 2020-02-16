@@ -9,6 +9,7 @@
 #include "include/function.h"
 #include <task.h>
 #include <types.h>
+#include <lib/mem.h>
 
 /**代码段、数据段、TSS段的选择子*/
 X86U16 code_0_selector, data_0_selector, TSS_selector;
@@ -54,7 +55,7 @@ void init_arch(void)
 
 	/**准备GDT表*/
 	write_GDTR(MMD_GDT_ADDR, MMD_GDT_SIZE - 1);
-	// clean_GDT();
+	memset(MMD_GDT_ADDR, 0, MMD_GDT_SIZE);
 
 	/**创建数据段和代码段*/
 	code_0_selector = set_GDT(0, 0xfffff, GDT_G + GDT_P + GDT_DPL_0 + GDT_code_32_non_conforming);
@@ -83,7 +84,6 @@ void init_arch(void)
 
 	/**加载TSS*/
 	write_TR(TSS_selector);
-
 	printk("Finished - init_arch();\n");
 }
 
