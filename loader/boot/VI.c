@@ -675,7 +675,7 @@ int warning(unsigned int warncode, const char *fmt, ...)
 void deinit_VI(void)
 {
 	// Clear the screen
-	rectangle(0, 0, Video_Info.xres, Video_Info.yres, 0x000000);
+	rectangle(0, 0, vbe_info.xres, vbe_info.yres, 0x000000);
 }
 
 /**初始化可视化界面*/
@@ -688,8 +688,8 @@ void init_VI(void)
 	resolution is the largest; Otherwise actual = video.*/
 	
 	/**计算起始坐标，保持可视化界面在正中央*/
-	VI_x = (Video_Info.xres - VI_width) / 2;
-	VI_title_y = (Video_Info.yres - (title_height + VI_page_height + notice_height)) / 2;
+	VI_x = (vbe_info.xres - VI_width) / 2;
+	VI_title_y = (vbe_info.yres - (title_height + VI_page_height + notice_height)) / 2;
 	VI_page_y = VI_title_y + title_height;
 	VI_notice_y = VI_page_y + VI_page_height;
 	VI_introduce_x = VI_x + ((VI_width - VI_introduce_width) / 2);
@@ -698,7 +698,7 @@ void init_VI(void)
 	VI_select_y = VI_introduce_y + VI_introduce_height;
 	
 	/**重绘屏幕*/
-	rectangle(0, 0, Video_Info.xres, Video_Info.yres, 0x000000);
+	rectangle(0, 0, vbe_info.xres, vbe_info.yres, 0x000000);
 	rectangle(VI_x, VI_title_y, VI_width, title_height, title_back_color);
 	rectangle(VI_x, VI_notice_y, VI_width, notice_height, notice_back_color);
 	

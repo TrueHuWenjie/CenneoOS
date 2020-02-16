@@ -9,19 +9,18 @@
 
 #include "../arch/x86/include/x86ebi.h"
 #include <types.h>
-#include <lib/graphics.h>
 #include <video.h>
 
-/**Initialize for vesa*/
-void init_VESA(void)
-{
-	Video_Info.xres = ebi.ModeInfoBlock.XResolution;
-	Video_Info.yres = ebi.ModeInfoBlock.YResolution;
-	Video_Info.bit_per_pixel = ebi.ModeInfoBlock.BitsPerPixel;
-	Video_Info.vram_length = (((Video_Info.xres * Video_Info.yres) * (Video_Info.bit_per_pixel / 8)) & 0xfffff000) + 0x1000;
-	Video_Info.vram = (char *)ebi.ModeInfoBlock.PhysBasePtr;
-	// Video_Info.vram = (unsigned char*)vmalloc(Video_Info.vram_length);
+struct vbe_info vbe_info;
 
-	// Video_Info.vram = (unsigned char*)ebi.ModeInfoBlock.PhysBasePtr;
-	// kmap(Video_Info.vram, ebi.ModeInfoBlock.PhysBasePtr, Video_Info.vram_length);
+/**Initialize for vesa*/
+void init_vesa(void)
+{
+	vbe_info.xres = ebi.ModeInfoBlock.XResolution;
+	vbe_info.yres = ebi.ModeInfoBlock.YResolution;
+	vbe_info.bpp = ebi.ModeInfoBlock.BitsPerPixel;
+	vbe_info.vram_length = (((vbe_info.xres * vbe_info.yres) * (vbe_info.bpp / 8)) & 0xfffff000) + 0x1000;
+	vbe_info.vram = ebi.ModeInfoBlock.PhysBasePtr;
+	//vbe_info.vram = vmalloc(vbe_info.vram_length);
+	//kmap(vbe_info.vram, ebi.ModeInfoBlock.PhysBasePtr, vbe_info.vram_length);
 }

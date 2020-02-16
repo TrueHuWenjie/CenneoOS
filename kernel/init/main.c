@@ -25,6 +25,7 @@
 #include <keyboard.h>
 #include <memory.h>
 #include <video.h>
+#include <kvi.h>
 
 /**在_start.asm中放置了boot_info_ptr指针指向boot_info*/
 extern struct boot_info *boot_info_ptr;
@@ -43,10 +44,16 @@ int task_test()
 /**内核主函数*/
 void main(void)
 {
-	/**初始化内存管理单元*/
-	init_interrupt();
-	init_mmu();
+	// Temporary
+	init_graph();
+	init_font();
+
+	// Open kvi
+	kvi_open();
+	fin:goto fin;
 	init_kmm();
+
+
 	init_time();
 	init_task();
 	init_CPU();
@@ -55,7 +62,6 @@ void main(void)
 
 	/**打印信息*/
 	// output_CPU_info();			// 打印处理器信息
-	output_mem_info();			// 打印内存管理相关信息
 	output_viedo_info();		// 打印VBE的相关信息
 
 	/**初始化设备*/
@@ -91,5 +97,5 @@ void output_viedo_info(void)
 	//printk("XResolution:%d, YResolution:%d, BitsPerPixel:%d.\n", ebi.ModeInfoBlock.XResolution, ebi.ModeInfoBlock.YResolution, ebi.ModeInfoBlock.BitsPerPixel);
 
 	/**显存信息*/
-	//printk("PhysBasePtr:%#X, Size of vram:%dBytes, vitual address of vram in kernel:%#X.\n", ebi.ModeInfoBlock.PhysBasePtr, Video_Info.vram_length, Video_Info.vram);
+	//printk("PhysBasePtr:%#X, Size of vram:%dBytes, vitual address of vram in kernel:%#X.\n", ebi.ModeInfoBlock.PhysBasePtr, vbe_info.vram_length, vbe_info.vram);
 }

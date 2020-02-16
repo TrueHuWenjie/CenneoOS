@@ -55,7 +55,6 @@ X86Addr pmb_alloc(void)
 					pmb_sm.free --;
 
 					/**返回这个页*/
-					printk("    New page:%#X.\n", new_page);
 					return (X86Addr)new_page;
 				}
 			}
@@ -76,7 +75,6 @@ void pmb_free(X86Addr addr)
 	/**将该页设置为自由*/
 	PMB_SETFREE((unsigned long)addr);
 	pmb_sm.free ++;
-	printk("    Free page:%#X.\n", addr);
 }
 
 // Initialization for Physical Memory Bitmap
@@ -114,9 +112,6 @@ void init_pmb(void)
         Length = ebi.ARDS[n].LengthLow;
     	pmb_sm.free += Length / MMU_PAGE_SIZE;
 
-    	// Print info
-    	printk("    Available memory:%#x~%#x.\n", BaseAddr, BaseAddr + Length);
-
         /**制作相应的物理内存位页图和内核内存字节页图*/
         while (Length)
     	{
@@ -129,19 +124,11 @@ void init_pmb(void)
         }
     }
 
-    printk("    Installed memory(RAM):%dKB, reserved memory(ROM):%dKB.\n", \
-        PMB_TOTAL_BYTES / 1024, PMB_RSVD_BYTES / 1024);
-
 	// Marking the place used by kernel and other system data as 'used'
 	ebi.kernel_addr = ebi.kernel_addr & 0xfffff000;
 	if (ebi.kernel_size % MMU_PAGE_SIZE)
 		ebi.kernel_size = MMU_PAGE_SIZE + ebi.kernel_size & 0xfffff000;
 	else ebi.kernel_size = ebi.kernel_size;
-
-	printk("    Data's addr:%#x, size:%dKB.\n", \
-		MMD_DATA_ADDR, MMD_DATA_SIZE / 1024);
-	printk("    Kernel's addr:%#x, size:%d(Aligned)KB.\n", \
-		ebi.kernel_addr, ebi.kernel_size / 1024);
 
 	for (n = 0; n * MMU_PAGE_SIZE < MMD_DATA_SIZE; n ++)
 		PMB_SETUSED(MMD_DATA_ADDR + n * MMU_PAGE_SIZE);
@@ -150,9 +137,4 @@ void init_pmb(void)
 		PMB_SETUSED(ebi.kernel_addr + n * MMU_PAGE_SIZE);
 
 	pmb_sm.free -= (ebi.kernel_size + MMD_DATA_SIZE) / MMU_PAGE_SIZE;
-
-	printk("    Free:%dPages(%dKB), Total:%dPages(%dKB).\n", \
-	pmb_sm.free, PMB_FREE_BYTES / 1024, pmb_sm.total, PMB_TOTAL_BYTES / 1024);
-
-	printk("Finished - init_pmb();\n");
 }

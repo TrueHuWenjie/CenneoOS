@@ -12,14 +12,6 @@
 
 #include <lib/fonts/font.h>
 
-struct Video_Info{
-	unsigned char *vram;
-	unsigned long xres, yres;
-	unsigned long vram_length;
-	unsigned long bit_per_pixel;
-}Video_Info;
-
-
 /**绘制像素函数*/
 void (*putpixel)(unsigned int x, unsigned int y, unsigned int color);
 

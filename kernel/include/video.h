@@ -10,7 +10,15 @@
 #ifndef VEDIO_H_
 #define VEDIO_H_
 
-void init_VESA(void);
+struct vbe_info{
+	unsigned char *vram;
+	unsigned long xres, yres;
+	unsigned long vram_length;
+	unsigned long bpp;
+};
+
+extern struct vbe_info vbe_info;
+
+void init_vesa(void);
 
 #endif
-

@@ -2,11 +2,10 @@
 // /kernel/arch/x86/kvi/interface.c
 // Kernel-support visual interface
 
-#include "../include/x86types.h"
-#include "../include/x86ebi.h"
 #include "../include/kvi.h"
 #include "theme.h"
 #include <stdbool.h>
+#include <video.h>
 #include <lib/graphics.h>
 #include <info.h>
 
@@ -23,14 +22,14 @@
 // kvi's state machine
 struct kvi_sm
 {
-	X86U32 xres;
-	X86U32 yres;
-	X86U32 cursor_column;
-	X86U32 cursor_row;
-	X86U32 width;
-	X86U32 height;
-	X86U32 bg_color;
-	X86U32 fg_color;
+	u32 xres;
+	u32 yres;
+	u32 cursor_column;
+	u32 cursor_row;
+	u32 width;
+	u32 height;
+	u32 bg_color;
+	u32 fg_color;
 	bool enable;
 } kvi_sm = {.enable = false};
 
@@ -99,7 +98,7 @@ void kvi_roll_screen(void)
 	kvi_sm.cursor_row --;
 }
 
-void kvi_color(X86U32 fg_color, X86U32 bg_color)
+void kvi_color(u32 fg_color, u32 bg_color)
 {
 	kvi_sm.fg_color = fg_color;
 	kvi_sm.bg_color = bg_color;
@@ -134,8 +133,8 @@ void kvi_open(void)
 	kvi_sm.cursor_column = 0;
 	kvi_sm.cursor_row = 0;
 
-	kvi_sm.xres = ebi.ModeInfoBlock.XResolution;
-	kvi_sm.yres = ebi.ModeInfoBlock.YResolution;
+	kvi_sm.xres = vbe_info.xres;
+	kvi_sm.yres = vbe_info.yres;
 
 	/**计算屏幕长度、宽度*/
 	kvi_sm.width = kvi_sm.xres / FONT_W;

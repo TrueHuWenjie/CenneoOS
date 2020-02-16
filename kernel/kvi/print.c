@@ -2,15 +2,17 @@
 // /kernel/arch/x86/kvi/print.c
 // Kernel-support visual interface - error handle
 
-#include "../include/x86types.h"
 #include "../include/kvi.h"
 #include "theme.h"
+#include <types.h>
 #include <stdarg.h>
+
+#define KVI_BUF_SIZE 256
 
 /**printk函数，格式化输出字符串到屏幕上*/
 int printk(const char *fmt, ...)
 {
-    char buffer[256];
+    char buffer[KVI_BUF_SIZE];
     va_list arg;
     unsigned long n;
 
@@ -38,7 +40,7 @@ int printk(const char *fmt, ...)
 
 int warn(const char *fmt, ...)
 {
-    char buffer[256];
+    char buffer[KVI_BUF_SIZE];
     va_list arg;
     unsigned long n;
 
@@ -66,7 +68,7 @@ int warn(const char *fmt, ...)
 
 int error(const char *fmt, ...)
 {
-    char buffer[256];
+    char buffer[KVI_BUF_SIZE];
     va_list arg;
     unsigned long n;
 

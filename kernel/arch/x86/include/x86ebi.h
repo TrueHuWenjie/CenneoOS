@@ -5,6 +5,8 @@
 #ifndef X86EBI_H_
 #define X86EBI_H_
 
+#include "power.h"
+
 #define X86EBI_CHECK { \
     if (boot_info_ptr->flag[0] != 'E' | \
         boot_info_ptr->flag[1] != 'B' | \

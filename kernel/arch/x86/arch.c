@@ -5,11 +5,12 @@
 #include "include/x86types.h"
 #include "include/x86ebi.h"
 #include "include/x86mmd.h"
-#include "include/kvi.h"
 #include "include/function.h"
 #include <task.h>
 #include <types.h>
 #include <lib/mem.h>
+
+struct boot_info ebi;
 
 /**代码段、数据段、TSS段的选择子*/
 X86U16 code_0_selector, data_0_selector, TSS_selector;
@@ -17,41 +18,12 @@ X86U16 code_3_selector, data_3_selector;
 
 struct TSS_32 TSS;
 
-
-/**内存管理相关信息输出函数*/
-void output_mem_info(void)
-{
-	unsigned long n;
-
-	/**空出一行*/
-	printk("\n");
-
-	/**打印内存分布信息*/
-	printk("Address Range Descriptor Structure:\nBaseAddrLow   BaseAddrHigh  LengthLow     LengthHigh    Type\n");
-	for (n = 0; n < BOOT_ARDS_NUM; n++)
-	{
-		printk("%#010x    %#010x    %#010x    %#010x    %#010x\n", \
-		ebi.ARDS[n].BaseAddrLow, \
-		ebi.ARDS[n].BaseAddrHigh, ebi.ARDS[n].LengthLow, \
-		ebi.ARDS[n].LengthHigh, ebi.ARDS[n].Type);
-	}
-}
-
 /**架构初始化*/
 void init_arch(void)
 {
 	// EBI check & store
 	X86EBI_CHECK
-	x86ebi_store();
-
-	// Temporary
-	init_graph();
-	init_font();
-
-	// Open kvi
-	kvi_open();
-
-	output_mem_info();
+	memcpy(&ebi, boot_info_ptr, sizeof(ebi));
 
 	/**准备GDT表*/
 	write_GDTR(MMD_GDT_ADDR, MMD_GDT_SIZE - 1);
@@ -84,21 +56,7 @@ void init_arch(void)
 
 	/**加载TSS*/
 	write_TR(TSS_selector);
-	printk("Finished - init_arch();\n");
-}
 
-/**重置函数*/
-void reset(void)
-{
-	io_out8(0x64,0xfe);
-}
-
-// Poweroff
-void poweroff(void)
-{
-	// In Qemu
-	io_out16(0x604, 0x2000);
-
-	// In VirtualBox
-	io_out16(0x4004, 0x3400);
+	init_interrupt();
+	init_mmu();
 }

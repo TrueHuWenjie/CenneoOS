@@ -24,11 +24,11 @@ unsigned int (*getpixel)(unsigned int x, unsigned int y);
 void init_graphics
 (unsigned long xres, unsigned long yres, unsigned long bpp, unsigned char *vram)
 {
-	Video_Info.xres = xres;
-	Video_Info.yres = yres;
-	Video_Info.bpp  = bpp;
-	Video_Info.vram = vram;
-	Video_Info.vlen = (((xres * yres) * (bpp / sizeof(char))) & 0xfffff000) + 0x1000;
+	vbe_info.xres = xres;
+	vbe_info.yres = yres;
+	vbe_info.bpp  = bpp;
+	vbe_info.vram = vram;
+	vbe_info.vlen = (((xres * yres) * (bpp / sizeof(char))) & 0xfffff000) + 0x1000;
 
 	/**根据BPP判断所需要的相应显示像素函数*/
 	switch (bpp)
@@ -139,10 +139,10 @@ unsigned int getpixel24(unsigned int x, unsigned int y)
 	unsigned int i;
 	
 	/**先判断该像素是否在屏幕上*/
-	if (x < Video_Info.xres & y < Video_Info.yres)
+	if (x < vbe_info.xres & y < vbe_info.yres)
 	{
-		i = ((y * Video_Info.xres) + x) * 3;
-		return (Video_Info.vram[i] + (Video_Info.vram[i+1] << 8) + (Video_Info.vram[i+2] << 16));
+		i = ((y * vbe_info.xres) + x) * 3;
+		return (vbe_info.vram[i] + (vbe_info.vram[i+1] << 8) + (vbe_info.vram[i+2] << 16));
 	}
 }
 
@@ -150,9 +150,9 @@ unsigned int getpixel24(unsigned int x, unsigned int y)
 unsigned int getpixel32(unsigned int x, unsigned int y)
 {
 	/**先判断该像素是否在屏幕上*/
-	if (x < Video_Info.xres & y < Video_Info.yres)
+	if (x < vbe_info.xres & y < vbe_info.yres)
 	{
-		return ((unsigned int *)Video_Info.vram)[(y * Video_Info.xres) + x];
+		return ((unsigned int *)vbe_info.vram)[(y * vbe_info.xres) + x];
 	}
 }
 
@@ -160,12 +160,12 @@ unsigned int getpixel32(unsigned int x, unsigned int y)
 void putpixel24(unsigned int x, unsigned int y, unsigned int color)
 {
 	int i;
-	unsigned char *vram = Video_Info.vram;
+	unsigned char *vram = vbe_info.vram;
 	
 	/**先判断该像素是否在屏幕上*/
-	if ((x < Video_Info.xres) & (y < Video_Info.yres))
+	if ((x < vbe_info.xres) & (y < vbe_info.yres))
 	{
-		i = ((y * Video_Info.xres) + x)*3;
+		i = ((y * vbe_info.xres) + x)*3;
 		vram[i] = color;
 		vram[i+1] = color >> 8;
 		vram[i+2] = color >> 16;
@@ -175,14 +175,14 @@ void putpixel24(unsigned int x, unsigned int y, unsigned int color)
 void putpixel32(unsigned int x, unsigned int y, unsigned int color)
 {
 	/**先判断该像素是否在屏幕上*/
-	if ((x < Video_Info.xres) & (y < Video_Info.yres))
+	if ((x < vbe_info.xres) & (y < vbe_info.yres))
 	{
-		((unsigned int *)Video_Info.vram)[(y * Video_Info.xres) + x] = color;
+		((unsigned int *)vbe_info.vram)[(y * vbe_info.xres) + x] = color;
 	}
 }
 
 /**清除屏幕函数*/
 void clear_screen(void)
 {
-	memset(Video_Info.vram, 0, Video_Info.vlen);	
+	memset(vbe_info.vram, 0, vbe_info.vlen);	
 }
