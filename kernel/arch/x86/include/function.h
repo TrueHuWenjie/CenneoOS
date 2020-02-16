@@ -87,7 +87,6 @@ void write_IDTR(u32 base, u16 size);
 u16 write_TR(u16 select);
 void write_GDTR(u32 base, u16 size);
 //GDT操作函数
-void clean_GDT(void);
 u16 set_GDT(u32 base_addr, u32 length, u32 attribute);
 //IDT操作函数
 void clean_IDT(void);
