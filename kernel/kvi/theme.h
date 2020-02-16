@@ -1,5 +1,5 @@
 // Cenneo OS
-// /kernel/arch/x86/kvi/theme.h
+// /kernel/kvi/theme.h
 // Kernel-support visual interface - theme
 
 #ifndef THEME_H_

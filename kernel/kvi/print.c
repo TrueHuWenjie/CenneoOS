@@ -1,5 +1,5 @@
 // Cenneo OS
-// /kernel/arch/x86/kvi/print.c
+// /kernel/kvi/print.c
 // Kernel-support visual interface - error handle
 
 #include "../include/kvi.h"

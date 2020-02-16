@@ -1,5 +1,5 @@
 // Cenneo OS
-// /kernel/arch/x86/kvi/interface.c
+// /kernel/kvi/interface.c
 // Kernel-support visual interface
 
 #include "../include/kvi.h"
