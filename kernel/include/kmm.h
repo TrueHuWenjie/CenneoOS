@@ -6,8 +6,12 @@
  * 11/15/2014 12:05 PM
  */
 
-#ifndef MEMORY_H_
-#define MEMORY_H_
+ // Cenneo OS
+ // /kernel/include/memory.h
+ // Kernel Memory Management
+
+#ifndef KMM_H_
+#define KMM_H_
 
 #include <stddef.h>
 #include <types.h>

@@ -10,7 +10,7 @@
 #include <lib/mem.h>
 #include <types.h>
 #include <stdlib.h>
-#include <memory.h>
+#include <kmm.h>
 
 /**在ATA标准中，IDE命令共有30多个，其中有10个是通用型命令*/
 #define HD_CMD_READ		0x20			//读取扇区命令

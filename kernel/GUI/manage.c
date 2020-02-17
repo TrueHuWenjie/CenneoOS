@@ -7,7 +7,7 @@
  * 8/14/2014 1:59 PM
  */
 
-#include <memory.h>
+#include <kmm.h>
 #include <stdlib.h>
 #include <GUI.h>
 #include <lib/mem.h>

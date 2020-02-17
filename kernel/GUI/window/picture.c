@@ -12,7 +12,7 @@
 #include <studio.h>
 #include <stdlib.h>
 #include <cfs.h>
-#include <memory.h>
+#include <kmm.h>
 #include <lib/graphics.h>
 #include "window.h"
 #include "../layer.h"

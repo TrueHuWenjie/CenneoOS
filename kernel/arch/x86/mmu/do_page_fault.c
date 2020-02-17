@@ -11,7 +11,6 @@
 #include "../include/x86types.h"
 #include "../include/mmu.h"
 #include <stdlib.h>
-#include <memory.h>
 #include <types.h>
 
 int rentry = 0;

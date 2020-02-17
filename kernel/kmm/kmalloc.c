@@ -10,7 +10,7 @@
 
 #include <stdlib.h>
 #include <stddef.h>
-#include <memory.h>
+#include <kmm.h>
 #include "kmalloc.h"
 
 #define MMU_PAGE_SIZE	4096

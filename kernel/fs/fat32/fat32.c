@@ -10,7 +10,7 @@
 #include "fat32.h"
 #include <lib/mem.h>
 #include <stdlib.h>
-#include <memory.h>
+#include <kmm.h>
 #include <hdd.h>
 #include <types.h>
 

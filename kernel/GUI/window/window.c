@@ -13,7 +13,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 #include <GUI.h>
-#include <memory.h>
+#include <kmm.h>
 #include <arch.h>
 #include <lib/graphics.h>
 #include <video.h>

@@ -11,7 +11,7 @@
 #include <lib/graphics.h>
 #include <video.h>
 #include <GUI.h>
-#include <memory.h>
+#include <kmm.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include "window.h"

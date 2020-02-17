@@ -2,7 +2,6 @@
 // /kernel/arch/x86/mmu/mmu.c
 // Memory Management Unit
 
-#include <memory.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <lib/mem.h>

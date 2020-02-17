@@ -8,7 +8,6 @@
  */
 
 #include "interrupt.h"
-#include <memory.h>
 #include "../include/x86mmd.h"
 #include "../include/function.h"
 #include <stdlib.h>
