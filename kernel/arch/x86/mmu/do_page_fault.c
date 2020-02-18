@@ -9,70 +9,61 @@
 
 #include <lib/mem.h>
 #include "../include/x86types.h"
+#include "../include/x86mmd.h"
 #include "../include/mmu.h"
 #include <stdlib.h>
-#include <types.h>
 
 int rentry = 0;
+
+#define PF_NOPG	0
+#define PF_LEVL	1
 
 /**页故障处理函数*/
 void do_page_fault(int error_code)
 {
-	u32 cr2, *pdt, *pt, *new_page;
+	X86U32 cr2, *pd, *pt, *new_page, *pt2pt;
 
 	/**判断是否重入*/
-	if (rentry != 0)
-	{
-		printk("rentry!!!");
-		fin:goto fin;
-	}else{
-		rentry = 1;
-	}
+	if (rentry != 0) error("Rentry happend in function 'do_page_fault()'!");
+	else rentry = 1;
+
+	pd = (X86U32 *)MMD_VM_PD_ADDR;
+	pt = (X86U32 *)MMD_VM_PT_ADDR;
+	pt2pt = MMD_VM_PT_ADDR + (MMD_VM_PT_ADDR >> 22) * MMU_PAGE_SIZE;
 
 	/**读取CR2信息*/
 	cr2 = read_CR2();
-	pdt = (u32 *) (read_CR3() & 0xfffff000);
-
 
 	/**判断是否是缺页引发的中断*/
-	if ((error_code == 2) | (error_code == 0))
+	if ((error_code & 1) == PF_NOPG)
 	{
-		printk("do page fault address:%#X.\n", cr2);
-
 		/**如果故障原因是没有页表*/
-		if ((pdt[(cr2 >> 22)] & 1) == 0)
+		if ((pd[cr2 >> 22] & 1) == 0)
 		{
 			/**获取一个新页*/
-			for (new_page = NULL; new_page == NULL; )
-				new_page = vmalloc(MMU_PAGE_SIZE);
+			new_page = pmb_alloc();
+
+			if (!new_page) error("No enough memory!");
 
 			/**放置新页作为页表（页目录表和页表均在内核态空间中）*/
-			pdt[(cr2 >> 22)] = ((unsigned int)new_page | 0x7);
+			pd[cr2 >> 22] = ((unsigned int)new_page | 0x3);
+			pt2pt[cr2 >> 22] = pd[cr2 >> 22];
 
 			/**清空这个页，保证不会出现干扰*/
-			memset((u8 *) (pdt[(cr2 >> 22)]), 0x00, ((4096 - 256) / 4));
+			memset(&pt[cr2 >> 22], 0x00, MMU_PAGE_SIZE);
+
 		}
 
-		/**先获取页表地址*/
-		pt = (u32 *)(pdt[(cr2 >> 22)] & 0xfffff000);
+		//pt = (X86U32 *)(pd[(cr2 >> 22)] & 0xfffff000);
+		extern unsigned int asd_1, asd_2, asd_3;
 
 		/**无论是否出现缺页表的情况，一定缺少页*/
-		pt[(cr2 & 0x3FF000) >> 12] = ((X86U32)pmb_alloc() | 0x7);
-
-		/*显示信息及返回*/
-		//printk("Page fault:allocated.%X",pdt[(cr2 >> 22)]);
+		new_page = pmb_alloc();
+		pt[cr2 >> 12] = ((X86U32)new_page | 0x3);
+		if (!new_page) error("No enough memory!");
 
 		goto finish;
-	}else{
-		// Open kvi
-		kvi_open();
-
-		/**关闭shell*/
-		printk("Page fault:(Unknown)error code:0x%X", error_code);
-
-		/**停机指令*/
-		io_hlt();
-	}
+	}else error("Page fault:(Unknown)error code:0x%X", error_code);
 
 finish:
 	rentry = 0;
