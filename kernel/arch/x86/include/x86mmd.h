@@ -5,6 +5,8 @@
 #ifndef X86MEM_H_
 #define X86MEM_H_
 
+#include "x86ebi.h"
+
 // Unit defination
 #define KB  * 1024
 #define MB  * 1048576
@@ -32,6 +34,9 @@
 #define MMD_IDT_SIZE    2 KB
 
 #define MMD_DATA_SIZE   ((MMD_IDT_ADDR + MMD_IDT_SIZE) + 2 KB)
+
+#define MMD_KNEL_ADDR   ebi.kernel_addr
+#define MMD_KNEL_SIZE   ebi.kernel_size
 
 // Virtual Memory
 #define MMD_VM_ADDR     0x00000000
