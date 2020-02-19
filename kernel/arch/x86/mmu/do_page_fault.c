@@ -23,16 +23,17 @@ void do_page_fault(int error_code)
 {
 	X86U32 cr2, *pd, *pt, *new_page, *pt2pt;
 
+	/**读取CR2信息*/
+	cr2 = read_CR2();
+
 	/**判断是否重入*/
-	if (rentry != 0) error("Rentry happend in function 'do_page_fault()'!");
+	if (rentry != 0) error("Rentry happend in function 'do_page_fault()', \
+		in addr:%#x.", cr2);
 	else rentry = 1;
 
 	pd = (X86U32 *)MMD_VM_PD_ADDR;
 	pt = (X86U32 *)MMD_VM_PT_ADDR;
 	pt2pt = MMD_VM_PT_ADDR + (MMD_VM_PT_ADDR >> 22) * MMU_PAGE_SIZE;
-
-	/**读取CR2信息*/
-	cr2 = read_CR2();
 
 	/**判断是否是缺页引发的中断*/
 	if ((error_code & 1) == PF_NOPG)
@@ -51,11 +52,9 @@ void do_page_fault(int error_code)
 
 			/**清空这个页，保证不会出现干扰*/
 			memset(&pt[cr2 >> 22], 0x00, MMU_PAGE_SIZE);
-
 		}
 
 		//pt = (X86U32 *)(pd[(cr2 >> 22)] & 0xfffff000);
-		extern unsigned int asd_1, asd_2, asd_3;
 
 		/**无论是否出现缺页表的情况，一定缺少页*/
 		new_page = pmb_alloc();
