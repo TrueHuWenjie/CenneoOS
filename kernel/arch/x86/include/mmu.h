@@ -28,6 +28,9 @@ extern struct pmb_sm pmb_sm;
 /**获取一个物理页函数
  * 返回值：NULL代表获取空闲物理页失败，非NULL代表获取成功。
  */
+// Return the number of free physical page
+unsigned long pmb_info_free(void);
+
 X86Addr pmb_alloc(void);
 
 /**释放一个物理页函数*/
