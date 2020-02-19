@@ -40,7 +40,7 @@
 
 // Virtual Memory
 #define MMD_VM_KNEL_ADDR     0x00000000
-#define MMD_VM_KNEL_SIZE     256 MB - 4096 * (1 + 1024)
+#define MMD_VM_KNEL_SIZE     (256 MB - 4096 * (1 + 1024))
 #define MMD_VM_PD_ADDR  0xfbff000
 #define MMD_VM_PD_SIZE  4096
 #define MMD_VM_PT_ADDR  0xfc00000
