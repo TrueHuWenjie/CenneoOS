@@ -61,6 +61,7 @@ void init_paging(void)
 	pt2pt = pmb_alloc();
 	memset(pt2pt, 0, MMU_PAGE_SIZE);
     pd[PG_PD_INDEX(MMD_VM_PT_ADDR)] = (X86U32)pt2pt + 3;
+    pt2pt[PG_PD_INDEX(MMD_VM_PD_ADDR)] = pd[PG_PD_INDEX(MMD_VM_PD_ADDR)];
     pt2pt[PG_PD_INDEX(MMD_VM_PT_ADDR)] = pd[PG_PD_INDEX(MMD_VM_PT_ADDR)];
 
     // Maping the kernel and data area into virtual memory
@@ -99,7 +100,7 @@ void init_paging(void)
 	{
 		pd[PG_PD_INDEX(ebi.ModeInfoBlock.PhysBasePtr + ptr)] = \
 		(X86U32)pmb_alloc() | 3;
-		memset((X86Addr)pd[PG_PD_INDEX(ebi.ModeInfoBlock.PhysBasePtr + ptr)], \
+		memset((X86Addr)(pd[PG_PD_INDEX(ebi.ModeInfoBlock.PhysBasePtr + ptr)] & 0xfffff000), \
 		0, MMU_PAGE_SIZE);
 	}
 
