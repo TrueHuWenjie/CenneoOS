@@ -12,6 +12,7 @@
 
 #include <stddef.h>
 
+char *strchr(const char *string, int chr);
 char *strcpy(char *dest, const char *src);
 char *strncpy(char *dest, const char *src, size_t count);
 size_t strlcpy(char *dest, const char *src, size_t size);
