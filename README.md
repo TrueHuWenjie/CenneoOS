@@ -42,14 +42,30 @@ Clone with HTTP
 
 ## 内核程序 ##
 
-内核程序的根目录位于***[.../cenneo-os-project/kernel/](./kernel "cenneo-os-kernel")***。
+内核程序的根目录位于
+***[.../cenneo-os-project/kernel/](./kernel "cenneo-os-kernel")
+***。
 
 ## 自主工具 ##
+鬼鸟文件系统阅读器（GhostBird Filesystem Reader, gfr），是一款为了在Windows和Linux上兼
+容具有自主文件系统格式的磁盘、软盘及虚拟介质的工具，通过它我们可以实现对上述介质的扇区、文件系统
+读写，为开发调试工作提供了便利，gfr子项目的根目录位于
+***[.../cenneo-os-project/tools/gfr](./tools/gfr "GhostBird Filesystem Reader")
+***。
 
 ## 系统镜像 ##
+
 
 ## 说明文档 ##
 
 ## 开发调试 ##
+将项目文件从版本控制系统上克隆下来后，进入根目录
+***[.../cenneo-os-project/](./ "cenneo-os-project")***。
+
+首先先解压虚拟磁盘映像，使用如下命令：
+
+    make prepare
+
+在终端中输入如下命令开始编译、生成
 
 ## 许可协议 ##
