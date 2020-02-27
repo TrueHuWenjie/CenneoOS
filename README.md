@@ -11,6 +11,7 @@
 包含这个README.md文件的目录作为本项目的根目录。
 
 ## 性能要求 ##
+
 处理器：Intel 80386及以上
 
 内存：9MB或更高
@@ -43,22 +44,32 @@ Clone with HTTP
 ## 内核程序 ##
 
 内核程序的根目录位于
-***[.../cenneo-os-project/kernel/](./kernel "cenneo-os-kernel")
-***。
+***[.../cenneo-os-project/kernel/](./kernel "cenneo-os-kernel")***，
+其中除编译脚本Makefile之外，包含了若干子文件夹。
 
 ## 自主工具 ##
+
 鬼鸟文件系统阅读器（GhostBird Filesystem Reader, gfr），是一款为了在Windows和Linux上兼
 容具有自主文件系统格式的磁盘、软盘及虚拟介质的工具，通过它我们可以实现对上述介质的扇区、文件系统
 读写，为开发调试工作提供了便利，gfr子项目的根目录位于
-***[.../cenneo-os-project/tools/gfr](./tools/gfr "GhostBird Filesystem Reader")
-***。
+***[.../cenneo-os-project/tools/gfr](./tools/gfr "GhostBird Filesystem Reader")***。
 
 ## 系统镜像 ##
+系统镜像文件位于目录
+***[.../cenneo-os-project/image](./image "Image directory")***之下，
+在项目从版本控制系统中克隆下来时，一般只会包含一个压缩文件image.zip，你需要在终端中使用如下命令：
 
+	make prepare
+
+对其进行解压，解压后的文件为同目录下的image.vhd。
 
 ## 说明文档 ##
+说明文档一般是位于项目根目录、子目录和文档目录
+***[.../cenneo-os-project/docs](./docs "Documents directory")***
+中的*.md文件，说明文件中除必要的项目名称、权力归属以及开发人员信息之外，还应对相应功能实现的原理、思路以及相关资料引用信息做出详细说明。
 
 ## 开发调试 ##
+
 将项目文件从版本控制系统上克隆下来后，进入根目录
 ***[.../cenneo-os-project/](./ "cenneo-os-project")***。
 
@@ -66,6 +77,6 @@ Clone with HTTP
 
     make prepare
 
-在终端中输入如下命令开始编译、生成
+然后在终端中输入如下命令开始编译、生成：
 
-## 许可协议 ##
+	sudo make run
