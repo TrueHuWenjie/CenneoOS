@@ -4,35 +4,8 @@
 
 #include "../arch/x86/include/x86mmd.h"
 #include "../arch/x86/include/mmu.h"
+#include "kmm_sm.h"
 #include <kvi.h>
-
-// Kernel Segment Descriptor
-struct ksd
-{
-    unsigned long addr:20;
-    unsigned long size:20;
-    unsigned long attr:8;
-};
-
-#define KSD_ATTR_FREE   0
-#define KSD_ATTR_USED   1
-#define KSD_ATTR_MAPD   2
-#define KSD_ATTR_SWAP   4
-#define KSD_ATTR_CTND   8
-
-
-#define KSDT_SIZE       sizeof(struct ksd) * (MMD_VM_KNEL_SIZE / MMU_PAGE_SIZE)
-#define KSDT_ADDR       ((MMD_VM_KNEL_ADDR + MMD_VM_KNEL_SIZE - KSDT_SIZE) & \
-0xfffff000)
-
-struct kmm_sm
-{
-    struct ksd *ksdt;
-    unsigned long ksdt_len;
-    unsigned long free;
-    unsigned long used;
-    unsigned long mapd;
-};
 
 struct kmm_sm kmm_sm;
 
@@ -85,6 +58,4 @@ void init_kmm(void)
             kmm_sm.mapd += size;
         else kmm_sm.used += size;
     }
-
-    kmm_info();
 }
