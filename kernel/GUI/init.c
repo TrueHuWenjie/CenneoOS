@@ -36,7 +36,7 @@ void init_GUI(void)
 	memset(layer_root, 0, sizeof(struct layer));
 
 	/**填充相应数据*/
-	for (;layer_root->buf == NULL;) layer_root->buf = vmalloc (LAYER_ROOT_LENGTH * LAYER_ROOT_WIDTH * 4);
+	for (;layer_root->buf == NULL;) layer_root->buf = vmalloc (LAYER_ROOT_LENGTH * LAYER_ROOT_WIDTH * 4, 0);
 	layer_root->visiable = true;
 	layer_root->x = 0;
 	layer_root->y = 0;

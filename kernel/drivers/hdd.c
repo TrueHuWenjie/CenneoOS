@@ -5,7 +5,7 @@
  * Explorer/drivers/hdd.c
  * 2014.7.18 5:48 PM
  */
- 
+
 #include "hdd.h"
 #include <lib/mem.h>
 #include <types.h>
@@ -16,7 +16,7 @@
 #define HD_CMD_READ		0x20			//读取扇区命令
 #define HD_CMD_WRITE	0x30			//写入扇区命令
 #define HD_CMD_CHECK	0x90			//磁盘诊断命令
-	
+
 /**操作扇区时允许的最多出错次数*/
 #define MAX_ERRORS	10
 
@@ -44,24 +44,24 @@ void init_hdd(void)
 {
 	/**建立中断控制器的中断处理程序*/
 	register_PIC(0xe, &int_HDC_handle, "Hard Disk Control");
-	
+
 	/**分配一个扇区的空间*/
 	void *point;
-	point = vmalloc(512);
+	point = vmalloc(512, 0);
 	if (point == NULL) error("HDD:memory allocate error!");		/**分配失败控制*/
-	
+
 	/**读取硬盘配置信息*/
 	HD_get_phy_info(point);
-	
+
 	/**读取MBR，获取有用信息*/
 	read_disk(0, (unsigned short int*) point, 1);
 	memcpy(&LBA_start, (point + 0x1be + 8), 2);
 	struct Master_Boot_Record *MBR;
 	MBR = (struct Master_Boot_Record *) point;
 	//printk("MBR's effect:%#x", (*MBR).valid);
-	
+
 	printk("LAB_start:%#X", LBA_start);
-	
+
 	/**释放这个空间*/
 	vfree(point);
 }
@@ -102,7 +102,7 @@ void hdd_wait(void)
 /**磁盘参数获取函数*/
 static void HD_get_phy_info(struct HD_info *info)
 {
-	
+
 }
 
 
@@ -113,4 +113,3 @@ void int_HDC_handle(void)
 	printk("int HDC.\n");
 	EOI();
 }
-

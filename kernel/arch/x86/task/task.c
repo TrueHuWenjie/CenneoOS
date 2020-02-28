@@ -77,7 +77,7 @@ union task* new_task(int (*function)(), void *argument)
 {
 	/**为新任务的数据结构分配空间*/
 	union task *new_task;
-	new_task = vmalloc(sizeof(union task));
+	new_task = vmalloc(sizeof(union task), 0);
 	if (new_task == NULL) return 0;
 	memset(new_task, 0, sizeof(union task));
 

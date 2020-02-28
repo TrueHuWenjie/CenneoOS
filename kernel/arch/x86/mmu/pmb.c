@@ -25,15 +25,25 @@ struct pmb_sm pmb_sm;
 #define PMB_IS_FREE(addr) \
 	pmb[(X86U32)addr >> 17] >> (((X86U32)addr >> 12) & 0b11111) & 1
 
-/**获取一个物理页函数
- * 返回值：NULL代表获取空闲物理页失败，非NULL代表获取成功。
- */
 // Return the number of free physical page
 unsigned long pmb_info_free(void)
 {
 	return pmb_sm.free;
 }
 
+// Lock functions about pmb, cannot be used by any other process/thread
+void pmb_lock(void)
+{
+
+}
+
+// Unlock functions about pmb
+void pmb_unlock(void)
+{
+	
+}
+
+// Allocate a free page, return with non-X86A_NULL, otherwise failed.
 X86Addr pmb_alloc(void)
 {
 	unsigned long n, i, new_page;

@@ -1,15 +1,10 @@
-/**
- * Copyright 2013-2015 by Explorer Developers.
- * made by Lab Explorer Developers<1@GhostBirdOS.org>
- * Explorer function kmalloc
- * Explorer/arch/x86/kernel/kmalloc.c
- * version:Alpha
- * 1/10/2014 6:00 PM:created
- * 10/1/2015 8:15 AM:重写内存分配
- */
+// Cenneo OS
+// /kernel/kmm/kmalloc.c
+// Kernel memory allocate & free
 
 #include <stdlib.h>
 #include <stddef.h>
+#include <kvi.h>
 #include <kmm.h>
 #include "kmalloc.h"
 
@@ -42,16 +37,16 @@ static struct Memory_Descriptor *empty = NULL;
 static void prepare_MD(void)
 {
 	/**分配一个新页储存描述符*/
-	struct Memory_Descriptor *MD = vmalloc(MMU_PAGE_SIZE);
+	struct Memory_Descriptor *MD = vmalloc(MMU_PAGE_SIZE, 0);
 	if (MD == NULL) error("fill pool error!");
-	
+
 	/**初始化该页*/
 	unsigned i;
 	for (i = 0; i < MD_PER_PAGE; i ++)
 	{
 		MD[i].next = &MD[i + 1];
 	}
-	
+
 	/**将该页描述符加入到内存池中*/
 	MD[i - 1].next = empty;
 	empty = MD;
@@ -62,26 +57,26 @@ void fill_pool(unsigned long n)
 {
 	/**判断空闲内存描述符表是否空*/
 	if (empty == NULL) prepare_MD();
-	
+
 	/**获得一个页*/
-	void *new_page = vmalloc(MMU_PAGE_SIZE);
-	
+	void *new_page = vmalloc(MMU_PAGE_SIZE, 0);
+
 	/**判断是否获取成功*/
 	if (new_page == NULL) error("No enough memory!");
-	
+
 	/**获取一个空闲内存描述符表*/
 	struct Memory_Descriptor *new_MD = empty;
 	empty = empty->next;
-	
+
 	/**获取相关信息*/
 	size_t size = mem_pool[n].size;
 	unsigned long number = MMU_PAGE_SIZE / size;
-	
+
 	/**初始化内存描述符表和这个页*/
 	new_MD->page = new_page;
 	new_MD->freeptr = new_page;
 	new_MD->refcnt = 0;
-	
+
 	/**将内存描述符表加入到内存池中*/
 	new_MD->next = mem_pool[n].next;
 	mem_pool[n].next = new_MD;
@@ -95,13 +90,13 @@ void fill_pool(unsigned long n)
 void *kmalloc(size_t size, int flags)
 {
 	void *retval;
-	
+
 	/**不允许调度*/
 	disable_schedule();
-	
+
 	/**内存描述符指针*/
 	struct Memory_Descriptor *point;
-	
+
 	/**寻找合适大小的内存池*/
 	unsigned long n;
 	for (n = 0; n < POOL_SIZE; n ++)
@@ -109,10 +104,10 @@ void *kmalloc(size_t size, int flags)
 		if (mem_pool[n].size >= size)
 		{
 			/**执行到这里说明已经找到合适大小的内存池*/
-			
+
 			/**判断内存池中是否有足够的内存*/
 			if (mem_pool[n].number == 0) fill_pool(n);
-			
+
 			/**获取可用内存*/
 			retval = mem_pool[n].next->freeptr;
 			mem_pool[n].next->refcnt ++;
@@ -128,7 +123,7 @@ void *kmalloc(size_t size, int flags)
 	 */
 	error("argument is too long!");
 	return NULL;
-	
+
 finish:
 	/**已经完成了内存分配的处理*/
 	/**允许调度*/
@@ -145,10 +140,10 @@ void kfree(void *point)
 	void *page;
 	unsigned long n;
 	struct Memory_Descriptor *MD, *prev = NULL;			/**指向当前描述符和上一个描述符*/
-	
+
 	/**计算获得该块内存所在的页面*/
 	page = (void *)((unsigned long) point & 0xfffff000);
-	
+
 	/**寻找每个大小的内存池*/
 	for (n = 0; n < POOL_SIZE; n ++)
 	{
@@ -159,7 +154,7 @@ void kfree(void *point)
 			{
 				/**就是这个内存描述符*/
 				MD->refcnt --;
-				
+
 				/**如果这个内存描述符引用为0*/
 				if (MD->refcnt == 0)
 				{

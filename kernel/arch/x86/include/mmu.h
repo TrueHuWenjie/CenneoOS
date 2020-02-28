@@ -25,16 +25,23 @@ extern struct pmb_sm pmb_sm;
 #define PMB_TOTAL_BYTES pmb_sm.total * MMU_PAGE_SIZE
 #define PMB_RSVD_BYTES pmb_sm.rsvd * MMU_PAGE_SIZE
 
-/**获取一个物理页函数
- * 返回值：NULL代表获取空闲物理页失败，非NULL代表获取成功。
- */
 // Return the number of free physical page
 unsigned long pmb_info_free(void);
 
+// Lock functions about pmb, cannot be used by any other process/thread
+void pmb_lock(void);
+
+// Unlock functions about pmb
+void pmb_unlock(void);
+
+// Allocate a free page, return with non-X86A_NULL, otherwise failed.
 X86Addr pmb_alloc(void);
 
 /**释放一个物理页函数*/
 void pmb_free(X86Addr addr);
+
+// Memory maping
+void paging_map(X86Addr phy_addr, X86Addr vir_addr, X86U32 number);
 
 // Initialization for Physical Memory Bitmap
 void init_pmb(void);

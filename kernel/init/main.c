@@ -44,16 +44,20 @@ int task_test()
 /**内核主函数*/
 void main(void)
 {
-	// Temporary
+	init_kmm();
+
 	init_graph();
 	init_font();
 
 	// Open kvi
 	kvi_open();
-	fin:goto fin;
-	init_kmm();
 
+	kmm_info();
+	int *ptr;
+	ptr = vmalloc(8192, VM_MAPD);
+	kmm_info();
 
+fin2:goto fin2;
 	init_time();
 	init_task();
 	init_CPU();
