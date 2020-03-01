@@ -18,7 +18,7 @@
 
 #include <lib/mem.h>
 #include <syscalls.h>
-#include <memory.h>
+#include <kmm.h>
 #include <task.h>
 #include <stddef.h>
 #include <stdlib.h>

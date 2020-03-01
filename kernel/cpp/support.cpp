@@ -1,15 +1,15 @@
 #include <stddef.h>
-#include <memory.h>
+#include <kmm.h>
 #include <lib/string.h>
 #include <lib/mem.h>
 
-#ifdef __cplusplus  
+#ifdef __cplusplus
 	extern "C"
 	{
 		void printk(const char* format, ...);
 		void test_C_plus_plus(void);
 	}
-#endif  
+#endif
 /**
 void *operator new (size_t size)
 {
@@ -37,7 +37,7 @@ void operator delete(void* p)
 /**
 void test_C_plus_plus(void)
 {
-	int i; 
+	int i;
 	char *a = new char[6];
 	a[0] = 'a';
 	a[1] = 'b';

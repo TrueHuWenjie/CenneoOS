@@ -21,10 +21,10 @@ struct process_struct
 	unsigned long cr3;					/**进程的页目录表地址*/
 	struct msg *msg_list;				/**消息链表*/
 };
-	
+
 /**任务0的联合体定义*/
-union task task_0;
-	
+extern union task task_0;
+
 /**任务信息结构*/
 struct task_info{
 	union task *next, *prev;			/**任务结构体之间组成双向链表*/
@@ -69,7 +69,7 @@ extern unsigned long init_Kernel_Task(unsigned long stack, int (*function)(void 
 
 /**初始化任务函数*/
 void init_task(void);
-	
+
 /**创建内核任务线程函数*/
 union task* new_task(int (*function)(), void *argument);
 
@@ -91,7 +91,7 @@ union task* get_id(void);
 
 /**获得父任务的id*/
 union task* get_pid(void);
-	
+
 /**任务结束函数*/
 void exit(int code);
 
@@ -106,10 +106,10 @@ void schedule(void);
 
 /**任务挂起函数*/
 void sleep(void);
-	
+
 /**任务唤醒函数*/
 void wakeup(union task* id);
-	
+
 /**exit other task*/
 #define	SUCCESS		0
 #define	FAIL		-1

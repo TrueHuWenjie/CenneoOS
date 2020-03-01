@@ -5,7 +5,6 @@
 #define PROBLEM_H_
 
 /**错误列表*/
-#define ERR_NO_MEM_FOR_ID 1			// 没有可用于中断描述符表的内存
 #define ERR_NO_MEM_FOR_SD 2			// 没有可用于储存器描述符表的内存
 #define ERR_NO_MEM_FOR_SCTBUF 3			// 没有可用于扇区缓存的内存
 #define ERR_NO_MEM_FOR_CONFIG 4			// 没有可以分配给引导配置文件的内存
@@ -22,4 +21,3 @@
 #define WARN_SCRIPT_SIZE_BAD 0x80000003		// length of cript incorrect
 
 #endif
-

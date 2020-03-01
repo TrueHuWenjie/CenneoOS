@@ -28,8 +28,8 @@
 #define		notice_back_color	0x669999	// 提示区域背景颜色
 #define		notice_font_color	0x000000	// 提示区域字符串颜色
 #define		introduce_font_color	0xcccccc
-#define		VI_output_line					120
-#define		VI_output_column				42
+#define		VI_output_line					80
+#define		VI_output_column				25
 #define		VI_output_page_number				1
 #define		VI_introduce_line				70
 #define		VI_introduce_column				7

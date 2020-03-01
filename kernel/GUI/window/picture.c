@@ -12,7 +12,7 @@
 #include <studio.h>
 #include <stdlib.h>
 #include <cfs.h>
-#include <memory.h>
+#include <kmm.h>
 #include <lib/graphics.h>
 #include "window.h"
 #include "../layer.h"
@@ -59,38 +59,38 @@ struct bmp_info_header
  * 成功返回0，不成功返回1
  */
 int *window_load_bmp(struct GUI_image *image, char *buffer)
-{	
+{
 	/**写指针和读指针*/
 	unsigned long wptr, rptr;
-	
+
 	unsigned char *data;
-	
+
 	/**BMP数据区指针*/
 	unsigned char *bmp_data;
-	
+
 	/**BMP位图文件头指针*/
 	struct bmp_file_header *head = (struct bmp_file_header *) buffer;
-	
+
 	/**BMP位图信息头指针*/
 	struct bmp_info_header *info_head = (struct bmp_info_header *) (buffer + sizeof(struct bmp_file_header));
-	
+
 	/**输出信息*/
 	// window_print(GUI_control, "BMP size:%dByte,length:%d,width:%d,bpp:%d.", head->size, head->length, head->width, info_head->bpp);
-	
+
 	/**获取数据区起始地址*/
 	bmp_data = buffer + head->bmp_data_offset;
-	
+
 	/**准备数据区放置抽象过的数据*/
 	for (data = NULL; data == NULL; )
-		data = vmalloc(head->length * head->width * 4);
-	
+		data = vmalloc(head->length * head->width * 4, 0);
+
 	/**根据每个像素位数使用不同拷贝方法*/
 	switch(info_head->bpp)
 	{
 		case 24: goto copy_24;
 		case 32: goto copy_32;
 	}
-	
+
 /**24位位图拷贝数据*/
 copy_24:
 	/**循环拷贝*/
@@ -104,7 +104,7 @@ copy_24:
 		data[wptr + 3] = 0xff;
 		wptr += 4;
 		rptr += 3;
-		
+
 		/**向上填充*/
 		if (rptr % (head->length * 3) == 0)
 		{
@@ -112,9 +112,9 @@ copy_24:
 		}
 	}
 	goto finish;
-	
+
 /**32位位图拷贝数据*/
-copy_32:	
+copy_32:
 	/**循环拷贝*/
 	wptr = 0;
 	rptr = (head->width - 1) * head->length;
@@ -123,7 +123,7 @@ copy_32:
 		((unsigned int *)data)[wptr] = ((unsigned int *)bmp_data)[rptr];
 		wptr ++;
 		rptr ++;
-		
+
 		/**向上填充*/
 		if (rptr % (head->length) == 0)
 		{
@@ -131,13 +131,13 @@ copy_32:
 		}
 	}
 	goto finish;
-	
+
 finish:
 	/**填充*image*/
 	image->data = (unsigned int *)data;
 	image->length = head->length;
 	image->width = head->width;
-	
+
 	/**正常返回*/
 	return 0;
 }
@@ -153,61 +153,61 @@ struct GUI_image *window_load_image(char *filename)
 {
 	/**文件信息结构体*/
 	file_info image_info;
-	
+
 	/**文件缓冲区指针*/
 	char *buffer;
-	
+
 	/**文件头结构联合体*/
 	union image_head_union *head_union;
-	
+
 	/**返回的抽象图形结构指针*/
 	struct GUI_image *retval;
-	
+
 	/**获取文件信息*/
 	image_info = get_file_info(filename);
-	
+
 	/**申请符合大小的缓冲区*/
 	for (buffer = NULL; buffer == NULL; )
-		buffer = vmalloc(image_info.size);
-	
+		buffer = vmalloc(image_info.size, 0);
+
 	/**申请符合大小的抽象图形结构使用的内存*/
 	for (retval = NULL; retval == NULL; )
 		retval = kmalloc(sizeof(struct GUI_image), 0);
-	
-	
+
+
 	/**加载图片文件*/
 	file_open(filename, buffer);
-	
+
 	/**头结构体指针指向文件头部*/
 	head_union = (union image_head_union *) buffer;
-	
+
 /**判断图片格式，分别使用不同的转换函数转换*/
-	
+
 	/**判断是否是BMP图片*/
 	if (head_union->bmp_file_header.type[0] == 'B' &
 		head_union->bmp_file_header.type[1] == 'M' )
 	{
 		/**是BMP图片*/
 		// window_print(GUI_control, "image type:Microsoft Windows BMP Image");
-		
+
 		/**调用BMP图片加载函数*/
 		window_load_bmp(retval, buffer);
-		
+
 		/**释放缓冲区*/
 		vfree(buffer);
 		// window_print(GUI_control, "GUI image length:%d,width:%d,data:%#X", retval->length, retval->width, retval->data);
 	}else{
 		/**其他格式文件*/
 		// window_print(GUI_control, "Unkown Format.");
-		
+
 		/**释放相关结构占用的内存、文件占用的缓存*/
 		vfree(buffer);
 		kfree(retval);
-		
+
 		/**失败返回*/
 		return NULL;
 	}
-	
+
 	/**正常返回*/
 	return retval;
 }
@@ -217,15 +217,15 @@ void free_image(struct GUI_image *image)
 {
 	/**判断是否需要释放*/
 	if (image->data == NULL) return;
-	
+
 	/**释放image的数据区*/
 	vfree(image->data);
-	
+
 	/**释放image的结构体*/
 	kfree(image);
-	
+
 	/**置空指针*/
 	image = NULL;
-	
+
 	/**正常返回*/
 }

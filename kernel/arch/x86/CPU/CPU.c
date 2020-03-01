@@ -10,6 +10,8 @@
 
 #include "CPU.h"
 #include <stdbool.h>
+#include <lib/string.h>
+#include <kvi.h>
 
 bool support_CPUID;
 unsigned int CPU_MAXID;
@@ -31,7 +33,7 @@ void init_CPU(void)
 	 *is save Register EFLAGS and try to change the bit 21
 	 *in Register EFLAGS, than compare if we write successful.
 	 */
-	
+
 
 /*****************************WARING:can't add printk here*****************************/
 /*****************************PLEASE ADD PRINTK TO output_CPU_info*****************************/
@@ -49,7 +51,7 @@ void init_CPU(void)
 		movl	%edx,(CPU_OEM+4); \
 		movl	%ecx,(CPU_OEM+8); \
 	");
-	
+
 	/**
 	 *get extended MAX value of CPUID instruction
 	 */
@@ -58,13 +60,13 @@ void init_CPU(void)
 		cpuid; \
 		movl	%eax,(CPU_EMAXID); \
 	");
-	
+
 	/**
 	 *get family & model
 	 */
 
 
-	
+
 	if (strncmp(CPU_OEM, "GenuineIntel", 12) == 0)
 	{
 		asm volatile(" \
@@ -78,14 +80,14 @@ void init_CPU(void)
 		}else{
 			display_family = FAMILY;
 		}
-		
+
 		if (FAMILY == 0x6 || FAMILY == 0xf)
 		{
 			display_model = (EXTENDED_MODEL << 4) + MODEL;
 		}else{
 			display_model = MODEL;
 		}
-		
+
 		/**
 		 *CPU family & model information
 		 */
@@ -105,7 +107,7 @@ void init_CPU(void)
 				 */
 				CPU_model = CPU_model_06_0FH;
 			}
-			
+
 		}else if (display_family == 0xf)
 		{
 			CPU_family = CPU_family_0FH;
@@ -139,7 +141,7 @@ void init_CPU(void)
 	}else
 	{
 		CPU_family = CPU_family_Unknown;
-		CPU_model = CPU_model_Unknown;	
+		CPU_model = CPU_model_Unknown;
 	}
 }
 
@@ -150,7 +152,7 @@ void output_CPU_info(void)
 
 	/**空出一行*/
 	printk("\n");
-	
+
 	printk("CPU information:\n");
 	printk("CPU manufacturer information:%s\n", &CPU_OEM);
 	printk("CPU model:");

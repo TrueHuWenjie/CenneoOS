@@ -140,8 +140,8 @@ int_48:	interrupt_start 48			;48号中断
 int_49:	interrupt_start 49			;49号中断
 int_50:	interrupt_start_syscall	50	;50号中断(系统调用)
 
-	
-	
+
+
 interrupt_entry:
 	call	interrupt_handle		;调用中断处理函数
 	popad							;还原通用寄存器

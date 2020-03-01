@@ -7,11 +7,12 @@
  * 8/16/2014 9:08 AM
  */
 
-#include <memory.h>
+#include <kmm.h>
 #include <stdlib.h>
 #include <GUI.h>
 #include <lib/mem.h>
 #include <lib/graphics.h>
+#include <info.h>
 #include "layer.h"
 
 /**GUI根图层*/
@@ -22,20 +23,20 @@ struct layer *layer_root = NULL;
 /**initialization GUI*/
 void init_GUI(void)
 {
-	/**关闭shell*/
-	disable_shell();
-	
+	// Close kvi
+	kvi_close();
+
 	/**清除屏幕*/
 	clear_screen();
-	
+
 	/**创建GUI根图层*/
 	for (;layer_root == NULL;) layer_root = kmalloc(sizeof(struct layer), 0);
-	
+
 	/**清空获得的内存*/
 	memset(layer_root, 0, sizeof(struct layer));
-	
+
 	/**填充相应数据*/
-	for (;layer_root->buf == NULL;) layer_root->buf = vmalloc (LAYER_ROOT_LENGTH * LAYER_ROOT_WIDTH * 4);
+	for (;layer_root->buf == NULL;) layer_root->buf = vmalloc (LAYER_ROOT_LENGTH * LAYER_ROOT_WIDTH * 4, 0);
 	layer_root->visiable = true;
 	layer_root->x = 0;
 	layer_root->y = 0;
@@ -44,15 +45,15 @@ void init_GUI(void)
 	layer_root->top = layer_root;
 	layer_root->bottom = layer_root;
 	layer_root->winptr = NULL;
-	
+
 	/**填充矩形*/
 	GUI_put_square(layer_root, 0x400000ff, 0, 0, LAYER_ROOT_LENGTH, LAYER_ROOT_WIDTH);
 	// GUI_put_square(layer_root, 0x40000000, 0, 0, LAYER_ROOT_LENGTH, LAYER_ROOT_WIDTH);
-	
+
 	/**信息输出*/
 	GUI_put_string(layer_root, 0xffffffff, 0, 00, 0, 0, font("simsun"), "Explorer Graphical User Interface.");
-	GUI_put_string(layer_root, 0xffffffff, 0, 16, 0, 0, font("simsun"), "Version:1.0");
-	GUI_put_string(layer_root, 0xffffffff, 0, 32, 0, 0, font("simsun"), "Copyright 2015 Ghost Bird OS Developers.");
+	GUI_put_string(layer_root, 0xffffffff, 0, 16, 0, 0, font("simsun"), "Kernel version:" KERNEL_VERSION);
+	GUI_put_string(layer_root, 0xffffffff, 0, 32, 0, 0, font("simsun"), COPYRIGHT);
 
 	/**This function in window.c*/
 	init_Window();
@@ -61,5 +62,5 @@ void init_GUI(void)
 /**禁用GUI*/
 void disable_GUI(void)
 {
-	
+
 }

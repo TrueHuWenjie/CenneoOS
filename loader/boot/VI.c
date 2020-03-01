@@ -620,7 +620,7 @@ int error(unsigned int errcode, const char *fmt, ...)
 	unsigned long n;
 	
 	/**关闭中断*/
-	disallow_interrupt();
+	interrupt_close();
 	
 	/**使VI切换到输出界面*/
 	VI_active(VI_page_output);
@@ -639,7 +639,7 @@ int error(unsigned int errcode, const char *fmt, ...)
 	va_end(arg);
 	
 	/**不可返回*/
-	stillhalt();
+	idle();
 }
 
 /**警告输出函数*/
@@ -672,6 +672,12 @@ int warning(unsigned int warncode, const char *fmt, ...)
 	return n;
 }
 
+void deinit_VI(void)
+{
+	// Clear the screen
+	rectangle(0, 0, vbe_info.xres, vbe_info.yres, 0x000000);
+}
+
 /**初始化可视化界面*/
 void init_VI(void)
 {
@@ -682,8 +688,8 @@ void init_VI(void)
 	resolution is the largest; Otherwise actual = video.*/
 	
 	/**计算起始坐标，保持可视化界面在正中央*/
-	VI_x = (Video_Info.xres - VI_width) / 2;
-	VI_title_y = (Video_Info.yres - (title_height + VI_page_height + notice_height)) / 2;
+	VI_x = (vbe_info.xres - VI_width) / 2;
+	VI_title_y = (vbe_info.yres - (title_height + VI_page_height + notice_height)) / 2;
 	VI_page_y = VI_title_y + title_height;
 	VI_notice_y = VI_page_y + VI_page_height;
 	VI_introduce_x = VI_x + ((VI_width - VI_introduce_width) / 2);
@@ -692,7 +698,7 @@ void init_VI(void)
 	VI_select_y = VI_introduce_y + VI_introduce_height;
 	
 	/**重绘屏幕*/
-	rectangle(0, 0, Video_Info.xres, Video_Info.yres, 0x000000);
+	rectangle(0, 0, vbe_info.xres, vbe_info.yres, 0x000000);
 	rectangle(VI_x, VI_title_y, VI_width, title_height, title_back_color);
 	rectangle(VI_x, VI_notice_y, VI_width, notice_height, notice_back_color);
 	
@@ -738,12 +744,5 @@ void init_VI(void)
 	// printi("No Option can be selected.", 24, 25);
 	printn("F1 output page            F2 select page            Esc reset");
 	printak("<0xFF0000>" copyright "</> <0xFF4500>" author "</>.\n<0x87CEFF>" software_name "</> <0xffff00>" version "</> <0xEE9A00>" build "</>\n" info "\n");
-	
-	/**模拟测试*/
-	// select_register(0, "Ghost Bird test1");
-	// select_register(1, "Ghost Bird test2");
-	// select_register(2, "Ghost Bird 0.02(Explorer kernel version)");
-	// select_register(5, "line 5");
-	// select_register(10, "line 10");
-	// select_set_active(2);
 }
+

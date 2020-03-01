@@ -1,6 +1,6 @@
 /**
  * Date:2017/6/20 21:23
- * Author:HuWenjie<1@hwj.me>
+ * Author:HuWenjie<huwenjie@cenneo.com>
  * Ghost Bird File System Reader
  * return defination
  * 

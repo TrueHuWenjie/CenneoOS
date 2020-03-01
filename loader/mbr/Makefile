@@ -4,16 +4,18 @@
 
 # compile all the MBR
 
-	
-MBR.bin: MBR.basm
-	$(NS) MBR.basm -o MBR.bin
+TARGET = MBR.BIN
+
+
+$(TARGET): $(TARGET:.BIN=.ASM)
+	$(NS) $< -o $@
 	
 all:
-	make MBR.bin
+	make MBR.BIN
 	
-install:MBR.bin
-	$(GFR) -ws MBR.bin $(image) 1
+install:$(TARGET)
+	$(GFR) -ws $(TARGET) $(image) 1
 	
 clean:
-	$(RM) MBR.bin
+	$(RM) $(TARGET)
 	

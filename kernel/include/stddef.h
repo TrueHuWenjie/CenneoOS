@@ -11,5 +11,6 @@
 #define STDDEF_H_
 
 typedef unsigned long size_t;
+typedef unsigned long ptrdiff_t;
 
 #endif

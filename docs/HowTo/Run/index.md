@@ -1,6 +1,6 @@
 # How To Run #
 
-To make a great project, we try our best to support developers work no matter what platform they are using, such as Windows and Linux, Runing Ghost Bird OS needs steps as follow:
+To make a great project, we try our best to support developers work no matter what platform they are using, such as Windows and Linux, Runing Cenneo OS needs steps as follow:
 
 1. Get a stable version of source(release better).
 2. Install toolchain, virtual macthine and some other tools you need.
@@ -59,7 +59,7 @@ you will get *image.vhd* at */GhostBirdOS/image/*.
 
 ## Compile the code ##
 
-First of all, Ghost Bird OS isn't a single project, in fact, this is a collection of multiple items, some of the project that make up Ghost Bird OS are as follows:
+First of all, Cenneo OS isn't a single project, in fact, this is a collection of multiple items, some of the project that make up Cenneo OS are as follows:
 
 - Explorer kernel Project
 - Explorer loader Project

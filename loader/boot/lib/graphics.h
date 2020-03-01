@@ -10,12 +10,12 @@
 #ifndef GRAPHICS_H_
 #define GRAPHICS_H_
 
-struct Video_Info{
+struct vbe_info{
 	unsigned long xres, yres;
 	unsigned long bpp;
 	unsigned char *vram;
 	unsigned long vlen;
-}Video_Info;
+}vbe_info;
 
 
 /**绘制像素函数*/

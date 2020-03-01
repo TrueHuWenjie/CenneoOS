@@ -1,0 +1,8 @@
+*.o
+*.d
+*.bin
+/tools/gfr/gfr
+/loader/boot/BOOT
+*.swp
+/kernel/KERNEL
+*.BIN

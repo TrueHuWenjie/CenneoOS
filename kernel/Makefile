@@ -1,10 +1,10 @@
 # Date:2017/6/8 2:21
-# Author:HuWenjie<1@hwj.me>
+# Author:HuWenjie<huwenjie@cenneo.com>
 # Ghost Bird File System Reader
 # Makefile
-# 
+#
 # BSD 2-Clause License
-# 
+#
 # Copyright (c) 2017, Ghost Bird Operating System Project Developers.
 # All rights reserved.
 
@@ -17,25 +17,38 @@ ASM_SRCS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.asm))
 OBJS := $(patsubst %.c, %.o, $(C_SRCS))
 OBJS += $(patsubst %.cpp, %.o, $(CPP_SRCS))
 OBJS += $(patsubst %.asm, %.o, $(ASM_SRCS))
+OBJS := $(filter %_start.o, $(OBJS)) $(filter-out %_start.o, $(OBJS))
 
-OBJCOPYFLAGS := -R .note -R .comment -S
+OBJCOPYFLAGS := binary -R .note -R .comment -S \
+--set-section-flags .bss=alloc,load,contents
 
 LDFLAGS  := -m elf_i386
-CFLAGS   := -fno-stack-protector -I $(CURDIR)/include
-CPPFLAGS := -fno-stack-protector -I $(CURDIR)/include
+CFLAGS   := -m32 -fno-stack-protector -I $(CURDIR)/include
+CPPFLAGS := -m32 -fno-stack-protector -I $(CURDIR)/include
 ASMFLAGS := -f elf
 
-TARGET = KERNEL
+TARGET = KERNEL.BIN
 
 sinclude $(OBJS:.o=.d)
+
+install:$(TARGET)
+	modprobe nbd
+	qemu-nbd -c /dev/nbd0 $(image) -f vpc
+	sleep 0.2
+	mount /dev/nbd0p1 /mnt
+	cp $(TARGET) /mnt
+	umount /mnt
+	qemu-nbd -d /dev/nbd0
+	sleep 0.2
+	rmmod nbd
 
 all: $(TARGET)
 
 $(TARGET): kernel.o
-	$(OBJCOPY) -O binary kernel.o $(TARGET)
+	$(OBJCOPY) -O $(OBJCOPYFLAGS) kernel.o $(TARGET)
 
 kernel.o: $(OBJS)
-	$(LD) $(LDFLAGS) -o kernel.o -Ttext 0x10000 $(OBJS)
+	$(LD) $(LDFLAGS) -o kernel.o -Ttext 0x400000 $(OBJS)
 
 %.o: %.asm
 	$(NS) $(ASMFLAGS) -o $@ $<

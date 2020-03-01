@@ -11,6 +11,21 @@
 #include <lib/mem.h>
 #include <stddef.h>
 
+/*
+char *strchr(string, chr) - search a string for a character
+Purpose:
+       Searches a string for a given character, which may be the
+       null character '\0'.
+*/
+char *strchr(const char *string, int chr)
+{
+    while (*string && *string != chr)
+        string++;
+    if (*string == chr)
+        return(string);
+    return((char *)0);
+}
+
 /**
  *strncmp - Compare two length-limited strings
  *@cs: One string

@@ -8,23 +8,19 @@
  */
 
 #include "interrupt.h"
-#include <memory.h>
-#include "../include/page.h"
+#include "../include/x86mmd.h"
 #include "../include/function.h"
-#include "../include/address.h"
 #include <stdlib.h>
 #include <types.h>
 
-void init_Interrupt(void)
+void clean_IDT(void)
 {
-	/**初始化中断描述符表*/
-	IDT_len = 256;
-	IDT_size = IDT_len * 8;
-	IDT_addr = (u32 *)vmalloc(IDT_size);
-	write_IDTR((u32)IDT_addr, IDT_size - 1);
-	clean_IDT();
-	
-	
+	unsigned int n, *idt;
+
+	idt = (unsigned int *)MMD_IDT_ADDR;
+	for (n = 0; n < MMD_IDT_SIZE / sizeof(unsigned int); n ++)
+		idt[n] = 0;
+
 	/**初始化irq数组*/
 	unsigned long point;
 	for (point = 0; point < NUMBER_INTERRUPT; point ++)
@@ -32,8 +28,15 @@ void init_Interrupt(void)
 		irqaction[point].name = NULL;
 		irqaction[point].handle = &easy_handle;
 	}
-	
-	
+}
+
+void init_interrupt(void)
+{
+	/**初始化中断描述符表*/
+	write_IDTR(MMD_IDT_ADDR, MMD_IDT_SIZE - 1);
+
+	clean_IDT();
+
 	/**创建中断描述符*/
 	create_IDT(0 , code_0_selector, &int_0 , interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
 	create_IDT(1 , code_0_selector, &int_1 , interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
@@ -85,16 +88,16 @@ void init_Interrupt(void)
 	create_IDT(47, code_0_selector, &int_47, interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
 	create_IDT(48, code_0_selector, &int_48, interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
 	create_IDT(49, code_0_selector, &int_49, interrupt_gate + IDT_32 + IDT_DPL_0 + IDT_P);
-	
+
 	/**专门用作系统调用的描述符*/
 	create_IDT(50, code_0_selector, &int_50, interrupt_gate + IDT_32 + IDT_DPL_3 + IDT_P);
-	
-	
+
+
 	/**初始化Intel 386保护模式的相关中断异常处理程序*/
 	init_trap();
-	
-	
+
 	/**正常返回*/
+	printk("Finished - init_interrupt();\n");
 	return;
 }
 
@@ -116,13 +119,26 @@ long register_irq(unsigned char irq, char *name, void (*handle)(int error_code))
 void init_trap(void)
 {
 	register_irq(0, "Divide Error", &Divide_Error);
-	register_irq(3, "Break Point", &Break_Point);
-	register_irq(4, "Over Flow", &Over_Flow);
-	register_irq(6, "Undefined", &Undefined);
+	register_irq(1, "Debug", &Divide_Error);
+	register_irq(2, "NMI Interrupt", &Divide_Error);
+	register_irq(3, "Breakpoint", &Break_Point);
+	register_irq(4, "Overflow", &Over_Flow);
+	register_irq(5, "BOUND Range Exceeded", &Over_Flow);
+	register_irq(6, "Invalid Opcode", &Undefined);
+	register_irq(7, "Double Fault", &Double_Fault);
 	register_irq(8, "Double Fault", &Double_Fault);
-	register_irq(10, "Invalid Task Segment", &Invalid_Task_Segment);
+	register_irq(9, "CoProcessor Segment Overrun", &Double_Fault);
+	register_irq(10, "Invalid TSS", &Invalid_Task_Segment);
+	register_irq(11, "Segment Not Present", &Invalid_Task_Segment);
+	register_irq(12, "Stack Segment Fault", &Invalid_Task_Segment);
 	register_irq(13, "General Protection", &General_Protection);
-	register_irq(14, "Page Fault", &do_page_fault);
+	register_irq(14, "General Protection", &General_Protection);
+	register_irq(15, "Intel reserved", &General_Protection);
+	register_irq(16, "Floating-Point Error", &General_Protection);
+	register_irq(17, "Alignment Check", &General_Protection);
+	register_irq(18, "Machine Check", &General_Protection);
+	register_irq(19, "SIMD Floating-Point Exception", &General_Protection);
+	//register_irq(14, "Page Fault", &do_page_fault);
 }
 
 

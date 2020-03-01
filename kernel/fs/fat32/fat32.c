@@ -10,7 +10,7 @@
 #include "fat32.h"
 #include <lib/mem.h>
 #include <stdlib.h>
-#include <memory.h>
+#include <kmm.h>
 #include <hdd.h>
 #include <types.h>
 
@@ -59,7 +59,7 @@ struct FAT32_PBR
 	unsigned short	fsinfo;			// 文件系统信息扇区号一般为1
 	unsigned short	bkbot;			// 备份引导扇区6
 	unsigned char	reser[12];		// 保留12字节
-	
+
 	/*以下为扩展BPB*/
 	unsigned char	pdn;			// 物理驱动器号,第一个驱动器为0x80
 	unsigned char	exres;			// 保留
@@ -76,10 +76,10 @@ struct FAT32_PBR
 void init_FAT32(void)
 {
 	char *point;
-	point = vmalloc(512);
+	point = vmalloc(512, 0);
 	if (point == NULL) error("Initialize Memory Error!");
 	read_disk(LBA_start, (u16 *) point, 1);
-	
+
 	/*拷贝直接得到的数据*/
 	memcpy(&PBR1.OEM, (point + 0x03), 8);
 	memcpy(&PBR1.cluster_size, (point + 0x0d), 1);
@@ -91,11 +91,11 @@ void init_FAT32(void)
 	memcpy(&PBR1.FAT_size, (point + 0x24), 4);
 	memcpy(&PBR1.FAT_version, (point + 0x2a), 2);
 	memcpy(&PBR1.root_start, (point + 0x2c), 4);
-	
+
 	/*算出间接提供的数据*/
 	PBR1.FAT_start = LBA_start + PBR1.reserve;
 	PBR1.data_start = PBR1.FAT_start + (PBR1.FAT_num * PBR1.FAT_size);
-	
+
 	/*判断取哪个值*/
 	if (PBR1.total_sector_num_16 == 0)
 	{
@@ -107,7 +107,7 @@ void init_FAT32(void)
 	printk("Partition OEM:%s,FAT 32 version is 0x%X\n", &PBR1.OEM, PBR1.FAT_version);
 	printk("Cluster size:%X,reserve:%X\n", PBR1.cluster_size, PBR1.reserve);
 	printk("root max number:%X,root start:%X\n", PBR1.root_max_num, PBR1.root_start);
-	
+
 	/**测试结构体*/
 	printk("size of struct PBR is:%d.\n", sizeof(struct FAT32_PBR));
 }
@@ -148,7 +148,7 @@ file_info get_file_info(u8 *name)
 		src_buffer[offset_point] = name[offset_point];
 	}
 	/*读取根目录*/
-	root_point = (u8 *) vmalloc(PBR1.cluster_size * 512);/*512unsigned char是一个标准磁盘扇区的大小，乘上每个簇包含扇区的数量得一个簇的大小*/
+	root_point = (u8 *) vmalloc(PBR1.cluster_size * 512, 0);/*512unsigned char是一个标准磁盘扇区的大小，乘上每个簇包含扇区的数量得一个簇的大小*/
 	if (root_point == NULL) error("get file information is error!");
 	for (clu = PBR1.root_start; (clu & 0x0FFFFFF0) != 0x0FFFFFF0;)
 	{
@@ -200,7 +200,7 @@ u32 clu_to_sector(u32 clu_num)
 u32 get_next_clu(u32 clu)
 {
 	u32 *point, next_clu;
-	point = (u32 *) vmalloc(PBR1.cluster_size * 512);
+	point = (u32 *) vmalloc(PBR1.cluster_size * 512, 0);
 	/*每个FAT表项4个字节，一个扇区可以装128个FAT表项*/
 	read_disk((PBR1.FAT_start + (clu / 128)), (unsigned short int*) point, 1);
 	next_clu = point[clu % 128];
@@ -220,4 +220,3 @@ void load_data(void *buf, u32 clu)
 	}
 	return;
 }
-

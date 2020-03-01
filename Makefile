@@ -1,10 +1,10 @@
 # Date:2017/6/20 16:10
-# Author:HuWenjie<1@hwj.me>
-# Ghost Bird OS
+# Author:HuWenjie<huwenjie@cenneo.com>
+# Cenneo OS
 # Makefile
-# 
+#
 # BSD 2-Clause License
-# 
+#
 # Copyright (c) 2017, Ghost Bird Operating System Project Developers.
 # All rights reserved.
 
@@ -16,8 +16,8 @@ OBJCOPY = objcopy
 GFR     = gfr
 qemu = qemu-system-i386
 image = $(CURDIR)/image/image.vhd
-compress = makecab
-depress = expand
+compress = zip
+depress = unzip
 
 export CC NS LD OBJCOPY GFR
 export image qemu
@@ -33,7 +33,7 @@ export PATH += :$(CURDIR)/tools/gfr
 
 gfr:
 	cd tools/gfr && make all
-	
+
 loader:
 	cd loader && make all
 
@@ -41,7 +41,7 @@ kernel:
 	cd kernel && make all
 
 prepare:$(image:.vhd = .zip) $(image)
-	$(depress) $(image:.vhd=.zip) $(image)
+	$(depress) $(image:.vhd=.zip)
 
 clean_loader:
 	cd loader && make clean
@@ -58,17 +58,16 @@ clean:
 	cd kernel && make clean
 
 dist:clean
-	$(compress) $(image) $(image:.vhd=.zip)
-	$(RM) $(image)
-	
+	$(compress) -m -r -j $(image:.vhd=.zip) $(image)
+
 install:
 	cd loader && make install
-	
+	cd kernel && make install
 all:
-	cd loader && make all
-	
+	make loader
+	make kernel
 run:all install
-	$(qemu) -drive file=$(image),format=vpc
+	$(qemu) -drive file=$(image),format=vpc -m 9
 
 help:
 	clear
@@ -78,4 +77,3 @@ help:
 	@echo loader		make Explorer Loader
 	@echo clean		make cl
 	@echo loader		make Explorer Loader
-

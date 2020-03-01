@@ -8,7 +8,7 @@
  */
 
 #include <GUI.h>
-#include "memory.h"
+#include "kmm.h"
 #include "window.h"
 #include "unit.h"
 
@@ -38,13 +38,13 @@ struct layer_unit *unit_new_botton(struct window *target, unsigned long x, unsig
 {
 	/**纠正参数*/
 	correct_para(target, &x, &y, &length, &width);
-	
+
 	/**新建窗口单元*/
 	GUI_new_unit(target->layer, UNIT_BOTTON, x, y, length, width);
-	
+
 	/**绘制按钮*/
 	GUI_put_square(target->layer, 0xff0066ff, x, y, length, width);
-	
+
 	/**显示按钮上面的文字*/
 	GUI_put_string(target->layer, 0xffffffff, x, y + 4, x + length, y + width, font("Standard Font"), text);
 }
@@ -68,18 +68,18 @@ void unit_mini_handle(struct layer *target, unsigned long x, unsigned long y, vo
 struct layer_unit *GUI_new_unit(struct layer *target, unsigned int type, unsigned long x, unsigned long y, unsigned long length, unsigned long width)
 {
 	struct layer_unit *new_unit;
-	
+
 	/**申请一块内存空间放下新的单元*/
 	for (new_unit = NULL; new_unit == NULL; )
 		new_unit = kmalloc(sizeof(struct layer_unit), 0);
-	
+
 	/**参数赋值*/
 	new_unit->x = x;
 	new_unit->y = y;
 	new_unit->length = length;
 	new_unit->width = width;
 	new_unit->type = type;
-	
+
 	/**加入图层中单元单向链表*/
 	new_unit->next = target->layer_unit_list;
 	target->layer_unit_list = new_unit;
