@@ -8,12 +8,6 @@
 #include <kmm.h>
 #include "kmm_sm.h"
 
-/**设置内核内存字节页图函数*/
-void set_ker_bytemap(unsigned long ptr, char flag)
-{
-	//ker_mem_bytemap[ptr >> 12] = flag;
-}
-
 // Vast memory allocate functions in kernel area
 void *vmalloc(size_t size, unsigned char attribute)
 {
