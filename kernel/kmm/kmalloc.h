@@ -5,21 +5,21 @@
 #ifndef KMALLOC_H_
 #define KMALLOC_H_
 
-/**内存池*/
-struct mem_pool
+// Kernel Memroy Pool
+struct kmp
 {
 	size_t size;
 	unsigned long number;
-	struct Memory_Descriptor *next;
+	struct kmd *next;
 };
 
-/**内存描述符*/
-struct Memory_Descriptor
+// Kernel Memory Descriptor
+struct kmd
 {
 	void *page;
 	void *freeptr;
 	unsigned short refcnt;
-	struct Memory_Descriptor *next;
+	struct kmd *next;
 };
 /**其中flags代表下面情况之一*/
 #define MEM_INVALID	0

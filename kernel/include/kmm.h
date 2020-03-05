@@ -36,6 +36,9 @@ int vmap(void *phy_addr, void *vir_addr, size_t size);
 // Vast memory free functions in kernel area
 int vfree(void *addr);
 
+// Flags for function 'kmalloc'
+// #define KM_
+
 void *kmalloc(size_t size, int flags);
 void kfree(void *point);
 
