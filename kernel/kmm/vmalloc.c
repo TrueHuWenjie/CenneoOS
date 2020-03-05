@@ -96,6 +96,12 @@ alloc:
 		kmm_sm.free -= size;
 		kmm_sm.mapd += size;
 		return (void *)target;
+	}else{
+		kmm_sm.ksdt[kmm_sm.ksdt_len].attr = KSD_ATTR_USED;
+		kmm_sm.ksdt_len ++;
+		kmm_sm.free -= size;
+		kmm_sm.used += size;
+		return (void *)target;
 	}
 
 error("vmalloc error!");
