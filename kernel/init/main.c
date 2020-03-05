@@ -21,7 +21,7 @@
 #include <main.h>
 #include <types.h>
 #include <task.h>
-#include <arch.h> // Archtecture - 架构层
+#include <arch.h> // Architecture - 架构层
 #include <keyboard.h>
 #include <kmm.h>
 #include <video.h>
