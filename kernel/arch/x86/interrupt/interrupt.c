@@ -116,109 +116,24 @@ long register_irq(unsigned char irq, char *name, void (*handle)(int error_code))
 /**初始化Intel 386保护模式的相关中断异常函数*/
 void init_trap(void)
 {
-	register_irq(0, "Divide Error", &Divide_Error);
-	register_irq(1, "Debug", &Divide_Error);
-	register_irq(2, "NMI Interrupt", &Divide_Error);
-	register_irq(3, "Breakpoint", &Break_Point);
-	register_irq(4, "Overflow", &Over_Flow);
-	register_irq(5, "BOUND Range Exceeded", &Over_Flow);
-	register_irq(6, "Invalid Opcode", &Undefined);
-	register_irq(7, "Double Fault", &Double_Fault);
-	register_irq(8, "Double Fault", &Double_Fault);
-	register_irq(9, "CoProcessor Segment Overrun", &Double_Fault);
-	register_irq(10, "Invalid TSS", &Invalid_Task_Segment);
-	register_irq(11, "Segment Not Present", &Invalid_Task_Segment);
-	register_irq(12, "Stack Segment Fault", &Invalid_Task_Segment);
-	register_irq(13, "General Protection", &General_Protection);
-	register_irq(14, "General Protection", &General_Protection);
-	register_irq(15, "Intel reserved", &General_Protection);
-	register_irq(16, "Floating-Point Error", &General_Protection);
-	register_irq(17, "Alignment Check", &General_Protection);
-	register_irq(18, "Machine Check", &General_Protection);
-	register_irq(19, "SIMD Floating-Point Exception", &General_Protection);
-	//register_irq(14, "Page Fault", &do_page_fault);
-}
-
-
-/**除法错误中断处理程序*/
-static void Divide_Error(int error_code)
-{
-	/*显示错误界面*/
-	rectangle(0, 0, 800, 600, 0x8040B0);
-	outtextxy(50, 200, 0xffffff, "An error occurred by Processor.Explorer Kernel has been stopped.");
-	outtextxy(50, 216, 0xffffff, "ERROR information:Protect-Mode Divide Error(#DE).");
-	/*循环停机*/
-	for (;;) io_hlt();
-}
-
-
-/**断点中断处理程序*/
-static void Break_Point(int error_code)
-{
-	/*显示错误界面*/
-	rectangle(0, 0, 800, 600, 0x8040B0);
-	outtextxy(50, 200, 0xffffff, "An error occurred by Processor.Explorer Kernel has been stopped.");
-	outtextxy(50, 216, 0xffffff, "ERROR information:Protect-Mode Break Point(#BP).");
-	/*循环停机*/
-	for (;;) io_hlt();
-}
-
-
-/**溢出中断处理程序*/
-static void Over_Flow(int error_code)
-{
-	/*显示错误界面*/
-	rectangle(0, 0, 800, 600, 0x8040B0);
-	outtextxy(50, 200, 0xffffff, "An error occurred by Processor.Explorer Kernel has been stopped.");
-	outtextxy(50, 216, 0xffffff, "ERROR information:Protect-Mode Over Flow(#OF).");
-	/*循环停机*/
-	for (;;) io_hlt();
-}
-
-
-/**未定义指令中断处理程序*/
-static void Undefined(int error_code)
-{
-	/*显示错误界面*/
-	//rectangle(0, 0, 800, 600, 0x8040B0);
-	//outtextxy(50, 200, 0xffffff, "An error occurred by Processor.Explorer Kernel has been stopped.");
-	//outtextxy(50, 216, 0xffffff, "ERROR information:Protect-Mode Un-Define(#UD).");
-	/*循环停机*/
-	for (;;) io_hlt();
-}
-
-
-/**双重错误中断处理程序*/
-static void Double_Fault(int error_code)
-{
-	/*显示错误界面*/
-	rectangle(0, 0, 800, 600, 0x8040B0);
-	outtextxy(50, 200, 0xffffff, "An error occurred by Processor.Explorer Kernel has been stopped.");
-	outtextxy(50, 216, 0xffffff, "ERROR information:Protect-Mode Double Fault(#DF).");
-	/*循环停机*/
-	for (;;) io_hlt();
-}
-
-
-/**无效任务段中断处理程序*/
-static void Invalid_Task_Segment(int error_code)
-{
-	/*显示错误界面*/
-	rectangle(0, 0, 800, 600, 0x8040B0);
-	outtextxy(50, 200, 0xffffff, "An error occurred by Processor.Explorer Kernel has been stopped.");
-	outtextxy(50, 216, 0xffffff, "ERROR information:Protect-Mode Invalid TSS(#TS).");
-	/*循环停机*/
-	for (;;) io_hlt();
-}
-
-
-/**常规保护中断处理程序*/
-static void General_Protection(int error_code)
-{
-	/*显示错误界面*/
-	rectangle(0, 0, 800, 600, 0x8040B0);
-	outtextxy(50, 200, 0xffffff, "An error occurred by Processor.Explorer Kernel has been stopped.");
-	outtextxy(50, 216, 0xffffff, "ERROR information:Protect-Mode General Protection(#GP).");
-	/*循环停机*/
-	for (;;) io_hlt();
+	register_irq(0, "Divide Error", &excp_de_handle);
+	register_irq(1, "Debug", &excp_db_handle);
+	// Non-maskable external interrupt.
+	register_irq(3, "Breakpoint", &excp_bp_handle);
+	register_irq(4, "Overflow", &excp_of_handle);
+	register_irq(5, "BOUND Range Exceeded", &excp_br_handle);
+	register_irq(6, "Invalid Opcode", &excp_ud_handle);
+	register_irq(7, "Double Fault", &excp_nm_handle);
+	register_irq(8, "Double Fault", &excp_df_handle);
+	// Coprocessor Segment Overrun (reserved)
+	register_irq(10, "Invalid TSS", &excp_ts_handle);
+	register_irq(11, "Segment Not Present", &excp_np_handle);
+	register_irq(12, "Stack Segment Fault", &excp_ss_handle);
+	register_irq(13, "General Protection", &excp_gp_handle);
+	// Page Fault
+	// Intel reserved. Do not use.
+	register_irq(16, "Floating-Point Error", &excp_mf_handle);
+	register_irq(17, "Alignment Check", &excp_ac_handle);
+	register_irq(18, "Machine Check", &excp_mc_handle);
+	register_irq(19, "SIMD Floating-Point Exception", &excp_xf_handle);
 }

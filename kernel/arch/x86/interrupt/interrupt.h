@@ -94,26 +94,53 @@ long register_irq(unsigned char irq, char *name, void (*handle)(int error_code))
 /**初始化Intel 386保护模式的相关中断异常函数*/
 void init_trap(void);
 
-/**除法错误中断处理程序*/
-static void Divide_Error(int error_code);
+// Divide Error
+void excp_de_handle(int error_code);
 
-/**断点中断处理程序*/
-static void Break_Point(int error_code);
+// Debug
+void excp_db_handle(int error_code);
 
-/**溢出中断处理程序*/
-static void Over_Flow(int error_code);
+// Breakpoint
+void excp_bp_handle(int error_code);
 
-/**未定义指令中断处理程序*/
-static void Undefined(int error_code);
+// Overflow
+void excp_of_handle(int error_code);
 
-/**双重错误中断处理程序*/
-static void Double_Fault(int error_code);
+// BOUND Range Exceeded
+void excp_br_handle(int error_code);
 
-/**无效任务段中断处理程序*/
-static void Invalid_Task_Segment(int error_code);
+// Invalid Opcode (Undefined Opcode)
+void excp_ud_handle(int error_code);
 
-/**常规保护中断处理程序*/
-static void General_Protection(int error_code);
+// Device Not Available (No Math Coprocessor)
+void excp_nm_handle(int error_code);
+
+// Double Fault
+void excp_df_handle(int error_code);
+
+// Invalid TSS
+void excp_ts_handle(int error_code);
+
+// Segment Not Present
+void excp_np_handle(int error_code);
+
+// Stack-Segment Fault
+void excp_ss_handle(int error_code);
+
+// General Protection
+void excp_gp_handle(int error_code);
+
+// x87 FPU Floating-Point Error (Math Fault)
+void excp_mf_handle(int error_code);
+
+// Alignment Check
+void excp_ac_handle(int error_code);
+
+// Machine Check
+void excp_mc_handle(int error_code);
+
+// SIMD Floating-Point Exception
+void excp_xf_handle(int error_code);
 
 /**handle.c中*/
 
