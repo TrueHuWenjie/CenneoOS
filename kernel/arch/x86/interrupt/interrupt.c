@@ -96,8 +96,6 @@ void init_interrupt(void)
 	/**初始化Intel 386保护模式的相关中断异常处理程序*/
 	init_trap();
 
-	/**正常返回*/
-	printk("Finished - init_interrupt();\n");
 	return;
 }
 
