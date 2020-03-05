@@ -1,11 +1,6 @@
-/**
- * Copyright 2013-2015 by Explorer Developers.
- * made by Lab Explorer Developers<1@GhostBirdOS.org>
- * Explorer Interrupt Management Definition
- * Explorer/arch/x86/interrupt/interrupt.h
- * version:Alpha
- * 12/22/2014 2:52 PM
- */
+ // Cenneo OS
+ // /kernel/arch/x86/interrupt/interrupt.h
+ // Explorer Interrupt Management Definition
 
 #ifndef INTERRUPT_H_
 #define INTERRUPT_H_
