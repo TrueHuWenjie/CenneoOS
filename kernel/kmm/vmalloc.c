@@ -9,21 +9,21 @@
 #include "kmm_sm.h"
 
 // Vast memory allocate functions in kernel area
-void *vmalloc(size_t size, unsigned char attribute)
+void *vmalloc(size_t size, int flags)
 {
 	unsigned long n, target;
 
-    // Check attribute
+    // Check flags
     if (!size) return NULL;
-    if (attribute & VM_MAPD)
+    if (flags & VM_MAPD)
 	{
-		if ((attribute & VM_CTND) ||
-			(attribute & VM_IMMD) ||
-			(attribute & VM_SWAP))
+		if ((flags & VM_CTND) ||
+			(flags & VM_IMMD) ||
+			(flags & VM_SWAP))
             return NULL;
-	}else if (attribute & VM_CTND)
+	}else if (flags & VM_CTND)
 	{
-		if (attribute & VM_IMMD)
+		if (flags & VM_IMMD)
 			return NULL;
 	}
 
@@ -34,7 +34,7 @@ void *vmalloc(size_t size, unsigned char attribute)
 	// First we need to know whether there are enough free space
 	if (kmm_sm.free < size)
 	{
-		if (attribute & VM_WAIT)
+		if (flags & VM_WAIT)
 			error("vmalloc is unable to meet demand but still waiting here!");
 
 		// We may add some solutions here in future
@@ -51,14 +51,14 @@ ksdt_seek:
 	}
 
 	// In here we have no found any continuous space
-	if (attribute & VM_WAIT)
+	if (flags & VM_WAIT)
 		error("There is no continuous memory segment in kernel state!");
 
 	return NULL;
 
 page_seek:
-	// Only the call with attribute 'VM_IMMD' need do this
-	if (!(attribute & VM_IMMD)) goto alloc;
+	// Only the call with flags 'VM_IMMD' need do this
+	if (!(flags & VM_IMMD)) goto alloc;
 
 	// Lock pmb functions
 	pmb_lock();
@@ -72,12 +72,12 @@ page_seek:
 	}
 
 
-	if (attribute && VM_CTND)
+	if (flags && VM_CTND)
 	{
-		printk("Unsupported here: vmalloc with attribute 'VM_CTND'!\n");
+		printk("Unsupported here: vmalloc with flags 'VM_CTND'!\n");
 		return NULL;
 	}else{
-		printk("Unsupported here: vmalloc with attribute 'VM_CTND'!\n");
+		printk("Unsupported here: vmalloc with flags 'VM_CTND'!\n");
 		return NULL;
 	}
 
@@ -89,7 +89,7 @@ alloc:
 	kmm_sm.ksdt[n].size -= (size >> 12);
 	if (!kmm_sm.ksdt[n].size) kmm_sm.ksdt[n].attr = KSD_ATTR_FREE;
 
-	if (attribute && VM_MAPD)
+	if (flags && VM_MAPD)
 	{
 		kmm_sm.ksdt[kmm_sm.ksdt_len].attr = KSD_ATTR_USED + KSD_ATTR_MAPD;
 		kmm_sm.ksdt_len ++;

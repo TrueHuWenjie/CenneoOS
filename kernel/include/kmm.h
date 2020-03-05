@@ -28,7 +28,7 @@ extern "C" {
 #define VM_WAIT 16		// Allow vmalloc waiting until success
 
 // Vast memory allocate & free functions in kernel area
-void *vmalloc(size_t size, unsigned char attribute);
+void *vmalloc(size_t size, int flags);
 
 // Map physical memory into virtual memory
 int vmap(void *phy_addr, void *vir_addr, size_t size);
