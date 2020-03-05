@@ -52,12 +52,6 @@ void main(void)
 	// Open kvi
 	kvi_open();
 
-	kmm_info();
-	int *ptr;
-	ptr = vmalloc(8192, VM_MAPD);
-	kmm_info();
-
-fin2:goto fin2;
 	init_time();
 	init_task();
 	init_CPU();
