@@ -1,12 +1,6 @@
-/**
- * Copyright 2013-2015 by Explorer Developers.
- * made by Lab Explorer Developers<1@GhostBirdOS.org>
- * Explorer function kmalloc head
- * Explorer/include/kmalloc.h
- * version:Alpha
- * 2/10/2014 9:04 AM:created
- * 10/1/2015 8:15 AM:重写内存分配
- */
+// Cenneo OS
+// /kernel/kmm/kmalloc.h
+// Kernel Memory Allocation
 
 #ifndef KMALLOC_H_
 #define KMALLOC_H_
