@@ -28,6 +28,12 @@ extern struct pmb_sm pmb_sm;
 // Return the number of free physical page
 unsigned long pmb_info_free(void);
 
+// Return total number of physical page
+unsigned long pmb_info_total(void);
+
+// Return the number of reserved physical page
+unsigned long pmb_info_rsvd(void);
+
 // Lock functions about pmb, cannot be used by any other process/thread
 void pmb_lock(void);
 
