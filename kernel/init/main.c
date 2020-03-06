@@ -27,8 +27,10 @@
 #include <video.h>
 #include <kvi.h>
 
-/**在_start.asm中放置了boot_info_ptr指针指向boot_info*/
-extern struct boot_info *boot_info_ptr;
+void idle(void)
+{
+
+}
 
 /**内核主函数*/
 void main(void)
@@ -60,4 +62,6 @@ void main(void)
 	// Operating System Moniter
 	extern int osm_open(void);
 	new_task(&osm_open, NULL);
+
+	idle();
 }
