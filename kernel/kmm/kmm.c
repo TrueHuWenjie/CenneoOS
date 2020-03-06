@@ -22,6 +22,11 @@ void kmm_info(void)
     kmm_sm.used / 1024, kmm_sm.mapd / 1024);
 }
 
+unsigned int kmm_info_free(void)
+{
+    return kmm_sm.free;
+}
+
 void init_kmm(void)
 {
     unsigned long i, size;

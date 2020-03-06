@@ -46,6 +46,9 @@ void kfree(void *point);
 unsigned long new_pdt(void);
 
 void kmm_info(void);
+
+unsigned int kmm_info_free(void);
+
 void init_kmm(void);
 
 #ifdef __cplusplus
