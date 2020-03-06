@@ -186,8 +186,6 @@ press:
 					}
 				}
 			}
-			/**输出信息到相应窗口*/
-			window_print(layer->winptr, "Clicked in (%d,%d):%#X.", mouse_x - layer->x, mouse_y - layer->y, cmd);
 
 			/**退出循环*/
 			goto cmp_info;
