@@ -9,7 +9,7 @@
 
 #include <GUI.h>
 #include <time.h>
-#include <studio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <lib/graphics.h>

@@ -1,13 +1,13 @@
 /**
  * Copyright 2013-2015 by 2013-2015 by Explorer OS Developers. All rights reserved.
  * made by Lab Explorer Developers<1@GhostBirdOS.org>
- * studio.h
- * Explorer/include/studio.h
+ * stdio.h
+ * Explorer/include/stdio.h
  * 2/5/2015 3:2 PM
  */
 
-#ifndef STUDIO_H_
-#define STUDIO_H_
+#ifndef STDIO_H_
+#define STDIO_H_
 
 #include <stdarg.h>
 
