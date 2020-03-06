@@ -10,14 +10,14 @@
 
 #define MMU_PAGE_SIZE	4096
 
-#define MD_PER_PAGE	4096 / sizeof(struct Memory_Descriptor)
+#define KMD_PER_PAGE	4096 / sizeof(struct kmd)
 
 
 /**维护内存池
  * 注意：内存池中允许最大内存不得超过4096
  */
-#define POOL_SIZE	9
-static struct mem_pool mem_pool[POOL_SIZE] =
+#define POOL_SIZE	8
+static struct kmp kmp[POOL_SIZE] =
 {
 	{16  , 0, NULL},
 	{32  , 0, NULL},
@@ -26,23 +26,22 @@ static struct mem_pool mem_pool[POOL_SIZE] =
 	{256 , 0, NULL},
 	{512 , 0, NULL},
 	{1024, 0, NULL},
-	{2048, 0, NULL},
-	{4096, 0, NULL}
+	{2048, 0, NULL}
 };
 
 /**空闲内存描述符表的队列*/
-static struct Memory_Descriptor *empty = NULL;
+static struct kmd *empty = NULL;
 
 /**准备更多空闲内存描述符表函数*/
-static void prepare_MD(void)
+static void kmd_prepare(void)
 {
 	/**分配一个新页储存描述符*/
-	struct Memory_Descriptor *MD = vmalloc(MMU_PAGE_SIZE, 0);
+	struct kmd *MD = vmalloc(MMU_PAGE_SIZE, 0);
 	if (MD == NULL) error("fill pool error!");
 
 	/**初始化该页*/
 	unsigned i;
-	for (i = 0; i < MD_PER_PAGE; i ++)
+	for (i = 0; i < KMD_PER_PAGE; i ++)
 	{
 		MD[i].next = &MD[i + 1];
 	}
@@ -56,7 +55,7 @@ static void prepare_MD(void)
 void fill_pool(unsigned long n)
 {
 	/**判断空闲内存描述符表是否空*/
-	if (empty == NULL) prepare_MD();
+	if (empty == NULL) kmd_prepare();
 
 	/**获得一个页*/
 	void *new_page = vmalloc(MMU_PAGE_SIZE, 0);
@@ -65,11 +64,11 @@ void fill_pool(unsigned long n)
 	if (new_page == NULL) error("No enough memory!");
 
 	/**获取一个空闲内存描述符表*/
-	struct Memory_Descriptor *new_MD = empty;
+	struct kmd *new_MD = empty;
 	empty = empty->next;
 
 	/**获取相关信息*/
-	size_t size = mem_pool[n].size;
+	size_t size = kmp[n].size;
 	unsigned long number = MMU_PAGE_SIZE / size;
 
 	/**初始化内存描述符表和这个页*/
@@ -78,9 +77,9 @@ void fill_pool(unsigned long n)
 	new_MD->refcnt = 0;
 
 	/**将内存描述符表加入到内存池中*/
-	new_MD->next = mem_pool[n].next;
-	mem_pool[n].next = new_MD;
-	mem_pool[n].number = number;
+	new_MD->next = kmp[n].next;
+	kmp[n].next = new_MD;
+	kmp[n].number = number;
 }
 
 /**内核小块内存分配函数
@@ -95,24 +94,24 @@ void *kmalloc(size_t size, int flags)
 	disable_schedule();
 
 	/**内存描述符指针*/
-	struct Memory_Descriptor *point;
+	struct kmd *point;
 
 	/**寻找合适大小的内存池*/
 	unsigned long n;
 	for (n = 0; n < POOL_SIZE; n ++)
 	{
-		if (mem_pool[n].size >= size)
+		if (kmp[n].size >= size)
 		{
 			/**执行到这里说明已经找到合适大小的内存池*/
 
 			/**判断内存池中是否有足够的内存*/
-			if (mem_pool[n].number == 0) fill_pool(n);
+			if (kmp[n].number == 0) fill_pool(n);
 
 			/**获取可用内存*/
-			retval = mem_pool[n].next->freeptr;
-			mem_pool[n].next->refcnt ++;
-			mem_pool[n].next->freeptr += mem_pool[n].size;
-			mem_pool[n].number --;
+			retval = kmp[n].next->freeptr;
+			kmp[n].next->refcnt ++;
+			kmp[n].next->freeptr += kmp[n].size;
+			kmp[n].number --;
 			goto finish;
 		}
 	}
@@ -139,7 +138,7 @@ void kfree(void *point)
 {
 	void *page;
 	unsigned long n;
-	struct Memory_Descriptor *MD, *prev = NULL;			/**指向当前描述符和上一个描述符*/
+	struct kmd *MD, *prev = NULL;			/**指向当前描述符和上一个描述符*/
 
 	/**计算获得该块内存所在的页面*/
 	page = (void *)((unsigned long) point & 0xfffff000);
@@ -148,7 +147,7 @@ void kfree(void *point)
 	for (n = 0; n < POOL_SIZE; n ++)
 	{
 		/**寻找每个内存描述符*/
-		for (MD = mem_pool[n].next; MD != NULL; MD = MD->next)
+		for (MD = kmp[n].next; MD != NULL; MD = MD->next)
 		{
 			if (MD->page == page)
 			{

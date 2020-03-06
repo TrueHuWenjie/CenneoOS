@@ -205,7 +205,7 @@ void init_Window(void)
 
 	/**初始化光标*/
 	init_pointer();
-	// fin:goto fin;
+
 	/**初始化附加图层*/
 	init_attach_layer();
 

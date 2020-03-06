@@ -1,31 +1,25 @@
-/**
- * Copyright 2013-2015 by Explorer Developers.
- * made by Lab Explorer Developers<1@GhostBirdOS.org>
- * Explorer function kmalloc head
- * Explorer/include/kmalloc.h
- * version:Alpha
- * 2/10/2014 9:04 AM:created
- * 10/1/2015 8:15 AM:重写内存分配
- */
+// Cenneo OS
+// /kernel/kmm/kmalloc.h
+// Kernel Memory Allocation
 
 #ifndef KMALLOC_H_
 #define KMALLOC_H_
 
-/**内存池*/
-struct mem_pool
+// Kernel Memroy Pool
+struct kmp
 {
 	size_t size;
 	unsigned long number;
-	struct Memory_Descriptor *next;
+	struct kmd *next;
 };
 
-/**内存描述符*/
-struct Memory_Descriptor
+// Kernel Memory Descriptor
+struct kmd
 {
 	void *page;
 	void *freeptr;
 	unsigned short refcnt;
-	struct Memory_Descriptor *next;
+	struct kmd *next;
 };
 /**其中flags代表下面情况之一*/
 #define MEM_INVALID	0
