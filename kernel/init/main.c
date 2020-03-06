@@ -69,5 +69,5 @@ void main(void)
 	// new_task(&task_test, NULL);
 
 	/**GUI初始化*/
-	//init_GUI();
+	init_GUI();
 }

@@ -83,7 +83,9 @@ cmp_info:
 		case 0x8: goto release;
 
 		/**无效命令返回*/
-		case 0xff: sleep();
+		case 0xff:
+			refresh_pointer();
+			sleep();
 
 		/**其他命令忽略*/
 		default: goto cmp_info;
@@ -185,7 +187,7 @@ press:
 				}
 			}
 			/**输出信息到相应窗口*/
-			// window_print(layer->winptr, "Clicked in (%d,%d):%#X.", mouse_x - layer->x, mouse_y - layer->y, cmd);
+			window_print(layer->winptr, "Clicked in (%d,%d):%#X.", mouse_x - layer->x, mouse_y - layer->y, cmd);
 
 			/**退出循环*/
 			goto cmp_info;
@@ -196,6 +198,7 @@ press:
 	window_cancel_active();
 	goto cmp_info;
 }
+
 
 /**初始化窗口系统*/
 void init_Window(void)
@@ -218,16 +221,16 @@ void init_Window(void)
 	set_mouse_interception(task_GUI_mouse_handle);
 
 	/**加载相关资源*/
-	close_f_botton = window_load_image("CLOSE_F_.BMP");
-	close_p_botton = window_load_image("CLOSE_P_.BMP");
-	mini_f_botton = window_load_image("MINI_F_.BMP");
-	mini_p_botton = window_load_image("MINI_P_.BMP");
+	// close_f_botton = window_load_image("CLOSE_F_.BMP");
+	// close_p_botton = window_load_image("CLOSE_P_.BMP");
+	// mini_f_botton = window_load_image("MINI_F_.BMP");
+	// mini_p_botton = window_load_image("MINI_P_.BMP");
 
 	/**GUI控制台窗口*/
 	GUI_control = GUI_window("Explorer GUI Control", WINDOW_NORMAL, 0, 0, 480, 320);
 
 	/**加载背景*/
-	new_task(&load_background, "WALLPAP2.BMP");
+	// new_task(&load_background, "WALLPAP2.BMP");
 
 	/**窗口测试*/
 	new_window_2 = GUI_window("Cenneo OS", WINDOW_NORMAL, 0, 0, 300, 300);
@@ -359,7 +362,7 @@ void init_pointer(void)
 	pointer_layer->visiable = true;
 
 	/**设置刷新*/
-	settimer(&refresh_pointer, 1000 / 50, 0);
+	//settimer(&refresh_pointer, 1000 / 50, 0);
 }
 
 /**
