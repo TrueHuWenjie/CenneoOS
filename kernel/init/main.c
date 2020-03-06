@@ -56,4 +56,8 @@ void main(void)
 
 	/**GUI初始化*/
 	init_GUI();
+
+	// Operating System Moniter
+	extern int osm_open(void);
+	new_task(&osm_open, NULL);
 }
