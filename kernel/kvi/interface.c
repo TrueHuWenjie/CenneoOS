@@ -116,17 +116,23 @@ void kvi_basicinfo(void)
 	if (BASE) printk("It is based on " BASE ".\n");
 }
 
-//close the shell
-void kvi_close(void)
+// Close kvi
+void kvi_disable(void)
 {
 	kvi_sm.enable = false;
 }
 
 // Open kvi
-void kvi_open(void)
+void kvi_enable(void)
 {
-	// Not allowed open twice
-	if (kvi_sm.enable == true) return;
+	kvi_sm.enable = true;
+}
+
+// Initialization for kvi
+void init_kvi(void)
+{
+	// Enable kvi
+	kvi_enable();
 
 	// Clear the screen
 	rectangle(0, 0, kvi_sm.xres, kvi_sm.yres, kvi_sm.bg_color);

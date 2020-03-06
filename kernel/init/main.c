@@ -48,9 +48,7 @@ void main(void)
 
 	init_graph();
 	init_font();
-
-	// Open kvi
-	kvi_open();
+	init_kvi();
 
 	init_time();
 	init_task();

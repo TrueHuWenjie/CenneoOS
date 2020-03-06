@@ -24,7 +24,7 @@ struct layer *layer_root = NULL;
 void init_GUI(void)
 {
 	// Close kvi
-	kvi_close();
+	kvi_disable();
 
 	/**清除屏幕*/
 	clear_screen();

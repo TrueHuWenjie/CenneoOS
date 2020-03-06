@@ -75,6 +75,8 @@ int error(const char *fmt, ...)
     /**停止调度*/
     // disable_schedule();
 
+    kvi_disable();
+
     kvi_color(KVI_EROR_FGCOLOR, KVI_EROR_BGCOLOR);
 
     /**format*/
