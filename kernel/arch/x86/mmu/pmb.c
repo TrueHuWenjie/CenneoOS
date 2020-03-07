@@ -31,6 +31,18 @@ unsigned long pmb_info_free(void)
 	return pmb_sm.free;
 }
 
+// Return total number of physical page
+unsigned long pmb_info_total(void)
+{
+	return pmb_sm.total;
+}
+
+// Return the number of reserved physical page
+unsigned long pmb_info_rsvd(void)
+{
+	return pmb_sm.rsvd;
+}
+
 // Lock functions about pmb, cannot be used by any other process/thread
 void pmb_lock(void)
 {
@@ -40,7 +52,7 @@ void pmb_lock(void)
 // Unlock functions about pmb
 void pmb_unlock(void)
 {
-	
+
 }
 
 // Allocate a free page, return with non-X86A_NULL, otherwise failed.

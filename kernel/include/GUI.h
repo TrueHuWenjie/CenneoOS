@@ -72,7 +72,7 @@ long int GUI_put_square(struct layer *layer, unsigned int color, unsigned long x
  * made by Lab Explorer<2322869088@qq.com>
  * layer为要画的目标图层，color为要绘制的像素颜色(32-bit)
  * (x,y)是像素的坐标，length和width是用于人为边界判断，0代表仅作图层边框判断
- * 
+ *
  * 人为边界判断：窗口作为加入窗口元素的图层，在被画上数据时，容易因为无有效判断而
  * 绘制到窗口本身的部分。程序绘制控件的时候也容易画到其他控件的区域。为了解决这个
  * 问题，加入人为边界判断方法，对像素是否超出范围进行有效的判断。从防止绘制过界的
@@ -95,7 +95,7 @@ unsigned int GUI_get_pix(struct layer *layer, unsigned long x, unsigned long y);
 struct window *GUI_window(char *title, char style, unsigned long x, unsigned long y, unsigned long length, unsigned long width);
 
 /**输出字符串到窗口*/
-void window_string(struct window *target, unsigned long x, unsigned long y, char *s);;
+void window_string(struct window *target, unsigned long x, unsigned long y, char *s);
 
 /**窗口信息输出函数*/
 int window_print(struct window *target, const char *fmt, ...);

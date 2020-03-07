@@ -27,19 +27,10 @@
 #include <video.h>
 #include <kvi.h>
 
-/**在_start.asm中放置了boot_info_ptr指针指向boot_info*/
-extern struct boot_info *boot_info_ptr;
-
-/**任务测试函数*/
-int task_test()
+void idle(void)
 {
-	unsigned long n;
-	for (;;){
-		for (n = 0; n < 0xffffff; n++);
-		printk("process:%d.\n", get_id());
-	}
-}
 
+}
 
 /**内核主函数*/
 void main(void)
@@ -65,9 +56,12 @@ void main(void)
 	init_hdd();					// 初始化磁盘
 	init_FAT32();				// 初始化FAT32文件系统
 
-	/**多任务性能测试*/
-	// new_task(&task_test, NULL);
-
 	/**GUI初始化*/
 	init_GUI();
+
+	// Operating System Moniter
+	extern int osm_open(void);
+	new_task(&osm_open, NULL);
+
+	idle();
 }
