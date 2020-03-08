@@ -27,11 +27,6 @@
 #include <video.h>
 #include <kvi.h>
 
-int test(void)
-{
-	fin:goto fin;
-}
-
 void idle(void)
 {
 	task_name("Idle");
@@ -68,6 +63,6 @@ void main(void)
 	// Operating System Moniter
 	extern int osm_open(void);
 	new_task(&osm_open, NULL);
-	new_task(&test, NULL);
+	
 	idle();
 }
