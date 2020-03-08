@@ -110,6 +110,6 @@ static void HD_get_phy_info(struct HD_info *info)
 void int_HDC_handle(void)
 {
 	/**由于目前对于磁盘控制器的中断无处理方法，因此只是简单输出信息*/
-	printk("int HDC.\n");
+	//printk("int HDC.\n");
 	EOI();
 }
