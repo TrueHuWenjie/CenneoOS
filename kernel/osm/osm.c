@@ -71,7 +71,7 @@ void osm_display(void)
         }
 
         usage = (float)(entry->info.runtime - entry->info.lastsecond) / 10.0;
-        sprintf(buf, "%-12.12s %s   %2.1f%%  %d", entry->info.name, status, usage, entry->info.tid);
+        sprintf(buf, "%-12.12s %s   %4.1f%%  %d", entry->info.name, status, usage, entry->info.tid);
         entry->info.lastsecond = entry->info.runtime;
         if (buf[11] != 0x20)
         {
