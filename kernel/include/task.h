@@ -12,11 +12,14 @@
 
 #include <stddef.h>
 
-union task *current;/*当前任务*/
+extern union task *current;/*当前任务*/
+#define TASK_NAME_LEN 32
 
 /**进程结构体*/
 struct process_struct
 {
+	char name[TASK_NAME_LEN];
+	unsigned int pid;
 	unsigned long nthread;				/**线程数量*/
 	unsigned long cr3;					/**进程的页目录表地址*/
 	struct msg *msg_list;				/**消息链表*/
@@ -29,19 +32,22 @@ extern union task task_0;
 struct task_info{
 	union task *next, *prev;			/**任务结构体之间组成双向链表*/
 	unsigned long stack;				/**堆栈指针*/
+	char name[TASK_NAME_LEN];
+	unsigned int tid;
 	union task* father;					/**父任务*/
 	struct process_struct *pptr;		/**进程结构指针*/
 	unsigned long counter, time_limit;	/**时间片计时和时间片长度*/
 	unsigned long runtime;				/**运行时间*/
+	unsigned long lastsecond;
 	int state;							/**任务的属性*/
 };
 
 /**其中state是以下其中一种情况*/
 
-#define TASK_INVALID	0			//无效
-#define TASK_HIGH		1			//实时任务
-#define TASK_SLEEP		8			//睡眠
-#define TASK_ZOMBLE		9			//僵死
+#define TASK_INVALID	0			// 无效
+#define TASK_HIGH		1			// 实时任务
+#define TASK_SLEEP		8			// 睡眠
+#define TASK_ZOMBLE		9			// 僵死
 
 /**任务联合体的大小*/
 #define TASK_SIZE	8192

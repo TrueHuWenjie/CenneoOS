@@ -31,9 +31,32 @@ unsigned long temp_stack;/*临时堆栈指针存放变量*/
  * 可以使用多级反馈调度算法。
  */
 static union task *realtime, *high, *normal, *low, *zomble, *wait;
+union task *current;
 
 /**任务0的联合体定义*/
 union task task_0;
+
+unsigned int pid = 0, tid = 0;
+
+unsigned int proc_get_pid(void)
+{
+	return pid ++;
+}
+
+unsigned int task_get_tid(void)
+{
+	return tid ++;
+}
+
+int proc_name(const char *name)
+{
+	strncpy(current->info.pptr->name, name, TASK_NAME_LEN);
+}
+
+int task_name(const char *name)
+{
+	strncpy(current->info.name, name, TASK_NAME_LEN);
+}
 
 /**初始化任务管理*/
 void init_task(void)
@@ -41,10 +64,13 @@ void init_task(void)
 	struct process_struct *process_0;
 
 	/**对0任务的数据结构进行赋值*/
-	task_0.info.counter = 60;		/**给0任务分配50微秒的时间片*/
-	task_0.info.time_limit = 60;	/**0任务时间片长度为50微秒*/
+	strcpy(task_0.info.name, "task 0");
+	task_0.info.counter = 50;		/**给0任务分配50微秒的时间片*/
+	task_0.info.time_limit = 50;	/**0任务时间片长度为50微秒*/
 	task_0.info.runtime = 0;		/**0任务总共运行时间归0*/
+	task_0.info.lastsecond = 0;
 	task_0.info.state = TASK_HIGH;	/**设置0任务为高优先级任务*/
+	task_0.info.tid = task_get_tid();
 
 	/**将0任务做成双向循环链表*/
 	task_0.info.next = &task_0;
@@ -64,9 +90,11 @@ void init_task(void)
 	task_0.info.pptr = process_0;
 
 	/**0进程赋值*/
+	strcpy(process_0->name, "Kernel");
 	process_0->cr3 = read_CR3();
 	process_0->msg_list = NULL;
 	process_0->nthread ++;
+	process_0->pid = proc_get_pid();
 
 	schedule_flag = true;
 }
@@ -89,6 +117,7 @@ union task* new_task(int (*function)(), void *argument)
 	new_task->info.state = TASK_HIGH;			/**设置新任务为高优先级任务*/
 	new_task->info.pptr = current->info.pptr;	/**新任务同样是本进程的一个线程*/
 	new_task->info.pptr->nthread ++;			/**本进程的线程数量加一*/
+	new_task->info.tid = task_get_tid();
 
 	/**对新任务的堆栈进行初始化*/
 	new_task->info.stack = Init_Kernel_Task(((unsigned long)new_task + TASK_SIZE), function, argument);

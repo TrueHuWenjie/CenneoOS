@@ -71,6 +71,8 @@ int GUI_mouse_handle(void *arg)
 	struct layer *layer;
 	struct layer_unit *unit_ptr;
 
+	task_name("GUI Mouse handle");
+
 /**判断信息性质*/
 cmp_info:
 	cmd = get_mouse_cmd(MOUSE_TRY);
@@ -228,7 +230,7 @@ void init_Window(void)
 	GUI_control = GUI_window("Explorer GUI Control", WINDOW_NORMAL, 0, 0, 480, 320);
 
 	/**加载背景*/
-	// new_task(&load_background, "WALLPAP2.BMP");
+	//new_task(&load_background, "WALLPAP2.BMP");
 
 	/**窗口测试*/
 	new_window_2 = GUI_window("Cenneo OS", WINDOW_NORMAL, 0, 0, 300, 300);
@@ -265,6 +267,8 @@ struct GUI_image *wallpaper;
  */
 int load_background(void *filename)
 {
+	task_name("Wallpaper loader");
+
 	/**加载图片*/
 	wallpaper = window_load_image(filename);
 

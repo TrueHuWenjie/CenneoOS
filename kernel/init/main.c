@@ -29,7 +29,8 @@
 
 void idle(void)
 {
-
+	task_name("Idle");
+	while (1) io_hlt();
 }
 
 /**内核主函数*/
@@ -62,6 +63,6 @@ void main(void)
 	// Operating System Moniter
 	extern int osm_open(void);
 	new_task(&osm_open, NULL);
-
+	
 	idle();
 }
