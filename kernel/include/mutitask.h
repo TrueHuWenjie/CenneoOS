@@ -1,18 +1,13 @@
-/**
- * Copyright 2013-2015 by Explorer Developers.
- * made by Lab Explorer Developers<1@GhostBirdOS.org>
- * Explorer task system
- * Explorer/arch/x86/include/task.h
- * version:Alpha
- * 7/29/2014 4:59 PM
- */
+// Cenneo OS
+// /kernel/include/mutitask.h
+// Muti-task support
 
 #ifndef TASK_H_
 #define TASK_H_
 
 #include <stddef.h>
 
-extern union task *current;/*当前任务*/
+extern union thread *current;/*当前任务*/
 #define TASK_NAME_LEN 32
 
 /**进程结构体*/
@@ -26,15 +21,15 @@ struct process_struct
 };
 
 /**任务0的联合体定义*/
-extern union task task_0;
+extern union thread task_0;
 
 /**任务信息结构*/
 struct task_info{
-	union task *next, *prev;			/**任务结构体之间组成双向链表*/
+	union thread *next, *prev;			/**任务结构体之间组成双向链表*/
 	unsigned long stack;				/**堆栈指针*/
 	char name[TASK_NAME_LEN];
 	unsigned int tid;
-	union task* father;					/**父任务*/
+	union thread* father;					/**父任务*/
 	struct process_struct *pptr;		/**进程结构指针*/
 	unsigned long counter, time_limit;	/**时间片计时和时间片长度*/
 	unsigned long runtime;				/**运行时间*/
@@ -53,7 +48,7 @@ struct task_info{
 #define TASK_SIZE	8192
 
 /**任务联合体*/
-union task
+union thread
 {
 	struct task_info info;
 	unsigned long stack[TASK_SIZE / sizeof(unsigned long)];
@@ -68,16 +63,16 @@ struct GBOS_head
 };
 
 /**队列管理函数*/
-void init_queue(union task *queue);
-void add_queue(union task *queue, union task *task);
+void init_queue(union thread *queue);
+void add_queue(union thread *queue, union thread *task);
 
 extern unsigned long init_Kernel_Task(unsigned long stack, int (*function)(void *), void * argument);/*位于\arch\x86\kernel\task\init_stack.asm文件中*/
 
 /**初始化任务函数*/
-void init_task(void);
+void init_mutitask(void);
 
 /**创建内核任务线程函数*/
-union task* new_task(int (*function)(), void *argument);
+union thread* task(int (*function)(), void *argument);
 
 /**执行文件名及参数*/
 struct exec_file_para
@@ -90,13 +85,13 @@ struct exec_file_para
 int run_exec(void *arg);
 
 /**运行任务函数*/
-union task* run(char *filename, char *para, int flag);
+union thread* run(char *filename, char *para, int flag);
 
 /**获得当前任务的id*/
-union task* get_id(void);
+union thread* get_id(void);
 
 /**获得父任务的id*/
-union task* get_pid(void);
+union thread* get_pid(void);
 
 /**任务结束函数*/
 void exit(int code);
@@ -114,11 +109,11 @@ void schedule(void);
 void sleep(void);
 
 /**任务唤醒函数*/
-void wakeup(union task* id);
+void wakeup(union thread* id);
 
 /**exit other task*/
 #define	SUCCESS		0
 #define	FAIL		-1
-long do_exit(union task* id);
+long do_exit(union thread* id);
 
 #endif

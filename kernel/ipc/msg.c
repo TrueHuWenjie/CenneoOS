@@ -19,7 +19,7 @@
 #include <lib/mem.h>
 #include <syscalls.h>
 #include <kmm.h>
-#include <task.h>
+#include <mutitask.h>
 #include <stddef.h>
 #include <stdlib.h>
 

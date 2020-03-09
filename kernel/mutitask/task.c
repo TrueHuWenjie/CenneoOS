@@ -1,11 +1,6 @@
-/**
- * Copyright 2013-2015 by Explorer Developers.
- * made by Lab Explorer Developers<1@GhostBirdOS.org>
- * Explorer task system
- * Explorer/arch/x86/kernel/task/task.c
- * version:Alpha
- * 10/4/2014 10:00 AM
- */
+// Cenneo OS
+// /kernel/mutitask/task.c
+// Muti-task support
 
 #include <kmm.h>
 #include <lib/mem.h>
@@ -13,7 +8,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <spinlock.h>
-#include <task.h>
+#include <mutitask.h>
 
 /**
  * Explorer 内核进程管理
@@ -30,11 +25,11 @@ unsigned long temp_stack;/*临时堆栈指针存放变量*/
 /**队列：实时、高、正常、低优先、僵尸、等待，
  * 可以使用多级反馈调度算法。
  */
-static union task *realtime, *high, *normal, *low, *zomble, *wait;
-union task *current;
+static union thread *realtime, *high, *normal, *low, *zomble, *wait;
+union thread *current;
 
 /**任务0的联合体定义*/
-union task task_0;
+union thread task_0;
 
 unsigned int pid = 0, tid = 0;
 
@@ -59,7 +54,7 @@ int task_name(const char *name)
 }
 
 /**初始化任务管理*/
-void init_task(void)
+void init_mutitask(void)
 {
 	struct process_struct *process_0;
 
@@ -101,35 +96,35 @@ void init_task(void)
 
 
 /**创建内核级线程函数*/
-union task* new_task(int (*function)(), void *argument)
+union thread* task(int (*function)(), void *argument)
 {
 	/**为新任务的数据结构分配空间*/
-	union task *new_task;
-	new_task = vmalloc(sizeof(union task), 0);
-	if (new_task == NULL) return 0;
-	memset(new_task, 0, sizeof(union task));
+	union thread *task;
+	task = vmalloc(sizeof(union thread), 0);
+	if (task == NULL) return 0;
+	memset(task, 0, sizeof(union thread));
 
 	/**对新任务的数据结构进行赋值*/
-	new_task->info.father = current;			/**设置父任务指针*/
-	new_task->info.time_limit = 60;				/**时间片*/
-	new_task->info.counter = 0;					/**创建时不分配时间片*/
-	new_task->info.runtime = 0;					/**新任务总共执行时间归0*/
-	new_task->info.state = TASK_HIGH;			/**设置新任务为高优先级任务*/
-	new_task->info.pptr = current->info.pptr;	/**新任务同样是本进程的一个线程*/
-	new_task->info.pptr->nthread ++;			/**本进程的线程数量加一*/
-	new_task->info.tid = task_get_tid();
+	task->info.father = current;			/**设置父任务指针*/
+	task->info.time_limit = 60;				/**时间片*/
+	task->info.counter = 0;					/**创建时不分配时间片*/
+	task->info.runtime = 0;					/**新任务总共执行时间归0*/
+	task->info.state = TASK_HIGH;			/**设置新任务为高优先级任务*/
+	task->info.pptr = current->info.pptr;	/**新任务同样是本进程的一个线程*/
+	task->info.pptr->nthread ++;			/**本进程的线程数量加一*/
+	task->info.tid = task_get_tid();
 
 	/**对新任务的堆栈进行初始化*/
-	new_task->info.stack = Init_Kernel_Task(((unsigned long)new_task + TASK_SIZE), function, argument);
+	task->info.stack = Init_Kernel_Task(((unsigned long)task + TASK_SIZE), function, argument);
 
 	/**将新任务插入到任务列表中*/
-	current->info.next->info.prev = new_task;
-	new_task->info.prev = current;
-	new_task->info.next = (*current).info.next;
-	current->info.next = new_task;
+	current->info.next->info.prev = task;
+	task->info.prev = current;
+	task->info.next = (*current).info.next;
+	current->info.next = task;
 
 	/**返回*/
-	return new_task;
+	return task;
 }
 
 /**执行应用程序函数（非POSIX标准）*/
@@ -189,7 +184,7 @@ int run_exec(void *arg)
 }
 
 /**运行任务函数*/
-union task* run(char *filename, char *para, int flag)
+union thread* run(char *filename, char *para, int flag)
 {
 	struct exec_file_para *new_arg;
 
@@ -211,17 +206,17 @@ union task* run(char *filename, char *para, int flag)
 		strncpy(new_arg->para, para, 256);
 
 	/**创建新线程运行run_exec*/
-	new_task(&run_exec, new_arg);
+	task(&run_exec, new_arg);
 }
 
 /**获得任务的id*/
-union task* get_id(void)
+union thread* get_id(void)
 {
 	return current;
 }
 
 /**获得父任务的id*/
-union task* get_pid(void)
+union thread* get_pid(void)
 {
 	return current->info.father;;
 }
@@ -231,8 +226,8 @@ union task* get_pid(void)
 void exit(int code)
 {
 	/**指向自身的结构体*/
-	union task *my = current;
-
+	union thread *my = current;
+	printk("Exit!!%d\n", code);
 	/**将自己从任务链表中剥离*/
 	my->info.next->info.prev = my->info.prev;
 	my->info.prev->info.next = my->info.next;
@@ -257,28 +252,28 @@ void disable_schedule(void)
 }
 
 /**切换到目标任务*/
-extern void switch_to(union task* id);
+extern void switch_to(union thread* id);
 
 /**任务切换函数，使用算法选择下个任务并加载*/
 void schedule(void)
 {
-	union task *new_task;
+	union thread *task;
 
 	/**判断是否允许调度*/
 	if (schedule_flag == false) return;
 
 	/**选择下一个要运行的进程*/
-	new_task = current->info.next;
+	task = current->info.next;
 
 	/**分配时间片*/
-	new_task->info.counter = new_task->info.time_limit;
+	task->info.counter = task->info.time_limit;
 
 
 	/**切换页目录表*/
-	write_CR3(new_task->info.pptr->cr3);
+	write_CR3(task->info.pptr->cr3);
 
 	/**切换至新任务*/
-	switch_to(new_task);
+	switch_to(task);
 }
 
 
@@ -297,7 +292,7 @@ void sleep(void)
 }
 
 /**任务唤醒函数*/
-void wakeup(union task* target)
+void wakeup(union thread* target)
 {
 	/**判断该任务是否已经挂起*/
 	if (target->info.state == TASK_SLEEP)

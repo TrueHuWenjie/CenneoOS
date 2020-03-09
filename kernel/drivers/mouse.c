@@ -27,7 +27,7 @@ static char mouse_info[3];
 static unsigned long mouse_info_point;
 
 /**intercept task*/
-union task *mouse_intercept;
+union thread *mouse_intercept;
 
 void init_mouse(void)
 {
@@ -102,7 +102,7 @@ handle:
 }
 
 /**注册鼠标侦听任务函数*/
-void set_mouse_interception(union task *target)
+void set_mouse_interception(union thread *target)
 {
 	mouse_intercept = target;
 }
