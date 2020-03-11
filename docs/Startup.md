@@ -15,7 +15,7 @@ graph TD;
     -->_start函数调用init_arch函数进行硬件抽象层初始化
     -->_start函数调用main函数进行内核初始化
     -->main函数调用其他功能初始化函数
-    -->main函数退化为Idle函数;
+    -->main函数退化为Idle守护进程;
     end
 
 ```
