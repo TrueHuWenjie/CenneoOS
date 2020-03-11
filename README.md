@@ -70,6 +70,12 @@ Clone with HTTP
 ***[.../cenneo-os-project/docs](./docs "Documents directory")***
 中的*.md文件，说明文件中除必要的项目名称、权力归属以及开发人员信息之外，还应对相应功能实现的原理、思路以及相关资料引用信息做出详细说明。
 
+## 其他资料 ##
+项目开发时所需要的相关硬件、软件的标准、规范或协议相关资料都在
+***[Wiki](http://git.cenneo.com/cenneo-os-developer/cenneo-os-project/-/wikis/home "Project's Wiki")***
+中。
+
+
 ## 开发调试 ##
 
 将项目文件从版本控制系统上克隆下来后，进入根目录
