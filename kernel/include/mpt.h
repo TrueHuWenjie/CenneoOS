@@ -1,13 +1,22 @@
 // Cenneo OS
-// /kernel/include/mutitask.h
-// Muti-task support
+// /kernel/include/mpt.h
+// Multiple process and task support
 
-#ifndef TASK_H_
-#define TASK_H_
+#ifndef MPT_H_
+#define MPT_H_
 
 #include <stddef.h>
 
-extern union thread *current;/*当前任务*/
+extern union thread *current;
+
+struct mpt_queen
+{
+	union thread *realtime, *high, *normal, *low;
+	union thread *idle, *wait, *sleep, *zombie;
+};
+
+extern struct mpt_queen mpt_queen;
+
 #define TASK_NAME_LEN 32
 
 /**进程结构体*/
@@ -24,12 +33,14 @@ struct process_struct
 extern union thread task_0;
 
 /**任务信息结构*/
-struct task_info{
+struct thread_info{
 	union thread *next, *prev;			/**任务结构体之间组成双向链表*/
 	unsigned long stack;				/**堆栈指针*/
 	char name[TASK_NAME_LEN];
 	unsigned int tid;
-	union thread* father;					/**父任务*/
+	union thread *father;
+	union thread *brother;
+	union thread *children;
 	struct process_struct *pptr;		/**进程结构指针*/
 	unsigned long counter, time_limit;	/**时间片计时和时间片长度*/
 	unsigned long runtime;				/**运行时间*/
@@ -37,21 +48,25 @@ struct task_info{
 	int state;							/**任务的属性*/
 };
 
-/**其中state是以下其中一种情况*/
-
-#define TASK_INVALID	0			// 无效
-#define TASK_HIGH		1			// 实时任务
-#define TASK_SLEEP		8			// 睡眠
-#define TASK_ZOMBLE		9			// 僵死
+// state in thread_info represents one of the following conditions:
+#define THREAD_INVALID	0			// Invalid
+#define THREAD_REALTIME	1			// Realtime
+#define THREAD_HIGH		2			// High
+#define THREAD_NORMAL	3			// Normal
+#define THREAD_LOW		4			// Low
+#define THREAD_IDLE		7			// Idle
+#define THREAD_WAIT		8			// Idle
+#define THREAD_SLEEP	9			// Sleep
+#define THREAD_ZOMBIE	10			// Zombie
 
 /**任务联合体的大小*/
-#define TASK_SIZE	8192
+#define THREAD_SIZE	8192
 
 /**任务联合体*/
 union thread
 {
-	struct task_info info;
-	unsigned long stack[TASK_SIZE / sizeof(unsigned long)];
+	struct thread_info info;
+	int stack[THREAD_SIZE / sizeof(int)];
 };
 
 /**Ghost Bird 应用程序头部结构体*/

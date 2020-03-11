@@ -10,7 +10,7 @@
 #ifndef MOUSE_H_
 #define MOUSE_H_
 
-#include <mutitask.h>
+#include <mpt.h>
 
 /**鼠标x\y全局变量*/
 long mouse_x, mouse_y;

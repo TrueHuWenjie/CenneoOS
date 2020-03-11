@@ -1,6 +1,6 @@
 // Cenneo OS
-// /kernel/mutitask/task.c
-// Muti-task support
+// /kernel/multitask/task.c
+// Multiple process and task support
 
 #include <kmm.h>
 #include <lib/mem.h>
@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <spinlock.h>
-#include <mutitask.h>
+#include <mpt.h>
 
 /**
  * Explorer 内核进程管理
@@ -21,11 +21,7 @@ static bool schedule_flag = false;
 
 unsigned long temp_stack;/*临时堆栈指针存放变量*/
 
-
-/**队列：实时、高、正常、低优先、僵尸、等待，
- * 可以使用多级反馈调度算法。
- */
-static union thread *realtime, *high, *normal, *low, *zomble, *wait;
+struct mpt_queen mpt_queen;
 union thread *current;
 
 /**任务0的联合体定义*/
@@ -64,7 +60,7 @@ void init_mutitask(void)
 	task_0.info.time_limit = 50;	/**0任务时间片长度为50微秒*/
 	task_0.info.runtime = 0;		/**0任务总共运行时间归0*/
 	task_0.info.lastsecond = 0;
-	task_0.info.state = TASK_HIGH;	/**设置0任务为高优先级任务*/
+	task_0.info.state = THREAD_HIGH;	/**设置0任务为高优先级任务*/
 	task_0.info.tid = task_get_tid();
 
 	/**将0任务做成双向循环链表*/
@@ -94,9 +90,14 @@ void init_mutitask(void)
 	schedule_flag = true;
 }
 
+// Set self thread as idle thread
+int thread_idle(void)
+{
+	//if (idle)
+}
 
 /**创建内核级线程函数*/
-union thread* task(int (*function)(), void *argument)
+union thread *task(int (*function)(), void *argument)
 {
 	/**为新任务的数据结构分配空间*/
 	union thread *task;
@@ -109,13 +110,13 @@ union thread* task(int (*function)(), void *argument)
 	task->info.time_limit = 60;				/**时间片*/
 	task->info.counter = 0;					/**创建时不分配时间片*/
 	task->info.runtime = 0;					/**新任务总共执行时间归0*/
-	task->info.state = TASK_HIGH;			/**设置新任务为高优先级任务*/
+	task->info.state = THREAD_HIGH;			/**设置新任务为高优先级任务*/
 	task->info.pptr = current->info.pptr;	/**新任务同样是本进程的一个线程*/
 	task->info.pptr->nthread ++;			/**本进程的线程数量加一*/
 	task->info.tid = task_get_tid();
 
 	/**对新任务的堆栈进行初始化*/
-	task->info.stack = Init_Kernel_Task(((unsigned long)task + TASK_SIZE), function, argument);
+	task->info.stack = Init_Kernel_Task(((unsigned long)task + THREAD_SIZE), function, argument);
 
 	/**将新任务插入到任务列表中*/
 	current->info.next->info.prev = task;
@@ -285,20 +286,25 @@ void sleep(void)
 	current->info.prev->info.next = current->info.next;
 
 	/**设置睡眠属性*/
-	current->info.state = TASK_SLEEP;
+	current->info.state = THREAD_SLEEP;
 
 	/**调度任务*/
 	schedule();
+}
+
+void pause(unsigned long ms)
+{
+
 }
 
 /**任务唤醒函数*/
 void wakeup(union thread* target)
 {
 	/**判断该任务是否已经挂起*/
-	if (target->info.state == TASK_SLEEP)
+	if (target->info.state == THREAD_SLEEP)
 	{
 		/**刚刚唤醒的任务加入正常队列*/
-		target->info.state = TASK_HIGH;
+		target->info.state = THREAD_HIGH;
 
 		/**加入队列中*/
 		target->info.prev = current;

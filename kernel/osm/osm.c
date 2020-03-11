@@ -6,7 +6,7 @@
 #include <mmu.h>
 #include <GUI.h>
 #include <kmm.h>
-#include <mutitask.h>
+#include <mpt.h>
 #include "../arch/x86/include/i8254.h"
 
 #define OSM_WIN_WIDTH 480
@@ -64,10 +64,10 @@ void osm_display(void)
     {
         switch (entry->info.state)
         {
-            case TASK_HIGH: status = "Run";
+            case THREAD_HIGH: status = "Run";
                             break;
-            case TASK_SLEEP: status = "Sleep";
-            case TASK_ZOMBLE: status = "Zomble";
+            case THREAD_SLEEP: status = "Sleep";
+            case THREAD_ZOMBIE: status = "Zomble";
         }
 
         usage = (float)(entry->info.runtime - entry->info.lastsecond) / 10.0;

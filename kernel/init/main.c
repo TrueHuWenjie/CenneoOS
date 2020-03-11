@@ -20,24 +20,12 @@
 #include <GUI.h>
 #include <main.h>
 #include <types.h>
-#include <mutitask.h>
+#include <mpt.h>
 #include <arch.h> // Architecture - 架构层
 #include <keyboard.h>
 #include <kmm.h>
 #include <video.h>
 #include <kvi.h>
-
-void idle(void)
-{
-	task_name("Idle");
-	while (1) io_hlt();
-}
-
-int test(char *arg)
-{
-	while (1)printk("test:%s\n", arg);
-	return 123;
-}
 
 /**内核主函数*/
 void main(void)
@@ -64,13 +52,17 @@ void main(void)
 	init_FAT32();				// 初始化FAT32文件系统
 
 	/**GUI初始化*/
-	//init_GUI();
+	init_GUI();
 
 	// Operating System Moniter
 	extern int osm_open(void);
-	//task(&osm_open, NULL);
-	task(&test, "I am your father1!\n");
-	task(&test, "I am your father2!\n");
-	task(&test, "I am your father3!\n");
-	idle();
+	task(&osm_open, NULL);
+
+	// Idle now
+	task_name("Idle");
+
+	while (1)
+	{
+		io_hlt();
+	}
 }
