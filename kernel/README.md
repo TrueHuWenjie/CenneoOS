@@ -21,7 +21,6 @@
 |    lib     |           Library           |          其他功能函数库          |
 |    osm     |  Operating System Moniter   |          操作系统监视器          |
 |   script   |           Script            |           脚本语言支持           |
-| ---------- | --------------------------- | -------------------------------- |
 | KERNEL.BIN |     Kernel binary file      |   生成的内核二进制机器代码文件   |
 |  kernel.o  |     Kernel object file      |        生成的内核目标文件        |
 |  Makefile  |       Makefile script       |        Make工具的编译脚本        |
