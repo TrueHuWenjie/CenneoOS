@@ -7,8 +7,9 @@
 
 玄鸟操作系统是一款自主研发设计、跨平台多任务图形化操作系统，版权、著作权归属玄鸟股份有限公司所有。
 
-在下面的详细介绍中，以***[.../cenneo-os-project/](./ "cenneo-os-project")***目录，即
-包含这个README.md文件的目录作为本项目的根目录。
+在下面的详细介绍中，以
+***[.../cenneo-os-project/](./ "cenneo-os-project")***
+目录，即包含这个README.md文件的目录作为本项目的根目录。
 
 ## 性能要求 ##
 
@@ -56,8 +57,9 @@ Clone with HTTP
 
 ## 系统镜像 ##
 系统镜像文件位于目录
-***[.../cenneo-os-project/image](./image "Image directory")***之下，
-在项目从版本控制系统中克隆下来时，一般只会包含一个压缩文件image.zip，你需要在终端中使用如下命令：
+***[.../cenneo-os-project/image](./image "Image directory")***
+之下，在项目从版本控制系统中克隆下来时，一般只会包含一个压缩文件image.zip，
+你需要在终端中使用如下命令：
 
 	make prepare
 
@@ -67,6 +69,12 @@ Clone with HTTP
 说明文档一般是位于项目根目录、子目录和文档目录
 ***[.../cenneo-os-project/docs](./docs "Documents directory")***
 中的*.md文件，说明文件中除必要的项目名称、权力归属以及开发人员信息之外，还应对相应功能实现的原理、思路以及相关资料引用信息做出详细说明。
+
+## 其他资料 ##
+项目开发时所需要的相关硬件、软件的标准、规范或协议相关资料都在
+***[Wiki](http://git.cenneo.com/cenneo-os-developer/cenneo-os-project/-/wikis/home "Project's Wiki")***
+中。
+
 
 ## 开发调试 ##
 
