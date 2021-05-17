@@ -8,7 +8,7 @@
  */
 
 #include<stdlib.h>
-#include<task.h>
+#include<mpt.h>
 #include<types.h>
 #include "time.h"
 #include "cmos.h"
@@ -133,7 +133,7 @@ void PIT_handle(void)
 	/**EOI，允许8259A继续接收中断*/
 	EOI();
 
-/**任务切换*/
+	/**任务切换*/
 	current->info.runtime ++;		/**运行时间加一*/
 
 	/**判断该任务的时间片是否使用完，使用完了则选择新任务调度*/
@@ -141,10 +141,9 @@ void PIT_handle(void)
 	{
 		schedule();
 	}else{
-		(*current).info.counter --;
+		current->info.counter --;
 	}
 
-	/**返回*/
 	return;
 }
 

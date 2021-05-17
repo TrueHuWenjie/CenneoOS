@@ -64,6 +64,7 @@ global int_50						;50号中断执行函数
 
 ;中断开始宏
 %macro interrupt_start 1
+	pushfd
 	push	dword 0x00000000		;错误代码
 	push	dword %1				;中断号
 	pushad							;保护通用寄存器
@@ -72,6 +73,7 @@ global int_50						;50号中断执行函数
 
 ;中断开始(CPU自动压入错误号)宏
 %macro interrupt_start_errnum 1
+	pushfd
 	push	dword %1				;中断号
 	pushad							;保护通用寄存器
 	jmp		interrupt_entry			;统一执行
@@ -79,6 +81,7 @@ global int_50						;50号中断执行函数
 
 ;中断开始(系统调用)宏
 %macro interrupt_start_syscall 1
+	pushfd
 	push	dword 0x00000000		;错误代码
 	push	dword %1				;中断号
 	pushad							;保护通用寄存器
@@ -146,4 +149,5 @@ interrupt_entry:
 	call	interrupt_handle		;调用中断处理函数
 	popad							;还原通用寄存器
 	add		esp,8					;恢复栈
+	popfd
 	iretd							;中断反回

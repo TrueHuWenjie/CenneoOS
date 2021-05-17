@@ -19,7 +19,7 @@
 #include <lib/mem.h>
 #include <syscalls.h>
 #include <kmm.h>
-#include <task.h>
+#include <mpt.h>
 #include <stddef.h>
 #include <stdlib.h>
 
@@ -45,28 +45,28 @@ int send_msg(struct process_struct *object, unsigned int type, void *msg, size_t
 	void *temp_msg;
 	temp_msg = kmalloc(size, 0);
 	if (temp_msg == NULL) error("msg error!");
-	
+
 	/**分配新的消息结构*/
 	struct msg *new_msg;
 	new_msg = kmalloc(sizeof(struct msg), 0);
 	if (new_msg == NULL) error("msg error!");
-	
+
 	/**拷贝消息*/
 	memcpy(temp_msg, msg, size);
-	
+
 	/**填充消息结构*/
 	new_msg->sender = current->info.pptr;
 	new_msg->object = object;
 	new_msg->message = temp_msg;
 	new_msg->size = size;
 	new_msg->type = type;
-	
+
 	/**将该消息加入目标任务的消息队列上*/
 	struct msg *list_point;
 	for (list_point = object->msg_list; list_point->next != NULL; list_point = list_point->next);
 	list_point->next = new_msg;
 	new_msg->next = NULL;
-	
+
 	/**正常返回*/
 	return 0;
 }
@@ -76,7 +76,7 @@ int send_msg(struct process_struct *object, unsigned int type, void *msg, size_t
 
 /**用户级消息发送函数（系统调用）*/
 int sys_msg(struct context context)
-{	
+{
 /**功能调用判断*/
 	switch(context.ebx)
 	{
@@ -92,10 +92,10 @@ int sys_msg(struct context context)
 send_msg:
 	/**对参数进行判断*/
 	if (context.esi >= 0x80000000) return -1;
-	
+
 	/**调用消息发送函数*/
 	context.eax = send_msg((struct process_struct *)context.edi, context.esi, (void *)context.edx, context.ecx);
-	
+
 /**完成处理*/
 finish:
 	/**正常返回*/
@@ -110,23 +110,23 @@ finish:
 int recv_msg(void *ptr, size_t msg_size)
 {
 	struct msg *msg_list = current->info.pptr->msg_list;
-	
+
 	/**检查是否存在消息*/
 	if (msg_list == NULL) return 0;
-	
+
 	/**判断消息的长度是否超过接收消息的长度限制*/
 	if (msg_list->size > msg_size) return -1;
-	
+
 	/**将消息拷贝出来*/
 	memcpy(ptr, msg_list->message, msg_list->size);
-	
+
 	/**从当前任务中移除这个消息*/
 	current->info.pptr->msg_list = msg_list->next;
-	
+
 	/**回收内存*/
 	kfree(msg_list->message);
 	kfree(msg_list);
-	
+
 	/**正常返回*/
 	return 1;
 }

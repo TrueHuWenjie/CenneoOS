@@ -10,7 +10,7 @@
 #ifndef MOUSE_H_
 #define MOUSE_H_
 
-#include <task.h>
+#include <mpt.h>
 
 /**鼠标x\y全局变量*/
 long mouse_x, mouse_y;
@@ -36,7 +36,7 @@ unsigned char get_mouse_cmd(int flag);
 #define MOUSE_GET	2				// 直接获得，如果当前缓冲区为空，一直忙等待数据
 
 /**注册鼠标侦听任务函数*/
-void set_mouse_interception(union task *target);
+void set_mouse_interception(union thread *target);
 
 /**鼠标中断处理函数*/
 void int_mouse_handle(void);

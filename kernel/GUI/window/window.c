@@ -22,7 +22,7 @@
 #include "../recourse.h"
 #include "../layer.h"
 #include <mouse.h>
-#include <task.h>
+#include <mpt.h>
 
 /**
  * 图层顺序：
@@ -48,7 +48,7 @@ struct window *new_window_2;
 struct window *drag_window = NULL;
 unsigned long drag_x, drag_y;
 
-union task *task_GUI_mouse_handle;
+union thread *task_GUI_mouse_handle;
 
 /**鼠标光标点阵图转化成Explorer GUI 内部抽象图片结构*/
 struct GUI_image pointer_recourse =
@@ -215,7 +215,7 @@ void init_Window(void)
 	/**初始化任务栏*/
 	init_taskbar();
 
-	task_GUI_mouse_handle = new_task(&GUI_mouse_handle, NULL);
+	task_GUI_mouse_handle = task(&GUI_mouse_handle, NULL);
 
 	/**注册鼠标侦听*/
 	set_mouse_interception(task_GUI_mouse_handle);
@@ -230,7 +230,7 @@ void init_Window(void)
 	GUI_control = GUI_window("Explorer GUI Control", WINDOW_NORMAL, 0, 0, 480, 320);
 
 	/**加载背景*/
-	//new_task(&load_background, "WALLPAP2.BMP");
+	//task(&load_background, "WALLPAP2.BMP");
 
 	/**窗口测试*/
 	new_window_2 = GUI_window("Cenneo OS", WINDOW_NORMAL, 0, 0, 300, 300);
@@ -292,7 +292,7 @@ void init_background(void)
 	//GUI_put_square(background_layer, 0x80ffffff, 0, 0, 800, 600);
 
 	/**加载图片*/
-	// new_task(&load_background, "BACKDROP.PIC");
+	// task(&load_background, "BACKDROP.PIC");
 }
 
 /**软系数，用来确定软鼠标的跟随灵敏度

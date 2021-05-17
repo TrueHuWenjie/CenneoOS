@@ -20,18 +20,12 @@
 #include <GUI.h>
 #include <main.h>
 #include <types.h>
-#include <task.h>
+#include <mpt.h>
 #include <arch.h> // Architecture - 架构层
 #include <keyboard.h>
 #include <kmm.h>
 #include <video.h>
 #include <kvi.h>
-
-void idle(void)
-{
-	task_name("Idle");
-	while (1) io_hlt();
-}
 
 /**内核主函数*/
 void main(void)
@@ -43,7 +37,7 @@ void main(void)
 	init_kvi();
 
 	init_time();
-	init_task();
+	init_mutitask();
 	init_CPU();
 	init_PIC();
 	init_PIT();
@@ -62,7 +56,13 @@ void main(void)
 
 	// Operating System Moniter
 	extern int osm_open(void);
-	new_task(&osm_open, NULL);
-	
-	idle();
+	task(&osm_open, NULL);
+
+	// Idle now
+	task_name("Idle");
+
+	while (1)
+	{
+		io_hlt();
+	}
 }

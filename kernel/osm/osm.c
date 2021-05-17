@@ -6,7 +6,7 @@
 #include <mmu.h>
 #include <GUI.h>
 #include <kmm.h>
-#include <task.h>
+#include <mpt.h>
 #include "../arch/x86/include/i8254.h"
 
 #define OSM_WIN_WIDTH 480
@@ -22,7 +22,7 @@ void osm_display(void)
     struct layer *layer = osm_win->layer;
     char buf[32];
     char *status;
-    static union task *entry;
+    static union thread *entry;
     float usage;
 
     GUI_put_square(layer, 0xffd1eeee, 245, 32, 240, 320);
@@ -64,10 +64,10 @@ void osm_display(void)
     {
         switch (entry->info.state)
         {
-            case TASK_HIGH: status = "Run";
+            case THREAD_HIGH: status = "Run";
                             break;
-            case TASK_SLEEP: status = "Sleep";
-            case TASK_ZOMBLE: status = "Zomble";
+            case THREAD_SLEEP: status = "Sleep";
+            case THREAD_ZOMBIE: status = "Zomble";
         }
 
         usage = (float)(entry->info.runtime - entry->info.lastsecond) / 10.0;
@@ -103,6 +103,7 @@ void osm_loop(void)
         {
             invalid = 0;
             osm_display();
+            // sleep();
         }
     }
 }
