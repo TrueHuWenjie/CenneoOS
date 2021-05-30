@@ -38,7 +38,7 @@ void wait_8042(void)
 {
 	for(;;)
 	{
-		if ((io_in8(port_keysta) & keysta_send_notready) == 0)
+		if ((io_in8(PORT_KEYSTA) & KEYSTA_SEND_NOTREADY) == 0)
 		{
 			break;
 		}

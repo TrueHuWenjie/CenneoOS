@@ -13,10 +13,10 @@
 	/**some port of Intel 8042 chip*/
 	#define PORT_DATA				0x0060
 	#define PORT_COMMAND			0x0064
-	#define port_keysta				0x0064
-	#define keysta_send_notready	0x02
-	#define keycmd_write_mode		0x60
-	#define kbc_mode				0x47
+	#define PORT_KEYSTA				0x0064
+	#define KEYSTA_SEND_NOTREADY	0x02
+	#define KEYCMD_WRITE_MODE		0x60
+	#define KBC_MODE				0x47
 	
 	/**send command to Intel 8042*/
 	void cmd_8042(char command);

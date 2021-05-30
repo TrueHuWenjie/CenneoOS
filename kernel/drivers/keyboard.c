@@ -53,7 +53,7 @@ void init_keyboard(void)
 void int_keyboard_handle(void)
 {
 	unsigned char key_val;
-	key_val = io_in8(keycmd_write_mode);
+	key_val = io_in8(KEYCMD_WRITE_MODE);
 	
 	/**compare if it is a function key*/
 	if (key_val == 0x2A)/*Left Shift is down*/

@@ -29,17 +29,17 @@ void reset(void)
 /**some port of Intel 8042 chip*/
 #define PORT_DATA				0x0060
 #define PORT_COMMAND			0x0064
-#define port_keysta				0x0064
-#define keysta_send_notready	0x02
-#define keycmd_write_mode		0x60
-#define kbc_mode				0x47
+#define PORT_KEYSTA				0x0064
+#define KEYSTA_SEND_NOTREADY	0x02
+#define KEYCMD_WRITE_MODE		0x60
+#define KBC_MODE				0x47
 
 /**wait for Intel 8042*/
 void wait_8042(void)
 {
 	for(;;)
 	{
-		if ((io_in8(port_keysta) & keysta_send_notready) == 0) break;
+		if ((io_in8(PORT_KEYSTA) & KEYSTA_SEND_NOTREADY) == 0) break;
 	}
 	return;
 }
@@ -118,7 +118,7 @@ unsigned int color = 0x333333;
 void keyboard_handle(void)
 {
 	unsigned char key_val;
-	key_val = io_in8(keycmd_write_mode);
+	key_val = io_in8(KEYCMD_WRITE_MODE);
 
 	/**
 	 * 键盘上键是0x48，下键是0x50，
