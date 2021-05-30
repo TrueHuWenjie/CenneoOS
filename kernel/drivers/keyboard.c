@@ -31,9 +31,9 @@ void init_keyboard(void)
 	register_PIC(1, &int_keyboard_handle, "keyboard");
 	
 	/*initialize for keyboard*/
-	cmd_keyboard(0xED);	/*设置LED灯命令*/
-	cmd_keyboard(0x00);	/*设置LED状态全部关闭*/
-	cmd_keyboard(0xF4);	/*清空键盘缓冲*/
+	i8042_keyboard_cmd(0xED);	/*设置LED灯命令*/
+	i8042_keyboard_cmd(0x00);	/*设置LED状态全部关闭*/
+	i8042_keyboard_cmd(0xF4);	/*清空键盘缓冲*/
 	return;
 }
 

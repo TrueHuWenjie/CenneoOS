@@ -42,9 +42,9 @@ void init_mouse(void)
 	register_PIC(12, &int_mouse_handle, "Mouse");
 
 	/**allow mouse send info to CPU*/
-	cmd_mouse(0xF4);
+	i8042_mouse_cmd(0xF4);
 	/**open mouse*/
-	enable_mouse();
+	i8042_mouse_enable();
 }
 
 void put_mouse_x(long x)
@@ -79,7 +79,7 @@ unsigned char get_mouse_cmd(int flag)
 	unsigned char retval;
 
 	/**如果当前没数据，try类型的请求直接返回*/
-	if ((flag == MOUSE_TRY) & (untreated == 0)) return 0xff;
+	if ((flag == MOUSE_TRY) && (untreated == 0)) return 0xff;
 
 /**如果非try请求，或者try请求且有数据的情况，响应*/
 handle:
@@ -110,19 +110,17 @@ void set_mouse_interception(union thread *target)
 /**鼠标数据处理函数*/
 void int_mouse_handle(void)
 {
-	mouse_info[mouse_info_point] = read_8042();
+	mouse_info[mouse_info_point] = i8042_read();
+
 	if (mouse_info_point == 2)
 	{
-
-		// printk("mouse:(%d, %d, %d)\n", mouse_info[0], mouse_info[1], mouse_info[2]);
-
 		/**重新指向数组开始处*/
 		mouse_info_point = 0;
 
 		/**处理信息*/
 		mouse_cmd = mouse_info[0];
-		mouse_x += mouse_info[1];
-		mouse_y += -(mouse_info[2]);
+		mouse_x  += mouse_info[1];
+		mouse_y  -= mouse_info[2];
 
 		/**判断此时缓冲区是否已满*/
 		if (untreated < SIZE_OF_BUFFER_MOUSE)
