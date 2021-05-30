@@ -134,13 +134,13 @@ void init_kvi(void)
 	// Enable kvi
 	kvi_enable();
 
+	kvi_sm.xres = vbe_info.xres;
+	kvi_sm.yres = vbe_info.yres;
+
 	// Clear the screen
 	rectangle(0, 0, kvi_sm.xres, kvi_sm.yres, kvi_sm.bg_color);
 	kvi_sm.cursor_column = 0;
 	kvi_sm.cursor_row = 0;
-
-	kvi_sm.xres = vbe_info.xres;
-	kvi_sm.yres = vbe_info.yres;
 
 	/**计算屏幕长度、宽度*/
 	kvi_sm.width = kvi_sm.xres / FONT_W;
