@@ -42,7 +42,7 @@ long int GUI_set_resolution(struct layer *layer, unsigned long width, unsigned l
  * 该函数为通用函数，仅为兼容性考虑。
  * 在具体平台上建议用相应的汇编语言实现该函数以获得最大效能
  */
-long int GUI_refresh_pix(unsigned long int x, unsigned long int y);
+long int GUI_refresh_pixel(unsigned long int x, unsigned long int y);
 
 /**GUI块刷新函数*/
 void GUI_refresh_block(long x, long y, unsigned long width, unsigned long height);

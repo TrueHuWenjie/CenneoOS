@@ -19,7 +19,7 @@
  * 该函数为通用函数，仅为兼容性考虑。
  * 在具体平台上建议用相应的汇编语言实现该函数以获得最大效能
  */
-long inline int GUI_refresh_pix(unsigned long int x, unsigned long int y)
+long inline int GUI_refresh_pixel(unsigned long int x, unsigned long int y)
 {
 
 	unsigned int new_color;
@@ -76,7 +76,7 @@ void GUI_refresh_block(long x, long y, unsigned long length, unsigned long width
 		for (offset_x = 0; offset_x < length; offset_x ++)
 		{
 			/**刷新像素*/
-			GUI_refresh_pix(x + offset_x, y + offset_y);
+			GUI_refresh_pixel(x + offset_x, y + offset_y);
 		}
 	}
 }
@@ -89,7 +89,7 @@ long int GUI_refresh(void)
 	{
 		for (y = 0; y < vbe_info.yres; y ++)
 		{
-			GUI_refresh_pix(x, y);
+			GUI_refresh_pixel(x, y);
 		}
 	}
 }
