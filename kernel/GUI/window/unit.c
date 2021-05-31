@@ -18,29 +18,29 @@ void (*unit_handle[NUM_UNIT_HANDLE])(struct layer *target, unsigned long x, unsi
 {
 	unit_close_handle,
 	unit_mini_handle,
-	unit_botton_handle
+	unit_button_handle
 };
 
 /**按钮控件结构描述*/
-struct unit_botton
+struct unit_button
 {
 	char *text;
 };
 
 /**按钮消息处理函数*/
-void unit_botton_handle(struct layer *target, unsigned long x, unsigned long y, void *ptr)
+void unit_button_handle(struct layer *target, unsigned long x, unsigned long y, void *ptr)
 {
-	window_print(target->winptr, "botton:(%d,%d)", x, y);
+	window_print(target->winptr, "button:(%d,%d)", x, y);
 }
 
 /**新建按钮函数*/
-struct layer_unit *unit_new_botton(struct window *target, unsigned long x, unsigned long y, unsigned long width, unsigned long height, char *text)
+struct layer_unit *unit_new_button(struct window *target, unsigned long x, unsigned long y, unsigned long width, unsigned long height, char *text)
 {
 	/**纠正参数*/
 	correct_para(target, &x, &y, &width, &height);
 
 	/**新建窗口单元*/
-	GUI_new_unit(target->layer, UNIT_BOTTON, x, y, width, height);
+	GUI_new_unit(target->layer, UNIT_BUTTON, x, y, width, height);
 
 	/**绘制按钮*/
 	GUI_put_square(target->layer, 0xff0066ff, x, y, width, height);

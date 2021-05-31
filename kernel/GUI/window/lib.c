@@ -116,12 +116,12 @@ struct window *GUI_window(char *title, char style, unsigned long x, unsigned lon
 		window_set_active(new_window);
 
 		/**绘制按钮*/
-		GUI_map(new_window->layer, close_f_botton, new_window->layer->width - close_f_botton->width - WINDOW_NORMAL_FRAME_WIDTH, 0, 0, 0, 0);
-		GUI_map(new_window->layer, mini_f_botton, new_window->layer->width - (close_f_botton->width + mini_f_botton->width) - WINDOW_NORMAL_FRAME_WIDTH, 0, 0, 0, 0);
+		GUI_map(new_window->layer, close_f_button, new_window->layer->width - close_f_button->width - WINDOW_NORMAL_FRAME_WIDTH, 0, 0, 0, 0);
+		GUI_map(new_window->layer, mini_f_button, new_window->layer->width - (close_f_button->width + mini_f_button->width) - WINDOW_NORMAL_FRAME_WIDTH, 0, 0, 0, 0);
 
 		// /**建立单元*/
-		GUI_new_unit(new_window->layer, UNIT_CLOSE, new_window->layer->width - close_f_botton->width - WINDOW_NORMAL_FRAME_WIDTH, 0, close_f_botton->width, close_f_botton->height);
-		GUI_new_unit(new_window->layer, UNIT_MINI, new_window->layer->width - (close_f_botton->width + mini_f_botton->width) - WINDOW_NORMAL_FRAME_WIDTH, 0, mini_f_botton->width, mini_f_botton->height);
+		GUI_new_unit(new_window->layer, UNIT_CLOSE, new_window->layer->width - close_f_button->width - WINDOW_NORMAL_FRAME_WIDTH, 0, close_f_button->width, close_f_button->height);
+		GUI_new_unit(new_window->layer, UNIT_MINI, new_window->layer->width - (close_f_button->width + mini_f_button->width) - WINDOW_NORMAL_FRAME_WIDTH, 0, mini_f_button->width, mini_f_button->height);
 
 		/**主体*/
 		GUI_put_square(new_window->layer, 0xffffffff, WINDOW_NORMAL_FRAME_WIDTH, WINDOW_NORMAL_HEADER_WIDTH, width, height);

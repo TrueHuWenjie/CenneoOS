@@ -14,6 +14,17 @@
 #include <GUI.h>
 #include "i8042.h"
 
+#define MOUSE_CMD_RESET 0xff
+#define MOUSE_CMD_RESEND 0xfe
+#define MOUSE_CMD_SETDFT 0xf6
+#define MOUSE_CMD_DISABLE_PACKET_STREAM 0xf5
+#define MOUSE_CMD_ENABLE_PACKET_STREAM 0xf4
+#define MOUSE_CMD_SET_SAMPLE_RATE 0xf3
+#define MOUSE_CMD_GET_ID 0xf2
+#define MOUSE_CMD_REQ_SINGLE_PACKET 0xeb
+#define MOUSE_CMD_REQUEST_STATUS 0xe9
+#define MOUSE_CMD_SET_RES 0xe8
+
 /** A FIFO buffer for mouse*/
 static char mouse_buffer[SIZE_OF_BUFFER_MOUSE];
 static unsigned long untreated = 0;
@@ -23,7 +34,7 @@ static unsigned long write_point = 0, read_point = 0;
 unsigned char mouse_cmd;
 
 /**save mouse info temporary*/
-static char mouse_info[3];
+static char mouse_info[4];
 static unsigned long mouse_info_point;
 
 /**intercept task*/
@@ -41,10 +52,32 @@ void init_mouse(void)
 	/**register to 8259*/
 	register_PIC(12, &int_mouse_handle, "Mouse");
 
-	/**allow mouse send info to CPU*/
-	i8042_mouse_cmd(0xF4);
 	/**open mouse*/
 	i8042_mouse_enable();
+
+	i8042_mouse_cmd(0xF2);
+	i8042_mouse_cmd(0xF3);
+	i8042_mouse_cmd(200);
+	i8042_mouse_cmd(0xF3);
+	i8042_mouse_cmd(100);
+	i8042_mouse_cmd(0xF3);
+	i8042_mouse_cmd(80);
+
+	i8042_mouse_cmd(0xF2);
+
+	i8042_mouse_cmd(0xF3);
+	i8042_mouse_cmd(200);
+	i8042_mouse_cmd(0xF3);
+	i8042_mouse_cmd(200);
+	i8042_mouse_cmd(0xF3);
+	i8042_mouse_cmd(80);
+
+	i8042_mouse_cmd(0xF2);
+
+	/**allow mouse send info to CPU*/
+	i8042_mouse_cmd(0xF4);
+
+	mouse_info_point -= 3;
 }
 
 void put_mouse_x(long x)
@@ -111,8 +144,8 @@ void set_mouse_interception(union thread *target)
 void int_mouse_handle(void)
 {
 	mouse_info[mouse_info_point] = i8042_read();
-
-	if (mouse_info_point == 2)
+	
+	if (mouse_info_point == 3)
 	{
 		/**重新指向数组开始处*/
 		mouse_info_point = 0;
@@ -121,7 +154,7 @@ void int_mouse_handle(void)
 		mouse_cmd = mouse_info[0];
 		mouse_x  += mouse_info[1];
 		mouse_y  -= mouse_info[2];
-
+	printk("value:%x      %x     %x      %x\n", mouse_info[0],mouse_info[1],mouse_info[2],mouse_info[3]);
 		/**判断此时缓冲区是否已满*/
 		if (untreated < SIZE_OF_BUFFER_MOUSE)
 		{

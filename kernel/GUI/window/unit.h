@@ -17,7 +17,7 @@ extern void (*unit_handle[NUM_UNIT_HANDLE])(struct layer *target, unsigned long 
 /**单元种类列表*/
 #define UNIT_CLOSE			0
 #define UNIT_MINI			1
-#define UNIT_BOTTON			2
+#define UNIT_BUTTON			2
 
 /**单元结构*/
 struct layer_unit
@@ -30,10 +30,10 @@ struct layer_unit
 };
 
 /**按钮消息处理函数*/
-void unit_botton_handle(struct layer *target, unsigned long x, unsigned long y, void *ptr);
+void unit_button_handle(struct layer *target, unsigned long x, unsigned long y, void *ptr);
 
 /**新建按钮函数*/
-struct layer_unit *unit_new_botton(struct window *target, unsigned long x, unsigned long y, unsigned long width, unsigned long height, char *text);
+struct layer_unit *unit_new_button(struct window *target, unsigned long x, unsigned long y, unsigned long width, unsigned long height, char *text);
 
 /**窗体关闭按钮处理函数*/
 void unit_close_handle(struct layer *target, unsigned long x, unsigned long y, void *ptr);

@@ -12,7 +12,7 @@
 
 
 /**窗口相关资源*/
-extern struct GUI_image *close_f_botton, *close_p_botton, *mini_f_botton, *mini_p_botton;
+extern struct GUI_image *close_f_button, *close_p_button, *mini_f_button, *mini_p_button;
 
 
 /**鼠标光标点阵图*/

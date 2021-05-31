@@ -61,7 +61,7 @@ struct GUI_image pointer_recourse =
 };
 
 /**窗口相关资源*/
-struct GUI_image *close_f_botton, *close_p_botton, *mini_f_botton, *mini_p_botton;
+struct GUI_image *close_f_button, *close_p_button, *mini_f_button, *mini_p_button;
 
 /**鼠标消息的处理函数*/
 bool mouse_press = false;
@@ -221,10 +221,10 @@ void init_Window(void)
 	set_mouse_interception(task_GUI_mouse_handle);
 
 	/**加载相关资源*/
-	// close_f_botton = window_load_image("CLOSE_F_.BMP");
-	// close_p_botton = window_load_image("CLOSE_P_.BMP");
-	// mini_f_botton = window_load_image("MINI_F_.BMP");
-	// mini_p_botton = window_load_image("MINI_P_.BMP");
+	// close_f_button = window_load_image("CLOSE_F_.BMP");
+	// close_p_button = window_load_image("CLOSE_P_.BMP");
+	// mini_f_button = window_load_image("MINI_F_.BMP");
+	// mini_p_button = window_load_image("MINI_P_.BMP");
 
 	/**GUI控制台窗口*/
 	GUI_control = GUI_window("Explorer GUI Control", WINDOW_NORMAL, 0, 0, 480, 320);
@@ -235,7 +235,7 @@ void init_Window(void)
 	/**窗口测试*/
 	new_window_2 = GUI_window("Cenneo OS", WINDOW_NORMAL, 0, 0, 300, 300);
 	window_string(new_window_2, 0, 50, "Explorer 0.84 Window system testing...");
-	unit_new_botton(new_window_2, 125, 200, 60, 25, "botton1");
+	unit_new_button(new_window_2, 125, 200, 60, 25, "Button1");
 }
 
 /**初始化附加图层函数*/
@@ -416,7 +416,7 @@ void window_draw(struct window *target, unsigned int title_color, unsigned int f
 	if (target->style != WINDOW_NORMAL) return;
 
 	/**绘制窗体边框*/
-	GUI_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, 0, target->length - (close_f_botton->width + mini_f_botton->width), WINDOW_NORMAL_HEADER_WIDTH);
+	GUI_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, 0, target->length - (close_f_button->width + mini_f_button->width), WINDOW_NORMAL_HEADER_WIDTH);
 	// GUI_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, 0, target->length, WINDOW_NORMAL_HEADER_WIDTH);
 
 	/**左右边框*/
