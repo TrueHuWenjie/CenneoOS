@@ -49,32 +49,32 @@ void GUI_put_word(struct layer *layer, unsigned int color, unsigned long x, unsi
 /**draw a line in the layer*/
 void GUI_line(struct layer *layer, unsigned int color, unsigned long x0, unsigned long y0, unsigned long x1, unsigned long y1)
 {
-	int dx,dy,n,k,i,f;
-	int x,y;
-	dx=abs(x1-x0);
-	dy=abs(y1-y0);
-	n=dx+dy;
+	int dx, dy, n, k, i, f;
+	int x, y;
+	dx = abs(x1 - x0);
+	dy = abs(y1 - y0);
+	n = dx + dy;
 	
 	/**根据x1和x0的关系，选择合适的k运算方法*/
 	if (x1 == x0)
 	{
-		k=2;
-		x=x0;
-		y=y0;
-	}else if(x1>=x0)
+		k = 2;
+		x = x0;
+		y = y0;
+	}else if (x1 >= x0)
 	{
-		k=y1>=y0?1:4;
-		x=x0;
-		y=y0;
+		k = y1 >= y0 ? 1 : 4;
+		x = x0;
+		y = y0;
 	}else{
-		k=y1>=y0?2:4;
-		x=x0;
-		y=y0;
+		k = y1 >= y0 ? 2 : 4;
+		x = x0;
+		y = y0;
 	}
 
-	for(i=0,f=0;i<n;i++)
-		if(f>=0)
-		switch(k)
+	for (i = 0, f = 0; i < n; i ++)
+		if (f >= 0)
+		switch (k)
 		{
 			case 1:GUI_put_pixel(layer, color, x++, y, 0, 0);f -= dy;break;
 			case 2:GUI_put_pixel(layer, color, x, y++, 0, 0);f -= dx;break;
