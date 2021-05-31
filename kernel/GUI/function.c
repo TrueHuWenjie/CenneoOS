@@ -135,9 +135,6 @@ void GUI_put_pixel(struct layer *layer, unsigned int color, unsigned long x, uns
 	/**绘制*/
 	(*layer).buf[(y * (*layer).width) + x] = color;
 	
-	/**刷新像素*/
-	GUI_refresh_pixel((*layer).x + x, (*layer).y + y);
-	
 	/**正常返回*/
 	return;
 }
