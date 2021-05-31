@@ -143,7 +143,7 @@ void GUI_put_pixel(struct layer *layer, unsigned int color, unsigned long x, uns
 }
 
 /**get pixel from layer*/
-unsigned int GUI_get_pix(struct layer *layer, unsigned long x, unsigned long y)
+unsigned int GUI_get_pixel(struct layer *layer, unsigned long x, unsigned long y)
 {
 	/**There is a judgement about if the pixel in the layer*/
 	/**If there isn't a judgement,the pixel may be overflow the buffer*/

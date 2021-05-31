@@ -82,7 +82,7 @@ long int GUI_put_square(struct layer *layer, unsigned int color, unsigned long x
 void GUI_put_pixel(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height);
 
 /**获取一个图层的指定位置的像素颜色*/
-unsigned int GUI_get_pix(struct layer *layer, unsigned long x, unsigned long y);
+unsigned int GUI_get_pixel(struct layer *layer, unsigned long x, unsigned long y);
 
 /**GUI/window/lib.c中*/
 

@@ -34,7 +34,7 @@ long inline int GUI_refresh_pix(unsigned long int x, unsigned long int y)
 		if (layer->visiable == true)
 		{
 			/**获取图层的该位置像素颜色*/
-			new_color = GUI_get_pix(layer, x - (*layer).x, y - (*layer).y);
+			new_color = GUI_get_pixel(layer, x - (*layer).x, y - (*layer).y);
 
 			/**获取透明度*/
 			alpha = (alpha_cal * (new_color >> 24)) / 0xff;
