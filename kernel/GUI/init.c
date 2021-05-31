@@ -40,8 +40,8 @@ void init_GUI(void)
 	layer_root->visiable = true;
 	layer_root->x = 0;
 	layer_root->y = 0;
-	layer_root->length = LAYER_ROOT_LENGTH;
-	layer_root->width = LAYER_ROOT_WIDTH;
+	layer_root->width = LAYER_ROOT_LENGTH;
+	layer_root->height = LAYER_ROOT_WIDTH;
 	layer_root->top = layer_root;
 	layer_root->bottom = layer_root;
 	layer_root->winptr = NULL;

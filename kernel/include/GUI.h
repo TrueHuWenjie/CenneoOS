@@ -18,7 +18,7 @@
 void init_GUI(void);
 
 /**GUI/manage.c中*/
-struct layer *GUI_new_layer(long x, long y, unsigned long length, unsigned long width);
+struct layer *GUI_new_layer(long x, long y, unsigned long width, unsigned long height);
 
 /**释放图层函数*/
 int GUI_free_layer(struct layer *target);
@@ -33,7 +33,7 @@ int GUI_free_layer(struct layer *target);
 unsigned long GUI_set_height(struct layer *target, unsigned long int height);
 
 long int GUI_set_position(struct layer *layer, long x, long y);
-long int GUI_set_resolution(struct layer *layer, unsigned long length, unsigned long width);
+long int GUI_set_resolution(struct layer *layer, unsigned long width, unsigned long height);
 
 /**refresh.c中*/
 
@@ -45,27 +45,27 @@ long int GUI_set_resolution(struct layer *layer, unsigned long length, unsigned 
 long int GUI_refresh_pix(unsigned long int x, unsigned long int y);
 
 /**GUI块刷新函数*/
-void GUI_refresh_block(long x, long y, unsigned long length, unsigned long width);
+void GUI_refresh_block(long x, long y, unsigned long width, unsigned long height);
 
 /**GUI全部刷新*/
 long int GUI_refresh(void);
 
 /**图层贴图函数
- * 向layer图层以flag方式在位置(x,y)贴上图片(在length和width范围之内贴图)
+ * 向layer图层以flag方式在位置(x,y)贴上图片(在width和height范围之内贴图)
  */
-long int GUI_map(struct layer *layer, struct GUI_image *image, unsigned long x, unsigned long y, unsigned long length, unsigned long width, int flag);
+long int GUI_map(struct layer *layer, struct GUI_image *image, unsigned long x, unsigned long y, unsigned long width, unsigned long height, int flag);
 
 /**GUI Graphical Library*/
-void GUI_put_string(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long length, unsigned long width, struct font_info *font_info, const char *string);
+void GUI_put_string(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height, struct font_info *font_info, const char *string);
 
 /**put word to layer*/
-void GUI_put_word(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long length, unsigned long width, struct font_info *font_info, unsigned char ascii);
+void GUI_put_word(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height, struct font_info *font_info, unsigned char ascii);
 
 /**draw a line in the layer*/
 void GUI_line(struct layer *layer, unsigned int color, unsigned long x0, unsigned long y0, unsigned long x1, unsigned long y1);
 
 /**绘制一个方块*/
-long int GUI_put_square(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long length, unsigned long width);
+long int GUI_put_square(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height);
 
 /**
  * 画一个像素至图层上
@@ -79,7 +79,7 @@ long int GUI_put_square(struct layer *layer, unsigned int color, unsigned long x
  * 角度出发，不光要有边界判断(因为边界判断仅仅判断是否会溢出到右边或下边)，还要
  * 在一开始就对整体绘制元素的坐标进行纠正，以不会溢出到左边和上边。
  */
-void GUI_put_pixel(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long length, unsigned long width);
+void GUI_put_pixel(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height);
 
 /**获取一个图层的指定位置的像素颜色*/
 unsigned int GUI_get_pix(struct layer *layer, unsigned long x, unsigned long y);
@@ -90,9 +90,9 @@ unsigned int GUI_get_pix(struct layer *layer, unsigned long x, unsigned long y);
  * 创建一个窗口，标题为title，
  * 风格为style，
  * 当x = 0且y = 0时，窗口会创建在最中间
- * 窗口中有效内容尺寸为length*width
+ * 窗口中有效内容尺寸为length * height
  */
-struct window *GUI_window(char *title, char style, unsigned long x, unsigned long y, unsigned long length, unsigned long width);
+struct window *GUI_window(char *title, char style, unsigned long x, unsigned long y, unsigned long width, unsigned long height);
 
 /**输出字符串到窗口*/
 void window_string(struct window *target, unsigned long x, unsigned long y, char *s);

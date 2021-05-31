@@ -135,8 +135,8 @@ copy_32:
 finish:
 	/**填充*image*/
 	image->data = (unsigned int *)data;
-	image->length = head->length;
-	image->width = head->width;
+	image->width = head->length;
+	image->height = head->width;
 
 	/**正常返回*/
 	return 0;

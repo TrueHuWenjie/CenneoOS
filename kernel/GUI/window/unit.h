@@ -24,7 +24,7 @@ struct layer_unit
 {
 	unsigned int type;				/**单元的种类*/
 	unsigned long x, y;				/**单元的位置*/
-	unsigned long length, width;	/**单元的长宽*/
+	unsigned long width, height;	/**单元的长宽*/
 	struct layer_unit *next;		/**下一个单元结构*/
 	void *ptr;						/**各个单元自定义的指针*/
 };
@@ -33,7 +33,7 @@ struct layer_unit
 void unit_botton_handle(struct layer *target, unsigned long x, unsigned long y, void *ptr);
 
 /**新建按钮函数*/
-struct layer_unit *unit_new_botton(struct window *target, unsigned long x, unsigned long y, unsigned long length, unsigned long width, char *text);
+struct layer_unit *unit_new_botton(struct window *target, unsigned long x, unsigned long y, unsigned long width, unsigned long height, char *text);
 
 /**窗体关闭按钮处理函数*/
 void unit_close_handle(struct layer *target, unsigned long x, unsigned long y, void *ptr);
@@ -42,7 +42,7 @@ void unit_close_handle(struct layer *target, unsigned long x, unsigned long y, v
 void unit_mini_handle(struct layer *target, unsigned long x, unsigned long y, void *ptr);
 
 /**创建新单元函数*/
-struct layer_unit *GUI_new_unit(struct layer *target, unsigned int type, unsigned long x, unsigned long y, unsigned long length, unsigned long width);
+struct layer_unit *GUI_new_unit(struct layer *target, unsigned int type, unsigned long x, unsigned long y, unsigned long width, unsigned long height);
 
 
 #endif

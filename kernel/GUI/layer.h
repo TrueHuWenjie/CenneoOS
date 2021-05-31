@@ -18,7 +18,7 @@ struct layer
 {
 	bool visiable;							// 图层是否可见
 	long x, y;								// 图层位置
-	unsigned long length, width;			// 图层的长宽
+	unsigned long width, height;			// 图层的长宽
 	unsigned int *buf;						// 图层的画布
 	struct layer *top, *bottom;				// 图层双向链表
 	struct window *winptr;					// 指向相应窗口的指针
@@ -38,7 +38,7 @@ extern struct layer *background_layer, *pointer_layer, *taskbar_layer;
 struct GUI_image
 {
 	/**图片长、宽*/
-	unsigned long length, width;
+	unsigned long width, height;
 	
 	/**图片数据指针*/
 	unsigned int *data;

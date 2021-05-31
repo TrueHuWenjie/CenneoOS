@@ -34,19 +34,19 @@ void unit_botton_handle(struct layer *target, unsigned long x, unsigned long y, 
 }
 
 /**新建按钮函数*/
-struct layer_unit *unit_new_botton(struct window *target, unsigned long x, unsigned long y, unsigned long length, unsigned long width, char *text)
+struct layer_unit *unit_new_botton(struct window *target, unsigned long x, unsigned long y, unsigned long width, unsigned long height, char *text)
 {
 	/**纠正参数*/
-	correct_para(target, &x, &y, &length, &width);
+	correct_para(target, &x, &y, &width, &height);
 
 	/**新建窗口单元*/
-	GUI_new_unit(target->layer, UNIT_BOTTON, x, y, length, width);
+	GUI_new_unit(target->layer, UNIT_BOTTON, x, y, width, height);
 
 	/**绘制按钮*/
-	GUI_put_square(target->layer, 0xff0066ff, x, y, length, width);
+	GUI_put_square(target->layer, 0xff0066ff, x, y, width, height);
 
 	/**显示按钮上面的文字*/
-	GUI_put_string(target->layer, 0xffffffff, x, y + 4, x + length, y + width, font("Standard Font"), text);
+	GUI_put_string(target->layer, 0xffffffff, x, y + 4, x + width, y + height, font("Standard Font"), text);
 }
 
 /**窗体关闭按钮处理函数*/
@@ -65,7 +65,7 @@ void unit_mini_handle(struct layer *target, unsigned long x, unsigned long y, vo
 }
 
 /**创建新单元函数*/
-struct layer_unit *GUI_new_unit(struct layer *target, unsigned int type, unsigned long x, unsigned long y, unsigned long length, unsigned long width)
+struct layer_unit *GUI_new_unit(struct layer *target, unsigned int type, unsigned long x, unsigned long y, unsigned long width, unsigned long height)
 {
 	struct layer_unit *new_unit;
 
@@ -76,8 +76,8 @@ struct layer_unit *GUI_new_unit(struct layer *target, unsigned int type, unsigne
 	/**参数赋值*/
 	new_unit->x = x;
 	new_unit->y = y;
-	new_unit->length = length;
 	new_unit->width = width;
+	new_unit->height = height;
 	new_unit->type = type;
 
 	/**加入图层中单元单向链表*/

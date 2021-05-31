@@ -126,7 +126,7 @@ void window_click_Application(void)
 
 		/**Application隐藏起来*/
 		attach_layer->visiable = false;
-		GUI_refresh_block(attach_layer->x, attach_layer->y, attach_layer->length, attach_layer->width);
+		GUI_refresh_block(attach_layer->x, attach_layer->y, attach_layer->width, attach_layer->height);
 
 	/**如果未被点击过*/
 	}else

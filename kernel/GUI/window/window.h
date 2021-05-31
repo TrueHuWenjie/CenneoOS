@@ -80,13 +80,13 @@ void init_Window(void);
  * 当x = 0且y = 0时，窗口会创建在最中间
  * 窗口中有效内容尺寸为length*width
  */
-struct window *GUI_window(char *title, char style, unsigned long x, unsigned long y, unsigned long length, unsigned long width);
+struct window *GUI_window(char *title, char style, unsigned long x, unsigned long y, unsigned long width, unsigned long height);
 
 /**纠正绘制参数函数
  * 窗体有无边框、边框风格不同时
  * 绘制到图层上的实际地址是不一样的
  */
-void correct_para(struct window *target, unsigned long *x, unsigned long *y, unsigned long *length, unsigned long *width);
+void correct_para(struct window *target, unsigned long *x, unsigned long *y, unsigned long *width, unsigned long *height);
 
 /**输出字符串到窗口*/
 void window_string(struct window *target, unsigned long x, unsigned long y, char *s);

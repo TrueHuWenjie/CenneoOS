@@ -16,12 +16,12 @@
 #include "window/unit.h"
 
 /**创建新图层函数*/
-struct layer *GUI_new_layer(long x, long y, unsigned long length, unsigned long width)
+struct layer *GUI_new_layer(long x, long y, unsigned long width, unsigned long height)
 {
 	struct layer *new_layer;
 
 	/**参数判断*/
-	if (length == 0 | width == 0) return NULL;
+	if (width == 0 | height == 0) return NULL;
 
 	/**分配内存给图层结构体*/
 	for (new_layer = NULL; new_layer == NULL;)
@@ -40,7 +40,7 @@ struct layer *GUI_new_layer(long x, long y, unsigned long length, unsigned long 
 	GUI_set_position(new_layer, x, y);
 
 	/**设置图层分尺寸*/
-	GUI_set_resolution(new_layer, length, width);
+	GUI_set_resolution(new_layer, width, height);
 
 	/**正常返回*/
 	return new_layer;
@@ -82,7 +82,7 @@ int GUI_free_layer(struct layer *target)
 	target->bottom->top = target->top;
 
 	/**局部刷新*/
-	GUI_refresh_block(target->x, target->y, target->length, target->width);
+	GUI_refresh_block(target->x, target->y, target->width, target->height);
 
 	/**释放图层资源*/
 	kfree(target);
@@ -203,16 +203,16 @@ long int GUI_set_position(struct layer *layer, long x, long y)
 		/**判断是否有重叠*/
 
 			/**有重叠的情况*/
-			if (y < (old_y + layer->width))
+			if (y < (old_y + layer->height))
 			{
 				/**一体刷新*/
-				GUI_refresh_block(old_x, old_y, layer->length, ((y - old_y) + layer->width));
+				GUI_refresh_block(old_x, old_y, layer->width, ((y - old_y) + layer->height));
 
 			/**无重叠的情况*/
 			}else{
 				/**分别刷新*/
-				GUI_refresh_block(old_x, old_y, (*layer).length, (*layer).width);
-				GUI_refresh_block(x, y, (*layer).length, (*layer).width);
+				GUI_refresh_block(old_x, old_y, (*layer).width, (*layer).height);
+				GUI_refresh_block(x, y, (*layer).width, (*layer).height);
 			}
 
 		/**老区域在下边*/
@@ -220,32 +220,32 @@ long int GUI_set_position(struct layer *layer, long x, long y)
 		/**判断是否有重叠*/
 
 			/**有重叠的情况*/
-			if (old_y < (y + layer->width))
+			if (old_y < (y + layer->height))
 			{
 				/**一体刷新*/
-				GUI_refresh_block(x, y, layer->length, ((old_y - y) + layer->width));
+				GUI_refresh_block(x, y, layer->width, ((old_y - y) + layer->height));
 
 			/**无重叠的情况*/
 			}else{
 				/**分别刷新*/
-				GUI_refresh_block(old_x, old_y, (*layer).length, (*layer).width);
-				GUI_refresh_block(x, y, (*layer).length, (*layer).width);
+				GUI_refresh_block(old_x, old_y, (*layer).width, (*layer).height);
+				GUI_refresh_block(x, y, (*layer).width, (*layer).height);
 			}
 		}
 	}else{
 		/**刷新相关区域*/
-		GUI_refresh_block(old_x, old_y, (*layer).length, (*layer).width);
-		GUI_refresh_block(x, y, (*layer).length, (*layer).width);
+		GUI_refresh_block(old_x, old_y, (*layer).width, (*layer).height);
+		GUI_refresh_block(x, y, (*layer).width, (*layer).height);
 	}
 }
 
 /*change the resolution of the layer*/
-long int GUI_set_resolution(struct layer *layer, unsigned long length, unsigned long width)
+long int GUI_set_resolution(struct layer *layer, unsigned long width, unsigned long height)
 {
 	unsigned long ptr;
 
 	/**判断当前图层的大小和目标大小是否一致*/
-	if ((length == layer->length) && (width == layer->width))
+	if ((width == layer->width) && (height == layer->height))
 		goto clean;
 
 	/**如果该图层之前还有画布，首先要释放该画布*/
@@ -254,15 +254,15 @@ long int GUI_set_resolution(struct layer *layer, unsigned long length, unsigned 
 
 	/**分配新的内存*/
 	for (layer->buf = NULL; layer->buf == NULL;)
-		layer->buf = vmalloc(length * width * 4, 0);
+		layer->buf = vmalloc(width * height * 4, 0);
 
 	/**修改相关参数*/
-	layer->length = length;
 	layer->width = width;
+	layer->height = height;
 
 clean:
 	/**对新画布进行清空*/
-	for (ptr = 0; ptr < (length * width); ptr ++)
+	for (ptr = 0; ptr < (width * height); ptr ++)
 		layer->buf[ptr] = 0x00000000;
 
 	/**正常返回*/
@@ -273,7 +273,7 @@ clean:
  * 图层贴图函数
  * 向layer图层以flag方式在位置(x,y)贴上图片(在length和width范围之内贴图)
  */
-long int GUI_map(struct layer *layer, struct GUI_image *image, unsigned long x, unsigned long y, unsigned long length, unsigned long width, int flag)
+long int GUI_map(struct layer *layer, struct GUI_image *image, unsigned long x, unsigned long y, unsigned long width, unsigned long height, int flag)
 {
 	unsigned int *data = image->data;
 	unsigned long offset_x, offset_y;
@@ -283,32 +283,32 @@ long int GUI_map(struct layer *layer, struct GUI_image *image, unsigned long x, 
 	if (image == NULL) return -1;
 
 	/**判断length或者width是否为0，只要为0则按图片大小标准拷贝*/
-	if (length == 0) length = image->length;
 	if (width == 0) width = image->width;
+	if (height == 0) height = image->height;
 
 	/**判断layer和图片要拷贝的位置大小信息，选其中最小值（防止溢出）*/
-	if ((x + length) > layer->length)
-		length = layer->length - x;
-	if ((y + width) > layer->width)
-		width = layer->width - y;
+	if ((x + width) > layer->width)
+		width = layer->width - x;
+	if ((y + height) > layer->height)
+		height = layer->height - y;
 
 	/**纵坐标循环复制数据*/
 	for (offset_y = 0;; offset_y ++)
 	{
 		/**判断是否超过复制的限定\图形范围*/
-		if ((offset_y >= width) | (offset_y >= image->width)) break;
+		if ((offset_y >= height) | (offset_y >= image->height)) break;
 
 		/**横坐标循环复制数据*/
 		for (offset_x = 0;; offset_x ++)
 		{
 			/**判断是否超过复制的限定范围*/
-			if ((offset_x >= length) | (offset_x >= image->length)) break;
+			if ((offset_x >= width) | (offset_x >= image->width)) break;
 
 			/**数据复制*/
-			layer->buf[(offset_y + y) * layer->length + offset_x + x] = data[(offset_y * image->length) + offset_x];
+			layer->buf[(offset_y + y) * layer->width + offset_x + x] = data[(offset_y * image->width) + offset_x];
 		}
 	}
 
 	/**对图层块刷新*/
-	GUI_refresh_block(layer->x, layer->y, layer->length, layer->width);
+	GUI_refresh_block(layer->x, layer->y, layer->width, layer->height);
 }

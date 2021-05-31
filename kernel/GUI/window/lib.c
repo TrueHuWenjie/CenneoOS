@@ -30,18 +30,18 @@
  * 当x = 0且y = 0时，窗口会创建在最中间
  * 窗口中有效内容尺寸为length*width
  */
-struct window *GUI_window(char *title, char style, unsigned long x, unsigned long y, unsigned long length, unsigned long width)
+struct window *GUI_window(char *title, char style, unsigned long x, unsigned long y, unsigned long width, unsigned long height)
 {
 	unsigned long real_length, real_width;
 	/**根据不同的风格，进行不同的初始化*/
 	if (style == WINDOW_NONE)
 	{
 		/**无边框*/
-		real_length = length;
-		real_width = width;
+		real_length = width;
+		real_width = height;
 
 		/**无边框窗口最小不得长宽为0*/
-		if ((length * width) == 0)
+		if ((width * height) == 0)
 		{
 			/**错误返回*/
 			return NULL;
@@ -49,11 +49,11 @@ struct window *GUI_window(char *title, char style, unsigned long x, unsigned lon
 	}else if (style == WINDOW_NORMAL)
 	{
 		/**算进边框大小*/
-		real_length = length + (WINDOW_NORMAL_FRAME_WIDTH * 2);
-		real_width = width + WINDOW_NORMAL_HEADER_WIDTH + WINDOW_NORMAL_FRAME_WIDTH;
+		real_length = width + (WINDOW_NORMAL_FRAME_WIDTH * 2);
+		real_width = height + WINDOW_NORMAL_HEADER_WIDTH + WINDOW_NORMAL_FRAME_WIDTH;
 
 		/**正常边框窗口最小不得长宽为0*/
-		if ((length * width) == 0)
+		if ((width * height) == 0)
 		{
 			/**错误返回*/
 			return NULL;
@@ -68,8 +68,8 @@ struct window *GUI_window(char *title, char style, unsigned long x, unsigned lon
 	/**结构体赋值*/
 	strncpy(new_window->title, title, WINDOW_NUM_TITLE);
 	new_window->style = style;
-	new_window->length = length;
-	new_window->width = width;
+	new_window->length = width;
+	new_window->width = height;
 	new_window->print_x = 0;
 	new_window->print_y = 0;
 	new_window->ident = WINDOW_IDENT;
@@ -107,7 +107,7 @@ struct window *GUI_window(char *title, char style, unsigned long x, unsigned lon
 	if (style == WINDOW_NONE)
 	{
 		/**无边框*/
-		GUI_put_square(new_window->layer, 0xffffffff, 0, 0, length, width);
+		GUI_put_square(new_window->layer, 0xffffffff, 0, 0, width, height);
 
 	/**判断是不是正常风格*/
 	}else if (style == WINDOW_NORMAL)
@@ -116,15 +116,15 @@ struct window *GUI_window(char *title, char style, unsigned long x, unsigned lon
 		window_set_active(new_window);
 
 		/**绘制按钮*/
-		GUI_map(new_window->layer, close_f_botton, new_window->layer->length - close_f_botton->length - WINDOW_NORMAL_FRAME_WIDTH, 0, 0, 0, 0);
-		GUI_map(new_window->layer, mini_f_botton, new_window->layer->length - (close_f_botton->length + mini_f_botton->length) - WINDOW_NORMAL_FRAME_WIDTH, 0, 0, 0, 0);
+		GUI_map(new_window->layer, close_f_botton, new_window->layer->width - close_f_botton->width - WINDOW_NORMAL_FRAME_WIDTH, 0, 0, 0, 0);
+		GUI_map(new_window->layer, mini_f_botton, new_window->layer->width - (close_f_botton->width + mini_f_botton->width) - WINDOW_NORMAL_FRAME_WIDTH, 0, 0, 0, 0);
 
 		// /**建立单元*/
-		GUI_new_unit(new_window->layer, UNIT_CLOSE, new_window->layer->length - close_f_botton->length - WINDOW_NORMAL_FRAME_WIDTH, 0, close_f_botton->length, close_f_botton->width);
-		GUI_new_unit(new_window->layer, UNIT_MINI, new_window->layer->length - (close_f_botton->length + mini_f_botton->length) - WINDOW_NORMAL_FRAME_WIDTH, 0, mini_f_botton->length, mini_f_botton->width);
+		GUI_new_unit(new_window->layer, UNIT_CLOSE, new_window->layer->width - close_f_botton->width - WINDOW_NORMAL_FRAME_WIDTH, 0, close_f_botton->width, close_f_botton->height);
+		GUI_new_unit(new_window->layer, UNIT_MINI, new_window->layer->width - (close_f_botton->width + mini_f_botton->width) - WINDOW_NORMAL_FRAME_WIDTH, 0, mini_f_botton->width, mini_f_botton->height);
 
 		/**主体*/
-		GUI_put_square(new_window->layer, 0xffffffff, WINDOW_NORMAL_FRAME_WIDTH, WINDOW_NORMAL_HEADER_WIDTH, length, width);
+		GUI_put_square(new_window->layer, 0xffffffff, WINDOW_NORMAL_FRAME_WIDTH, WINDOW_NORMAL_HEADER_WIDTH, width, height);
 	}
 
 	/**返回新窗口的指针*/
@@ -148,7 +148,7 @@ void GUI_free_window(struct window *target)
  * 窗体有无边框、边框风格不同时
  * 绘制到图层上的实际地址是不一样的
  */
-void correct_para(struct window *target, unsigned long *x, unsigned long *y, unsigned long *length, unsigned long *width)
+void correct_para(struct window *target, unsigned long *x, unsigned long *y, unsigned long *width, unsigned long *height)
 {
 	/**根据窗口风格纠正参数*/
 	if (target->style == WINDOW_NONE)
@@ -161,11 +161,11 @@ void correct_para(struct window *target, unsigned long *x, unsigned long *y, uns
 		*y += WINDOW_NORMAL_HEADER_WIDTH;
 
 	/**判断是否超过边界，如果超过，以边界为准*/
-		if ((length != NULL) & (*length >= (target->length + WINDOW_NORMAL_FRAME_WIDTH)))
-			*length = target->length + WINDOW_NORMAL_FRAME_WIDTH;
+		if ((width != NULL) & (*width >= (target->length + WINDOW_NORMAL_FRAME_WIDTH)))
+			*width = target->length + WINDOW_NORMAL_FRAME_WIDTH;
 
-		if ((width != NULL) & (*width >= (target->width + WINDOW_NORMAL_HEADER_WIDTH)))
-			*width = target->width + WINDOW_NORMAL_HEADER_WIDTH;
+		if ((height != NULL) & (*height >= (target->width + WINDOW_NORMAL_HEADER_WIDTH)))
+			*height = target->width + WINDOW_NORMAL_HEADER_WIDTH;
 	}
 	return;
 }

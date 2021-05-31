@@ -53,8 +53,8 @@ union thread *task_GUI_mouse_handle;
 /**鼠标光标点阵图转化成Explorer GUI 内部抽象图片结构*/
 struct GUI_image pointer_recourse =
 {
-	.length = 12,
-	.width = 20,
+	.width = 12,
+	.height = 20,
 	.data = Pointer_Bitmap,
 	.count = 1,
 	.next = NULL
@@ -116,7 +116,7 @@ press:
 	if (attach_layer->visiable == true)
 	{
 		/**判断鼠标是否点击到附加图层区域*/
-		if ((mouse_x >= attach_layer->x) & (mouse_x < attach_layer->x + attach_layer->length) & (mouse_y >= attach_layer->y) & (mouse_y < attach_layer->y + attach_layer->width))
+		if ((mouse_x >= attach_layer->x) & (mouse_x < attach_layer->x + attach_layer->width) & (mouse_y >= attach_layer->y) & (mouse_y < attach_layer->y + attach_layer->height))
 		{
 			/**判断是否是Application在工作*/
 			if (Application_work_flag == true)
@@ -154,7 +154,7 @@ press:
 	for (layer = taskbar_layer->bottom; layer->winptr != NULL; layer = layer->bottom)
 	{
 		/**进行区域判断*/
-		if ((mouse_x >= layer->x) & (mouse_x < layer->x + layer->length) & (mouse_y >= layer->y) & (mouse_y < layer->y + layer->width))
+		if ((mouse_x >= layer->x) & (mouse_x < layer->x + layer->width) & (mouse_y >= layer->y) & (mouse_y < layer->y + layer->height))
 		{
 			/**设置被点击的窗口为活动窗口*/
 			window_set_active(layer->winptr);
@@ -178,7 +178,7 @@ press:
 				/**循环判断是否处于单元范围内*/
 				for (unit_ptr = layer->layer_unit_list; unit_ptr != NULL; unit_ptr = unit_ptr->next)
 				{
-					if ((mouse_x >= (layer->x + unit_ptr->x)) & (mouse_x < (layer->x + unit_ptr->x + unit_ptr->length)) & (mouse_y >= (layer->y + unit_ptr->y)) & (mouse_y < (layer->y + unit_ptr->y + unit_ptr->width)))
+					if ((mouse_x >= (layer->x + unit_ptr->x)) & (mouse_x < (layer->x + unit_ptr->x + unit_ptr->width)) & (mouse_y >= (layer->y + unit_ptr->y)) & (mouse_y < (layer->y + unit_ptr->y + unit_ptr->height)))
 					{
 						/**调用单元处理函数*/
 						unit_handle[unit_ptr->type](layer, mouse_x - (layer->x + unit_ptr->x), mouse_y - (layer->y + unit_ptr->y), unit_ptr->ptr);
@@ -358,7 +358,7 @@ void init_pointer(void)
 	pointer_layer->bottom->top = pointer_layer;
 
 	/**将光标点阵图映射到图层上*/
-	GUI_map(pointer_layer, &pointer_recourse, 0, 0, pointer_layer->length, pointer_layer->width, 0);
+	GUI_map(pointer_layer, &pointer_recourse, 0, 0, pointer_layer->width, pointer_layer->height, 0);
 
 	/**使图层可以看到*/
 	pointer_layer->visiable = true;
@@ -412,15 +412,15 @@ void window_draw(struct window *target, unsigned int title_color, unsigned int f
 	if (target->style != WINDOW_NORMAL) return;
 
 	/**绘制窗体边框*/
-	GUI_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, 0, target->length - (close_f_botton->length + mini_f_botton->length), WINDOW_NORMAL_HEADER_WIDTH);
+	GUI_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, 0, target->length - (close_f_botton->width + mini_f_botton->width), WINDOW_NORMAL_HEADER_WIDTH);
 	// GUI_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, 0, target->length, WINDOW_NORMAL_HEADER_WIDTH);
 
 	/**左右边框*/
-	GUI_put_square(target->layer, frame_color, 0, 0, WINDOW_NORMAL_FRAME_WIDTH, target->layer->width);
-	GUI_put_square(target->layer, frame_color, target->layer->length - WINDOW_NORMAL_FRAME_WIDTH, 0, WINDOW_NORMAL_FRAME_WIDTH, target->layer->width);
+	GUI_put_square(target->layer, frame_color, 0, 0, WINDOW_NORMAL_FRAME_WIDTH, target->layer->height);
+	GUI_put_square(target->layer, frame_color, target->layer->width - WINDOW_NORMAL_FRAME_WIDTH, 0, WINDOW_NORMAL_FRAME_WIDTH, target->layer->height);
 
 	/**下边框*/
-	GUI_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, target->layer->width - WINDOW_NORMAL_FRAME_WIDTH, target->length, WINDOW_NORMAL_FRAME_WIDTH);
+	GUI_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, target->layer->height - WINDOW_NORMAL_FRAME_WIDTH, target->length, WINDOW_NORMAL_FRAME_WIDTH);
 
 	/**窗体标题*/
 	GUI_put_string(target->layer, title_color, 5, 8, 0, 0, font("simsun"), target->title);
@@ -461,7 +461,7 @@ void window_set_active(struct window *target)
 			target->layer->bottom->top = target->layer;
 
 			/**这里没有依据风格判断实际上有效的部分，在后期需要改正*/
-			GUI_refresh_block(target->layer->x, target->layer->y, target->layer->length, target->layer->width);
+			GUI_refresh_block(target->layer->x, target->layer->y, target->layer->width, target->layer->height);
 		}
 
 		/**将新窗口绘制成活动窗口*/

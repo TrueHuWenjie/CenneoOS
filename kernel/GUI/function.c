@@ -13,18 +13,18 @@
 #include "layer.h"
 
 /**在指定图层的指定位置显示一个字符串*/
-void GUI_put_string(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long length, unsigned long width, struct font_info *font_info, const char *string)
+void GUI_put_string(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height, struct font_info *font_info, const char *string)
 {
 	while (*string != 0x00)
 	{
-		GUI_put_word(layer, color, x, y, length, width, font_info, *string);
+		GUI_put_word(layer, color, x, y, width, height, font_info, *string);
 		string ++;
 		x += font_info->length;
 	}
 }
 
 /**put word to layer*/
-void GUI_put_word(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long length, unsigned long width, struct font_info *font_info, unsigned char ascii)
+void GUI_put_word(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height, struct font_info *font_info, unsigned char ascii)
 {
 	unsigned long p, i, font_offset;/*offset in font*/
 	unsigned char d;
@@ -35,14 +35,14 @@ void GUI_put_word(struct layer *layer, unsigned int color, unsigned long x, unsi
 		d = font_info->addr[font_offset + i];
 		
 		/**对每行点阵进行逻辑计算后判断*/
-		if ((d & 0x80) != 0) { GUI_put_pixel(layer, color, x + 0, y + i, length, width); }
-		if ((d & 0x40) != 0) { GUI_put_pixel(layer, color, x + 1, y + i, length, width); }
-		if ((d & 0x20) != 0) { GUI_put_pixel(layer, color, x + 2, y + i, length, width); }
-		if ((d & 0x10) != 0) { GUI_put_pixel(layer, color, x + 3, y + i, length, width); }
-		if ((d & 0x08) != 0) { GUI_put_pixel(layer, color, x + 4, y + i, length, width); }
-		if ((d & 0x04) != 0) { GUI_put_pixel(layer, color, x + 5, y + i, length, width); }
-		if ((d & 0x02) != 0) { GUI_put_pixel(layer, color, x + 6, y + i, length, width); }
-		if ((d & 0x01) != 0) { GUI_put_pixel(layer, color, x + 7, y + i, length, width); }
+		if ((d & 0x80) != 0) { GUI_put_pixel(layer, color, x + 0, y + i, width, height); }
+		if ((d & 0x40) != 0) { GUI_put_pixel(layer, color, x + 1, y + i, width, height); }
+		if ((d & 0x20) != 0) { GUI_put_pixel(layer, color, x + 2, y + i, width, height); }
+		if ((d & 0x10) != 0) { GUI_put_pixel(layer, color, x + 3, y + i, width, height); }
+		if ((d & 0x08) != 0) { GUI_put_pixel(layer, color, x + 4, y + i, width, height); }
+		if ((d & 0x04) != 0) { GUI_put_pixel(layer, color, x + 5, y + i, width, height); }
+		if ((d & 0x02) != 0) { GUI_put_pixel(layer, color, x + 6, y + i, width, height); }
+		if ((d & 0x01) != 0) { GUI_put_pixel(layer, color, x + 7, y + i, width, height); }
 	}
 }
 
@@ -91,7 +91,7 @@ void GUI_line(struct layer *layer, unsigned int color, unsigned long x0, unsigne
 }
 
 /**draw a square in the layer*/
-long int GUI_put_square(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long length, unsigned long width)
+long int GUI_put_square(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height)
 {
 	/**Two pointers to determine coordinates*/
 	unsigned long int x_point, y_point;
@@ -99,9 +99,9 @@ long int GUI_put_square(struct layer *layer, unsigned int color, unsigned long x
 	 * Don't worried about the square overflow the buffer
 	 * because every pixel check in the GUI_put_pixel function
 	 */
-	for (y_point = 0; y_point < width; y_point++)
+	for (y_point = 0; y_point < height; y_point++)
 	{
-		for (x_point = 0; x_point < length; x_point++)
+		for (x_point = 0; x_point < width; x_point++)
 		{
 			GUI_put_pixel(layer, color, (x + x_point), (y + y_point), 0, 0);
 		}
@@ -120,20 +120,20 @@ long int GUI_put_square(struct layer *layer, unsigned int color, unsigned long x
  * 角度出发，不光要有边界判断(因为边界判断仅仅判断是否会溢出到右边或下边)，还要
  * 在一开始就对整体绘制元素的坐标进行纠正，以不会溢出到左边和上边。
  */
-void GUI_put_pixel(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long length, unsigned long width)
+void GUI_put_pixel(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height)
 {
 	/**判断是否需要人为边界判断*/
-	if ((length != 0) && (width != 0))
+	if ((width != 0) && (height != 0))
 	{
 		/**进行人为边界判断*/
-		if ((x >= length) | (y >= width)) return;
+		if ((x >= width) | (y >= height)) return;
 	}
 		
 	/**判断这个像素是否超出图层边界，如果超出，会覆盖其它内存数据*/
-	if ((x >= (*layer).length) | (y >= (*layer).width)) return;
+	if ((x >= (*layer).width) | (y >= (*layer).height)) return;
 	
 	/**绘制*/
-	(*layer).buf[(y * (*layer).length) + x] = color;
+	(*layer).buf[(y * (*layer).width) + x] = color;
 	
 	/**刷新像素*/
 	GUI_refresh_pix((*layer).x + x, (*layer).y + y);
@@ -147,6 +147,6 @@ unsigned int GUI_get_pix(struct layer *layer, unsigned long x, unsigned long y)
 {
 	/**There is a judgement about if the pixel in the layer*/
 	/**If there isn't a judgement,the pixel may be overflow the buffer*/
-	if ((x >= (*layer).length) | (y >= (*layer).width)) return 0;
-	return (*layer).buf[(y * (*layer).length) + x];
+	if ((x >= (*layer).width) | (y >= (*layer).height)) return 0;
+	return (*layer).buf[(y * (*layer).width) + x];
 }
