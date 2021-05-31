@@ -211,8 +211,8 @@ long int GUI_set_position(struct layer *layer, long x, long y)
 			/**无重叠的情况*/
 			}else{
 				/**分别刷新*/
-				GUI_refresh_block(old_x, old_y, (*layer).width, (*layer).height);
-				GUI_refresh_block(x, y, (*layer).width, (*layer).height);
+				GUI_refresh_block(old_x, old_y, layer->width, layer->height);
+				GUI_refresh_block(x, y, layer->width, layer->height);
 			}
 
 		/**老区域在下边*/
@@ -228,14 +228,14 @@ long int GUI_set_position(struct layer *layer, long x, long y)
 			/**无重叠的情况*/
 			}else{
 				/**分别刷新*/
-				GUI_refresh_block(old_x, old_y, (*layer).width, (*layer).height);
-				GUI_refresh_block(x, y, (*layer).width, (*layer).height);
+				GUI_refresh_block(old_x, old_y, layer->width, layer->height);
+				GUI_refresh_block(x, y, layer->width, layer->height);
 			}
 		}
 	}else{
 		/**刷新相关区域*/
-		GUI_refresh_block(old_x, old_y, (*layer).width, (*layer).height);
-		GUI_refresh_block(x, y, (*layer).width, (*layer).height);
+		GUI_refresh_block(old_x, old_y, layer->width, layer->height);
+		GUI_refresh_block(x, y, layer->width, layer->height);
 	}
 }
 

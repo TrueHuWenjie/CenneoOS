@@ -130,10 +130,10 @@ void GUI_put_pixel(struct layer *layer, unsigned int color, unsigned long x, uns
 	}
 		
 	/**判断这个像素是否超出图层边界，如果超出，会覆盖其它内存数据*/
-	if ((x >= (*layer).width) | (y >= (*layer).height)) return;
+	if ((x >= layer->width) | (y >= layer->height)) return;
 	
 	/**绘制*/
-	(*layer).buf[(y * (*layer).width) + x] = color;
+	layer->buf[(y * layer->width) + x] = color;
 	
 	/**正常返回*/
 	return;
@@ -144,6 +144,6 @@ unsigned int GUI_get_pixel(struct layer *layer, unsigned long x, unsigned long y
 {
 	/**There is a judgement about if the pixel in the layer*/
 	/**If there isn't a judgement,the pixel may be overflow the buffer*/
-	if ((x >= (*layer).width) | (y >= (*layer).height)) return 0;
-	return (*layer).buf[(y * (*layer).width) + x];
+	if ((x >= layer->width) | (y >= layer->height)) return 0;
+	return layer->buf[(y * layer->width) + x];
 }

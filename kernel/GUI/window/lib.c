@@ -32,13 +32,13 @@
  */
 struct window *GUI_window(char *title, char style, unsigned long x, unsigned long y, unsigned long width, unsigned long height)
 {
-	unsigned long real_length, real_width;
+	unsigned long real_width, real_height;
 	/**根据不同的风格，进行不同的初始化*/
 	if (style == WINDOW_NONE)
 	{
 		/**无边框*/
-		real_length = width;
-		real_width = height;
+		real_width = width;
+		real_height = height;
 
 		/**无边框窗口最小不得长宽为0*/
 		if ((width * height) == 0)
@@ -49,8 +49,8 @@ struct window *GUI_window(char *title, char style, unsigned long x, unsigned lon
 	}else if (style == WINDOW_NORMAL)
 	{
 		/**算进边框大小*/
-		real_length = width + (WINDOW_NORMAL_FRAME_WIDTH * 2);
-		real_width = height + WINDOW_NORMAL_HEADER_WIDTH + WINDOW_NORMAL_FRAME_WIDTH;
+		real_width = width + (WINDOW_NORMAL_FRAME_WIDTH * 2);
+		real_height = height + WINDOW_NORMAL_HEADER_WIDTH + WINDOW_NORMAL_FRAME_WIDTH;
 
 		/**正常边框窗口最小不得长宽为0*/
 		if ((width * height) == 0)
@@ -80,12 +80,12 @@ struct window *GUI_window(char *title, char style, unsigned long x, unsigned lon
 	 */
 	if ((x == 0) & (y == 0))
 	{
-		x = ((vbe_info.xres - real_length) / 2);
-		y = ((vbe_info.yres - real_width) /2);
+		x = ((vbe_info.xres - real_width) / 2);
+		y = ((vbe_info.yres - real_height) /2);
 	}
 
 	/**创建、初始化图层*/
-	new_window->layer = GUI_new_layer(x, y, real_length, real_width);
+	new_window->layer = GUI_new_layer(x, y, real_width, real_height);
 
 	/**将该图层从图层链表中脱离*/
 	new_window->layer->top->bottom = new_window->layer->bottom;
