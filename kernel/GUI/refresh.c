@@ -21,11 +21,9 @@
  */
 long inline int GUI_refresh_pixel(unsigned long int x, unsigned long int y)
 {
-
 	unsigned int new_color;
 	unsigned char alpha = 0xff, alpha_cal = 0xff, red = 0, green = 0, blue = 0;
 	struct layer *layer = layer_root;
-
 
 	/**层叠像素*/
 	do
