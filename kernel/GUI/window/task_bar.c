@@ -45,6 +45,8 @@ void window_refresh_date(void)
 
 	/**输出时间*/
 	GUI_put_string(taskbar_layer, TIME_COLOR, (vbe_info.xres - window_Date_length), 4, 0, 0, font("Standard Font"), date_buf);
+
+	GUI_update(taskbar_layer);
 }
 
 /**Menu的项描述体*/

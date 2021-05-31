@@ -48,12 +48,13 @@ void init_GUI(void)
 
 	/**填充矩形*/
 	GUI_put_square(layer_root, 0x400000ff, 0, 0, LAYER_ROOT_LENGTH, LAYER_ROOT_WIDTH);
-	// GUI_put_square(layer_root, 0x40000000, 0, 0, LAYER_ROOT_LENGTH, LAYER_ROOT_WIDTH);
 
 	/**信息输出*/
 	GUI_put_string(layer_root, 0xffffffff, 0, 00, 0, 0, font("simsun"), "Explorer Graphical User Interface.");
 	GUI_put_string(layer_root, 0xffffffff, 0, 16, 0, 0, font("simsun"), "Kernel version:" KERNEL_VERSION);
 	GUI_put_string(layer_root, 0xffffffff, 0, 32, 0, 0, font("simsun"), COPYRIGHT);
+
+	GUI_update(layer_root);
 
 	/**This function in window.c*/
 	init_Window();

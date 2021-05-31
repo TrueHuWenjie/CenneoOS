@@ -37,6 +37,9 @@ long int GUI_set_resolution(struct layer *layer, unsigned long width, unsigned l
 
 /**refresh.c中*/
 
+// Update a whole layer
+void GUI_update(struct layer *target);
+
 /**刷新像素函数
  * (x,y)是在屏幕上需要刷新的像素坐标
  * 该函数为通用函数，仅为兼容性考虑。

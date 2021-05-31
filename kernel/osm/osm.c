@@ -84,6 +84,9 @@ void osm_display(void)
         entry = entry->info.next;
         if (entry == current) break;
     }
+
+    // Update
+    GUI_update(layer);
 }
 
 void osm_update(void)
@@ -103,7 +106,7 @@ void osm_loop(void)
         {
             invalid = 0;
             osm_display();
-            // sleep();
+            //sleep();
         }
     }
 }

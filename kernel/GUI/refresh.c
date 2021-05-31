@@ -14,6 +14,13 @@
 #include <video.h>
 #include "layer.h"
 
+// Update a whole layer
+void GUI_update(struct layer *target)
+{
+	GUI_refresh_block(target->x, target->y, target->width, target->height);
+}
+
+
 /**刷新像素函数
  * (x,y)是在屏幕上需要刷新的像素坐标
  * 该函数为通用函数，仅为兼容性考虑。
@@ -63,15 +70,15 @@ long inline int GUI_refresh_pixel(unsigned long int x, unsigned long int y)
 }
 
 /**GUI块刷新函数*/
-void GUI_refresh_block(long x, long y, unsigned long length, unsigned long width)
+void GUI_refresh_block(long x, long y, unsigned long width, unsigned long height)
 {
 	unsigned long offset_x, offset_y;
 
 	/**循环向下刷新*/
-	for (offset_y = 0; offset_y < width; offset_y ++)
+	for (offset_y = 0; offset_y < height; offset_y ++)
 	{
 		/**循环向右刷新*/
-		for (offset_x = 0; offset_x < length; offset_x ++)
+		for (offset_x = 0; offset_x < width; offset_x ++)
 		{
 			/**刷新像素*/
 			GUI_refresh_pixel(x + offset_x, y + offset_y);

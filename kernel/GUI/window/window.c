@@ -293,6 +293,8 @@ void init_background(void)
 
 	/**加载图片*/
 	// task(&load_background, "BACKDROP.PIC");
+
+	GUI_update(background_layer);
 }
 
 /**软系数，用来确定软鼠标的跟随灵敏度
@@ -403,6 +405,8 @@ void init_taskbar(void)
 
 	/**显示Application*/
 	window_draw_Application(TASKBAR_COLOR, 0xff000000);
+
+	GUI_update(taskbar_layer);
 }
 
 /**绘制窗体边框函数*/
