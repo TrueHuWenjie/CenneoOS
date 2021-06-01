@@ -30,35 +30,56 @@
 /**内核主函数*/
 void main(void)
 {
+	// Kernel Memory Management
 	init_kmm();
 
-	init_kis();
+	// Kernel Log System
+	init_kls();
 
 	init_graph();
+
+	// Font
 	init_font();
+
+	// Kernel Visual Interface
 	init_kvi();
 
+	// Time
 	init_time();
+
+	// Multi-task
 	init_mutitask();
+
+	// CPU
 	init_CPU();
+
+	// Programmable Interruption Controller
 	init_PIC();
+
+	// Programmable Interruption Timer
 	init_PIT();
 
-	/**打印信息*/
-	output_CPU_info();			// 打印处理器信息
+	// Output information about CPU
+	output_CPU_info();
 
-	/**初始化设备*/
-	init_keyboard();			// 初始化键盘
-	init_mouse();				// 初始化鼠标
-	init_hdd();					// 初始化磁盘
-	init_FAT32();				// 初始化FAT32文件系统
+	// Keyboard
+	init_keyboard();
 
-	/**GUI初始化*/
+	// Mouse
+	init_mouse();
+
+	// Hard Disk Device
+	init_hdd();
+	init_FAT32();
+
+	// Graphical User Interface
 	init_GUI();
 
 	// Operating System Moniter
 	extern int osm_open(void);
 	task(&osm_open, NULL);
+
+
 
 	// Idle now
 	task_name("Idle");

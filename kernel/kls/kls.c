@@ -2,7 +2,8 @@
 // /kernel/kio/kio.c
 // Kernel Log System
 
-void init_kis(void)
+// Initialization of Kernel Log System
+void init_kls(void)
 {
 
 }
