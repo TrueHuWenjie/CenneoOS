@@ -67,7 +67,7 @@ all:
 	make loader
 	make kernel
 run:all install
-	$(qemu) -drive file=$(image),format=vpc -m 9
+	$(qemu) -drive file=$(image),format=vpc -vga none -device virtio-vga,virgl=on -m 9
 
 help:
 	clear
