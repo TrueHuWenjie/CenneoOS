@@ -7,6 +7,7 @@
  * 12/6/2014 8:58 PM
  */
 
+#include "../include/io.h"
 #include "cmos.h"
 
 /**CMOS的地址空间没有映射到内存区域上，
