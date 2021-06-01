@@ -16,9 +16,9 @@
  * 再向0x71读、写，以读取、写入CMOS。
  */
 
-/**从CMOS中获取信息函数*/
-unsigned char read_cmos(unsigned char addr)
+// Get info from COMS
+unsigned char cmos_read(unsigned char offset)
 {
-	io_out8(CMOS_INDEX, addr);		/**写入想要读出的信息在CMOS的偏移*/
+	io_out8(CMOS_INDEX, offset);		/**写入想要读出的信息在CMOS的偏移*/
 	return io_in8(CMOS_DATA);		/**读出相关信息*/
 }

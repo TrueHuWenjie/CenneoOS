@@ -65,4 +65,7 @@ struct CMOS
 	unsigned char reserved_3[12];
 };
 
+// Get info from COMS
+unsigned char cmos_read(unsigned char offset);
+
 #endif
