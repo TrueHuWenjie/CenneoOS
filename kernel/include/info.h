@@ -7,9 +7,9 @@
 
 #define KERNEL_NAME		"Cenneo kernel"
 #define KERNEL_VERSION	"1.0 Alpha"
-#define AUTHOR			"HuWenjie<huwenjie@cenneo.com>"
+#define AUTHOR			"Hu Wenjie<huwenjie@cenneo.com>"
 #define COPYRIGHT		"Copyright 2019-2020 by Cenneo Ltd."
 #define BASE			"Public Explorer 0.0.1"
-#define DESCRIPTION		"Welcome to visit our website:https://cenneo.com"
+#define DESCRIPTION		"Welcome to visit our website:https://www.cenneo.com"
 
 #endif
