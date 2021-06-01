@@ -16,7 +16,6 @@
 #define BYTEPERPIXEL 3
 #define FONT_W 8
 #define FONT_H 16
-#define VIDEO_MEM_ADDR 0xe0000000
 #define SIZE_OF_BUFFER 256
 
 // kvi's state machine
@@ -145,6 +144,8 @@ void init_kvi(void)
 	/**计算屏幕长度、宽度*/
 	kvi_sm.width = kvi_sm.xres / FONT_W;
 	kvi_sm.height = kvi_sm.yres / FONT_H;
+
+	kvi_color(KVI_NOTE_FGCOLOR, KVI_NOTE_BGCOLOR);
 
 	/**打开shell*/
 	kvi_sm.enable = true;
