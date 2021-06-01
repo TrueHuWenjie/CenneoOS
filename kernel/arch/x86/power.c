@@ -2,6 +2,8 @@
 // /kernel/arch/x86/power.c
 // Power management
 
+#include "include/io.h"
+
 // Reset your computer
 void reset(void)
 {
