@@ -32,6 +32,8 @@ void main(void)
 {
 	init_kmm();
 
+	init_kis();
+
 	init_graph();
 	init_font();
 	init_kvi();
