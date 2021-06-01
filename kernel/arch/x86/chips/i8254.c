@@ -86,12 +86,12 @@ void PIT_handle(void)
 				min = 0;
 
 				/**剩下的暂时不做判断，直接从CMOS中读取*/
-				hour = BCD_HEX(read_cmos(CMOS_CUR_HOUR));		/**当前时*/
-				week_day = BCD_HEX(read_cmos(CMOS_WEEK_DAY));	/**一周中当前天*/
-				day = BCD_HEX(read_cmos(CMOS_MON_DAY));			/**一月中当前日*/
-				mon = BCD_HEX(read_cmos(CMOS_CUR_MON));			/**当前月*/
-				year = BCD_HEX(read_cmos(CMOS_CUR_YEAR));		/**当前年*/
-				century = BCD_HEX(read_cmos(CMOS_CUR_CEN));		/**当前世纪*/
+				hour = BCD_HEX(cmos_read(CMOS_CUR_HOUR));		/**当前时*/
+				week_day = BCD_HEX(cmos_read(CMOS_WEEK_DAY));	/**一周中当前天*/
+				day = BCD_HEX(cmos_read(CMOS_MON_DAY));			/**一月中当前日*/
+				mon = BCD_HEX(cmos_read(CMOS_CUR_MON));			/**当前月*/
+				year = BCD_HEX(cmos_read(CMOS_CUR_YEAR));		/**当前年*/
+				century = BCD_HEX(cmos_read(CMOS_CUR_CEN));		/**当前世纪*/
 				/**CMOS中的年份仅仅是从本世纪开始到现在的绝对值，需要加上世纪*/
 				year += century * 100;
 			}else{
