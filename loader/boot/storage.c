@@ -17,7 +17,7 @@
 #include "head.h"
 #include "lib/mem.h"
 #include "lib/color.h"
-
+#include <io.h>
 
 
 /**储存器管理定义部分*/

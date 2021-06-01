@@ -13,6 +13,7 @@
 #include "fs.h"
 #include "VI.h"
 #include "script.h"
+#include <io.h>
 
 // A pointer that push argument, eip and jump to the start of kernel
 void (*kernel_start)(const struct boot_info *boot_info) = KERNEL_ADDR;
