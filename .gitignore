@@ -6,3 +6,4 @@
 *.swp
 /kernel/KERNEL
 *.BIN
+.DS_Store
