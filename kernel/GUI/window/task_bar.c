@@ -38,9 +38,9 @@ void window_refresh_date(void)
 	/**字符串格式转换*/
 	if (ktime.ms <= 500)			// 这里根据当前的微秒判断，以0.5秒为界限，小于0.5秒显示":"，大于0.5秒显示" "，可以达到一秒钟闪烁一次的效果
 	{
-		sprintf(date_buf, "%d:%02d %d/%d/%d", ktime.hour, ktime.mintus, ktime.month, ktime.day, ktime.year);
+		sprintf(date_buf, "%ld:%02ld %ld/%ld/%ld", ktime.hour, ktime.mintus, ktime.month, ktime.day, ktime.year);
 	}else{
-		sprintf(date_buf, "%d %02d %d/%d/%d", ktime.hour, ktime.mintus, ktime.month, ktime.day, ktime.year);
+		sprintf(date_buf, "%ld %02ld %ld/%ld/%ld", ktime.hour, ktime.mintus, ktime.month, ktime.day, ktime.year);
 	}
 
 	/**输出时间*/
