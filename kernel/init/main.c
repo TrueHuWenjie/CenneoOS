@@ -79,7 +79,9 @@ void main(void)
 	extern int osm_open(void);
 	task(&osm_open, NULL);
 
-
+	// Kernel Log System Monitor
+	extern int klsm_open(void);
+	task(&klsm_open, NULL);
 
 	// Idle now
 	task_name("Idle");
