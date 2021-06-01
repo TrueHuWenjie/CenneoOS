@@ -121,7 +121,7 @@ void PIT_handle(void)
 			/**如果是定时执行多次的定时器任务，就继续插入链表中*/
 			if (ptr->state == 0)
 			{
-				settimer((*ptr).function, (*ptr).time_size, (*ptr).state);
+				settimer(ptr->function, ptr->time_size, ptr->state);
 			}
 
 			/**如果不是多次执行任务，就从链表中移除*/
@@ -138,7 +138,7 @@ void PIT_handle(void)
 	current->info.runtime ++;		/**运行时间加一*/
 
 	/**判断该任务的时间片是否使用完，使用完了则选择新任务调度*/
-	if ((*current).info.counter == 0)
+	if (current->info.counter == 0)
 	{
 		schedule();
 	}else{
@@ -160,7 +160,7 @@ struct timer *settimer(void (*function)(void), unsigned long time, unsigned char
 	struct timer *retval, *ptr;
 
 	/**参数检查*/
-	if (time == 0) return NULL;
+	if (!time) return NULL;
 
 	/**创建新的定时任务结构体*/
 	retval = kmalloc(sizeof(struct timer));
