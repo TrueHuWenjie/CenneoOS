@@ -1,6 +1,6 @@
 // Explorer Boot
 // /boot/head.h
-// consisting all the definition of Boot
+// Consisting all the definition of Boot
 
 #ifndef HEAD_H_
 #define HEAD_H_
