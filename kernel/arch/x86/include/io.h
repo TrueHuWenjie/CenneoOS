@@ -41,7 +41,7 @@ u32 io_in32(u32 port);
 
 /**输出函数*/
 void io_out8(u32 port, u8 data);
-void io_out16(u32 port, u8 data);
-void io_out32(u32 port, u8 data);
+void io_out16(u32 port, u16 data);
+void io_out32(u32 port, u32 data);
 
 #endif
