@@ -7,3 +7,5 @@
 /kernel/KERNEL
 *.BIN
 .DS_Store
+image.vhd
+image.zip
