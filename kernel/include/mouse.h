@@ -16,7 +16,7 @@
 long mouse_x, mouse_y;
 
 /**鼠标命令缓冲区最大数量*/
-#define SIZE_OF_BUFFER_MOUSE	64
+#define SIZE_OF_BUFFER_MOUSE	256
 
 /**初始化鼠标函数*/
 void init_mouse(void);
