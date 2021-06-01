@@ -7,11 +7,11 @@
  * 7/26/2014 5:26 PM
  */
 
-#include<stdlib.h>
-#include<mpt.h>
-#include<types.h>
+#include <stdlib.h>
+#include <mpt.h>
+#include <types.h>
 #include "time.h"
-#include "cmos.h"
+#include "../include/cmos.h"
 #include "../include/io.h"
 #include "../include/i8254.h"
 
@@ -65,43 +65,43 @@ void PIT_handle(void)
 {
 
 	/**刷新时间*/
-	system_runtime ++;			/**系统运行时间*/
+	ktime.system_runtime ++;			/**系统运行时间*/
 
 	/**判断当前是不是999微妙*/
-	if (ms == 999)
+	if (ktime.ms == 999)
 	{
 		/**微秒归零*/
-		ms = 0;
+		ktime.ms = 0;
 
 		/**判断秒表*/
-		if (sec == 59)
+		if (ktime.second == 59)
 		{
 			/**秒归零*/
-			sec = 0;
+			ktime.second = 0;
 
 			/**判断分*/
-			if (min == 59)
+			if (ktime.mintus == 59)
 			{
 				/**分归零*/
-				min = 0;
+				ktime.mintus = 0;
 
 				/**剩下的暂时不做判断，直接从CMOS中读取*/
-				hour = BCD_HEX(cmos_read(CMOS_CUR_HOUR));		/**当前时*/
-				week_day = BCD_HEX(cmos_read(CMOS_WEEK_DAY));	/**一周中当前天*/
-				day = BCD_HEX(cmos_read(CMOS_MON_DAY));			/**一月中当前日*/
-				mon = BCD_HEX(cmos_read(CMOS_CUR_MON));			/**当前月*/
-				year = BCD_HEX(cmos_read(CMOS_CUR_YEAR));		/**当前年*/
-				century = BCD_HEX(cmos_read(CMOS_CUR_CEN));		/**当前世纪*/
+				ktime.hour = BCD_HEX(cmos_read(CMOS_CUR_HOUR));		/**当前时*/
+				ktime.week_day = BCD_HEX(cmos_read(CMOS_WEEK_DAY));	/**一周中当前天*/
+				ktime.day = BCD_HEX(cmos_read(CMOS_MON_DAY));			/**一月中当前日*/
+				ktime.month = BCD_HEX(cmos_read(CMOS_CUR_MON));			/**当前月*/
+				ktime.year = BCD_HEX(cmos_read(CMOS_CUR_YEAR));		/**当前年*/
+				ktime.century = BCD_HEX(cmos_read(CMOS_CUR_CEN));		/**当前世纪*/
 				/**CMOS中的年份仅仅是从本世纪开始到现在的绝对值，需要加上世纪*/
-				year += century * 100;
+				ktime.year += ktime.century * 100;
 			}else{
-				min ++;
+				ktime.mintus ++;
 			}
 		}else{
-			sec ++;
+			ktime.second ++;
 		}
 	}else{
-		ms ++;					/**微秒计时*/
+		ktime.ms ++;					/**微秒计时*/
 	}
 
 /**执行定时任务*/
@@ -113,7 +113,7 @@ void PIT_handle(void)
 		ptr = current_task;
 
 		/**循环判断是否有任务到时需要执行*/
-		while((ptr != NULL) && (ptr->time <= system_runtime))
+		while((ptr != NULL) && (ptr->time <= ktime.system_runtime))
 		{
 			/**执行定时任务*/
 			(*ptr->function)();
@@ -168,7 +168,7 @@ struct timer *settimer(void (*function)(void), unsigned long time, unsigned char
 
 	/**对定时任务结构体赋值*/
 	retval->time_size = time;
-	retval->time = time + system_runtime;
+	retval->time = time + ktime.system_runtime;
 	retval->state = state;
 	retval->function = function;
 

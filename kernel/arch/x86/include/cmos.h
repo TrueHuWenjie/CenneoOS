@@ -1,11 +1,6 @@
-/**
- * Copyright 2013-2015 by Explorer Developers.
- * made by Lab Explorer Developers<1@GhostBirdOS.org>
- * Explorer CMOS support Definition
- * Explorer/arch/x86/kernel/cmos.h
- * version:Aplha
- * 12/6/2014 8:58 PM
- */
+// Cenneo OS
+// /kernel/arch/x86/include/cmos.h
+// CMOS
 
 #ifndef CMOS_H_
 #define CMOS_H_
@@ -65,7 +60,7 @@ struct CMOS
 	unsigned char reserved_3[12];
 };
 
-// Get info from COMS
+// Get info from CMOS
 unsigned char cmos_read(unsigned char offset);
 
 #endif

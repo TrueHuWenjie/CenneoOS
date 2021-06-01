@@ -36,11 +36,11 @@ void window_refresh_date(void)
 	GUI_put_square(taskbar_layer, TASKBAR_COLOR, (vbe_info.xres - window_Date_length), 1, window_Date_length, TASKBAR_WIDTH - 1);			/**Date region*/
 
 	/**字符串格式转换*/
-	if (ms <= 500)					// 这里根据当前的微秒判断，以0.5秒为界限，小于0.5秒显示":"，大于0.5秒显示" "，可以达到一秒钟闪烁一次的效果
+	if (ktime.ms <= 500)			// 这里根据当前的微秒判断，以0.5秒为界限，小于0.5秒显示":"，大于0.5秒显示" "，可以达到一秒钟闪烁一次的效果
 	{
-		sprintf(date_buf, "%d:%02d %d/%d/%d", hour, min, mon, day, year);
+		sprintf(date_buf, "%d:%02d %d/%d/%d", ktime.hour, ktime.mintus, ktime.month, ktime.day, ktime.year);
 	}else{
-		sprintf(date_buf, "%d %02d %d/%d/%d", hour, min, mon, day, year);
+		sprintf(date_buf, "%d %02d %d/%d/%d", ktime.hour, ktime.mintus, ktime.month, ktime.day, ktime.year);
 	}
 
 	/**输出时间*/
