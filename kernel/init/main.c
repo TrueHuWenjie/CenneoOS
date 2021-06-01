@@ -47,8 +47,8 @@ void main(void)
 	// Time
 	init_time();
 
-	// Multi-task
-	init_mutitask();
+	// Multiple Process and Task
+	init_mpt();
 
 	// CPU
 	init_CPU();

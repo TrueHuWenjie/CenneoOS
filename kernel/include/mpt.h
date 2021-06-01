@@ -84,7 +84,7 @@ void add_queue(union thread *queue, union thread *task);
 extern unsigned long init_Kernel_Task(unsigned long stack, int (*function)(void *), void * argument);/*位于\arch\x86\kernel\task\init_stack.asm文件中*/
 
 /**初始化任务函数*/
-void init_mutitask(void);
+void init_mpt(void);
 
 /**创建内核任务线程函数*/
 union thread* task(int (*function)(), void *argument);

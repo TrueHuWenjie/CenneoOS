@@ -1,6 +1,6 @@
 // Cenneo OS
 // /kernel/multitask/task.c
-// Multiple process and task support
+// Multiple Process and Task support
 
 #include <kmm.h>
 #include <lib/mem.h>
@@ -50,7 +50,7 @@ int task_name(const char *name)
 }
 
 /**初始化任务管理*/
-void init_mutitask(void)
+void init_mpt(void)
 {
 	struct process_struct *process_0;
 
