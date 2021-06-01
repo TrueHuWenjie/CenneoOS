@@ -12,6 +12,7 @@
 #include<types.h>
 #include "time.h"
 #include "cmos.h"
+#include "../include/io.h"
 #include "../include/i8254.h"
 
 /**

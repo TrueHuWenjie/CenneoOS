@@ -20,6 +20,7 @@ Updates:
  */
 #include "../include/i8259.h"
 #include "../include/function.h"
+#include "../include/io.h"
 #include <types.h>
 
 /*8259初始化函数*/
