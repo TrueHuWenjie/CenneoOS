@@ -13,12 +13,17 @@
 #include <lib/mem.h>
 #include <lib/graphics.h>
 #include <info.h>
+#include <video.h>
 #include "layer.h"
 
 /**GUI根图层*/
 struct layer *layer_root = NULL;
-#define LAYER_ROOT_LENGTH	320
+#define LAYER_ROOT_LENGTH	240
 #define LAYER_ROOT_WIDTH	48
+
+// Info output
+#define GUI_INFO_BUF_LEN 64
+char buf[GUI_INFO_BUF_LEN];
 
 /**initialization GUI*/
 void init_GUI(void)
@@ -50,8 +55,9 @@ void init_GUI(void)
 	GUI_put_square(layer_root, 0x400000ff, 0, 0, LAYER_ROOT_LENGTH, LAYER_ROOT_WIDTH);
 
 	/**信息输出*/
-	GUI_put_string(layer_root, 0xffffffff, 0, 00, 0, 0, font("simsun"), "Explorer Graphical User Interface.");
-	GUI_put_string(layer_root, 0xffffffff, 0, 16, 0, 0, font("simsun"), "Kernel version:" KERNEL_VERSION);
+	sprintf(buf, "Resolution:%ldx%ld %ldbits", vbe_info.xres, vbe_info.yres, vbe_info.bpp);
+	GUI_put_string(layer_root, 0xffffffff, 0, 00, 0, 0, font("simsun"), "Graphical User Interface");
+	GUI_put_string(layer_root, 0xffffffff, 0, 16, 0, 0, font("simsun"), buf);
 	GUI_put_string(layer_root, 0xffffffff, 0, 32, 0, 0, font("simsun"), COPYRIGHT);
 
 	GUI_update(layer_root);
