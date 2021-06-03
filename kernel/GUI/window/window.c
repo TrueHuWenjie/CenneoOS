@@ -395,8 +395,8 @@ void init_taskbar(void)
 
 
 	/**绘制任务栏*/
-	gui_put_square(taskbar_layer, TASKBAR_COLOR, 0, 0, vbe_info.xres, 20);			/**任务区*/
-	gui_line(taskbar_layer, TASKBAR_LINE_COLOR, 0, 0, vbe_info.xres, 0);				/**边际线*/
+	gui_put_square(taskbar_layer, TASKBAR_COLOR, 0, 1, vbe_info.xres, 19);			/**任务区*/
+	gui_line(taskbar_layer, TASKBAR_LINE_COLOR, 0, 0, vbe_info.xres, 0);			/**边际线*/
 
 	/**设定定时器定时刷新时钟*/
 	settimer(&window_refresh_date, 500, 0);
