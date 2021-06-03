@@ -116,7 +116,8 @@ press:
 	if (attach_layer->visiable == true)
 	{
 		/**判断鼠标是否点击到附加图层区域*/
-		if ((mouse_x >= attach_layer->x) & (mouse_x < attach_layer->x + attach_layer->width) & (mouse_y >= attach_layer->y) & (mouse_y < attach_layer->y + attach_layer->height))
+		if ((mouse_x >= attach_layer->x) && (mouse_x < attach_layer->x + attach_layer->width) && \
+		(mouse_y >= attach_layer->y) && (mouse_y < attach_layer->y + attach_layer->height))
 		{
 			/**判断是否是Application在工作*/
 			if (Application_work_flag == true)
