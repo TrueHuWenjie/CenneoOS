@@ -230,6 +230,8 @@ void init_Window(void)
 	/**GUI控制台窗口*/
 	gui_control = gui_window("Explorer GUI Control", WINDOW_NORMAL, 0, 0, 480, 320);
 
+	gui_update(gui_control->layer);
+
 	/**加载背景*/
 	//task(&load_background, "WALLPAP2.BMP");
 
@@ -237,6 +239,9 @@ void init_Window(void)
 	new_window_2 = gui_window("Cenneo OS", WINDOW_NORMAL, 0, 0, 300, 300);
 	window_string(new_window_2, 0, 50, "Explorer 0.84 Window system testing...");
 	unit_new_button(new_window_2, 125, 200, 60, 25, "Button1");
+
+	// Update
+    gui_update(new_window_2->layer);
 }
 
 /**初始化附加图层函数*/
