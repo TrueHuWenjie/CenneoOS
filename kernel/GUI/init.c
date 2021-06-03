@@ -18,7 +18,7 @@
 
 /**GUI根图层*/
 struct layer *layer_root = NULL;
-#define LAYER_ROOT_LENGTH	240
+#define LAYER_ROOT_LENGTH	296
 #define LAYER_ROOT_WIDTH	48
 
 // Info output
