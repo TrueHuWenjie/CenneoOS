@@ -33,7 +33,7 @@ void window_refresh_date(void)
 	char date_buf[15];
 
 	/**重绘时钟区域*/
-	GUI_put_square(taskbar_layer, TASKBAR_COLOR, (vbe_info.xres - window_Date_length), 1, window_Date_length, TASKBAR_WIDTH - 1);			/**Date region*/
+	gui_put_square(taskbar_layer, TASKBAR_COLOR, (vbe_info.xres - window_Date_length), 1, window_Date_length, TASKBAR_WIDTH - 1);			/**Date region*/
 
 	/**字符串格式转换*/
 	if (ktime.ms <= 500)			// 这里根据当前的微秒判断，以0.5秒为界限，小于0.5秒显示":"，大于0.5秒显示" "，可以达到一秒钟闪烁一次的效果
@@ -44,9 +44,9 @@ void window_refresh_date(void)
 	}
 
 	/**输出时间*/
-	GUI_put_string(taskbar_layer, TIME_COLOR, (vbe_info.xres - window_Date_length), 4, 0, 0, font("Standard Font"), date_buf);
+	gui_put_string(taskbar_layer, TIME_COLOR, (vbe_info.xres - window_Date_length), 4, 0, 0, font("Standard Font"), date_buf);
 
-	GUI_update(taskbar_layer);
+	gui_update(taskbar_layer);
 }
 
 /**Menu的项描述体*/
@@ -77,7 +77,7 @@ struct window_menu_one window_menu_lib[WINDOW_NUM_MENU] =
 /**Menu的处理函数*/
 void window_menu_handle(unsigned int y)
 {
-	window_print(GUI_control, "Clicked:%s", window_menu_lib[y / 16].text);
+	window_print(gui_control, "Clicked:%s", window_menu_lib[y / 16].text);
 	run(window_menu_lib[y / 16].filename, NULL, 0);
 }
 
@@ -88,24 +88,24 @@ void window_show_menu(void)
 		attach_layer->visiable = true;
 
 		/**设置附加图层的位置在任务栏的左上方*/
-		GUI_set_position(attach_layer, 0, vbe_info.yres - (TASKBAR_WIDTH + WINDOW_MENU_WIDTH));
+		gui_set_position(attach_layer, 0, vbe_info.yres - (TASKBAR_WIDTH + WINDOW_MENU_WIDTH));
 
 		/**设置附加图层的长宽*/
-		GUI_set_resolution(attach_layer, WINDOW_MENU_LENGTH, WINDOW_MENU_WIDTH);
+		gui_set_resolution(attach_layer, WINDOW_MENU_LENGTH, WINDOW_MENU_WIDTH);
 
 		/**填充矩形*/
-		GUI_put_square(attach_layer, WINDOW_MENU_COLOR, 0, 1, WINDOW_MENU_LENGTH - 1, WINDOW_MENU_WIDTH - 2);
+		gui_put_square(attach_layer, WINDOW_MENU_COLOR, 0, 1, WINDOW_MENU_LENGTH - 1, WINDOW_MENU_WIDTH - 2);
 
 		/**绘制边际线*/
-		GUI_line(attach_layer, WINDOW_MENU_LINE_COLOR, 0, 0, WINDOW_MENU_LENGTH, 0);
-		GUI_line(attach_layer, WINDOW_MENU_LINE_COLOR, WINDOW_MENU_LENGTH - 1, 1, WINDOW_MENU_LENGTH - 1, WINDOW_MENU_WIDTH - 2);
+		gui_line(attach_layer, WINDOW_MENU_LINE_COLOR, 0, 0, WINDOW_MENU_LENGTH, 0);
+		gui_line(attach_layer, WINDOW_MENU_LINE_COLOR, WINDOW_MENU_LENGTH - 1, 1, WINDOW_MENU_LENGTH - 1, WINDOW_MENU_WIDTH - 2);
 
 		unsigned long y_count;
 
 		/**绘制全菜单信息*/
 		for (y_count = 0; y_count < WINDOW_NUM_MENU; y_count ++)
 		{
-			GUI_put_string(attach_layer, 0xff000000, 10, y_count * 16, 0, 0, font("Standard Font"), window_menu_lib[y_count].text);
+			gui_put_string(attach_layer, 0xff000000, 10, y_count * 16, 0, 0, font("Standard Font"), window_menu_lib[y_count].text);
 		}
 }
 
@@ -128,7 +128,7 @@ void window_click_Application(void)
 
 		/**Application隐藏起来*/
 		attach_layer->visiable = false;
-		GUI_refresh_block(attach_layer->x, attach_layer->y, attach_layer->width, attach_layer->height);
+		gui_refresh_block(attach_layer->x, attach_layer->y, attach_layer->width, attach_layer->height);
 
 	/**如果未被点击过*/
 	}else
@@ -148,8 +148,8 @@ void window_click_Application(void)
 void window_draw_Application(unsigned int backcolor, unsigned int fontcolor)
 {
 	/**绘制Application区*/
-	GUI_put_square(taskbar_layer, backcolor, 0, 1, window_Application_length, 19);
+	gui_put_square(taskbar_layer, backcolor, 0, 1, window_Application_length, 19);
 
 	/**写字*/
-	GUI_put_string(taskbar_layer, fontcolor, 4, 4, 0, 0, font("Standard Font"), "Application");
+	gui_put_string(taskbar_layer, fontcolor, 4, 4, 0, 0, font("Standard Font"), "Application");
 }

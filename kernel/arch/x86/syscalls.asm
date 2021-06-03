@@ -10,7 +10,7 @@
 
 global do_syscalls				; 系统调用处理函数
 extern printk					; 标准输入输出函数
-extern sys_GUI_API				; GUI API函数
+extern sys_gui_api				; GUI API函数
 extern sys_msg					; MSG API函数
 
 %define NUM_SYS_FUNCTION 32		; 最多功能数量
@@ -24,7 +24,7 @@ sys_function_list:
 	dd		sys_msg			; 2进程通信
 	dd		0				; 3文件系统
 	dd		0				; 4网络
-	dd		sys_GUI_API		; 5图形化用户界面
+	dd		sys_gui_api		; 5图形化用户界面
 .end	times (NUM_SYS_FUNCTION * 4) - (.end - sys_function_list) dd 0
 
 [section .text]

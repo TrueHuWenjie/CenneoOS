@@ -35,7 +35,7 @@ extern struct layer *attach_layer;
 extern struct layer *background_layer, *pointer_layer, *taskbar_layer;
 
 /**Explorer GUI 内部抽象图片结构*/
-struct GUI_image
+struct gui_image
 {
 	/**图片长、宽*/
 	unsigned long width, height;
@@ -47,7 +47,7 @@ struct GUI_image
 	unsigned long count;
 	
 	/**将一个窗口加载的多个图形资源串成一个单向链表，以便于图片的回收*/
-	struct GUI_image *next;
+	struct gui_image *next;
 };
 
 #endif

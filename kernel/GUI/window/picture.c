@@ -58,7 +58,7 @@ struct bmp_info_header
  * BMP格式图片加载函数
  * 成功返回0，不成功返回1
  */
-int *window_load_bmp(struct GUI_image *image, char *buffer)
+int *window_load_bmp(struct gui_image *image, char *buffer)
 {
 	/**写指针和读指针*/
 	unsigned long wptr, rptr;
@@ -75,7 +75,7 @@ int *window_load_bmp(struct GUI_image *image, char *buffer)
 	struct bmp_info_header *info_head = (struct bmp_info_header *) (buffer + sizeof(struct bmp_file_header));
 
 	/**输出信息*/
-	// window_print(GUI_control, "BMP size:%dByte,length:%d,width:%d,bpp:%d.", head->size, head->length, head->width, info_head->bpp);
+	// window_print(gui_control, "BMP size:%dByte,length:%d,width:%d,bpp:%d.", head->size, head->length, head->width, info_head->bpp);
 
 	/**获取数据区起始地址*/
 	bmp_data = buffer + head->bmp_data_offset;
@@ -149,7 +149,7 @@ union image_head_union
 };
 
 /**加载图片函数*/
-struct GUI_image *window_load_image(char *filename)
+struct gui_image *window_load_image(char *filename)
 {
 	/**文件信息结构体*/
 	file_info image_info;
@@ -161,7 +161,7 @@ struct GUI_image *window_load_image(char *filename)
 	union image_head_union *head_union;
 
 	/**返回的抽象图形结构指针*/
-	struct GUI_image *retval;
+	struct gui_image *retval;
 
 	/**获取文件信息*/
 	image_info = get_file_info(filename);
@@ -172,7 +172,7 @@ struct GUI_image *window_load_image(char *filename)
 
 	/**申请符合大小的抽象图形结构使用的内存*/
 	for (retval = NULL; retval == NULL; )
-		retval = kmalloc(sizeof(struct GUI_image), 0);
+		retval = kmalloc(sizeof(struct gui_image), 0);
 
 
 	/**加载图片文件*/
@@ -188,17 +188,17 @@ struct GUI_image *window_load_image(char *filename)
 		head_union->bmp_file_header.type[1] == 'M' )
 	{
 		/**是BMP图片*/
-		// window_print(GUI_control, "image type:Microsoft Windows BMP Image");
+		// window_print(gui_control, "image type:Microsoft Windows BMP Image");
 
 		/**调用BMP图片加载函数*/
 		window_load_bmp(retval, buffer);
 
 		/**释放缓冲区*/
 		vfree(buffer);
-		// window_print(GUI_control, "GUI image length:%d,width:%d,data:%#X", retval->length, retval->width, retval->data);
+		// window_print(gui_control, "GUI image length:%d,width:%d,data:%#X", retval->length, retval->width, retval->data);
 	}else{
 		/**其他格式文件*/
-		// window_print(GUI_control, "Unkown Format.");
+		// window_print(gui_control, "Unkown Format.");
 
 		/**释放相关结构占用的内存、文件占用的缓存*/
 		vfree(buffer);
@@ -213,7 +213,7 @@ struct GUI_image *window_load_image(char *filename)
 }
 
 /**释放图片资源函数*/
-void free_image(struct GUI_image *image)
+void free_image(struct gui_image *image)
 {
 	/**判断是否需要释放*/
 	if (image->data == NULL) return;

@@ -16,7 +16,7 @@
 #include "window/unit.h"
 
 /**创建新图层函数*/
-struct layer *GUI_new_layer(long x, long y, unsigned long width, unsigned long height)
+struct layer *gui_new_layer(long x, long y, unsigned long width, unsigned long height)
 {
 	struct layer *new_layer;
 
@@ -37,10 +37,10 @@ struct layer *GUI_new_layer(long x, long y, unsigned long width, unsigned long h
 	layer_root->top = new_layer;
 
 	/**设置图层位置*/
-	GUI_set_position(new_layer, x, y);
+	gui_set_position(new_layer, x, y);
 
 	/**设置图层分尺寸*/
-	GUI_set_resolution(new_layer, width, height);
+	gui_set_resolution(new_layer, width, height);
 
 	/**正常返回*/
 	return new_layer;
@@ -51,7 +51,7 @@ struct layer *GUI_new_layer(long x, long y, unsigned long width, unsigned long h
  * 该函数不可释放根图层！
  * 返回值：0 - 释放成功，1 - 释放失败
  */
-int GUI_free_layer(struct layer *target)
+int gui_free_layer(struct layer *target)
 {
 	/**判断要释放的图层是否是根图层*/
 	if (target == layer_root) return -1;
@@ -82,7 +82,7 @@ int GUI_free_layer(struct layer *target)
 	target->bottom->top = target->top;
 
 	/**局部刷新*/
-	GUI_refresh_block(target->x, target->y, target->width, target->height);
+	gui_refresh_block(target->x, target->y, target->width, target->height);
 
 	/**释放图层资源*/
 	kfree(target);
@@ -98,7 +98,7 @@ int GUI_free_layer(struct layer *target)
  * 返回值 = 1：根图层(无意义)
  * 返回值为其他值时，代表正常返回，成功改变
  */
-unsigned long GUI_set_height(struct layer *target, unsigned long int height)
+unsigned long gui_set_height(struct layer *target, unsigned long int height)
 {
 	unsigned long total = 0, retval;
 	struct layer *layer = layer_root;
@@ -153,7 +153,7 @@ unsigned long GUI_set_height(struct layer *target, unsigned long int height)
 /**获取图层高度函数
  * 返回值 = 0：获取失败(无该图层)
  */
-unsigned long GUI_get_height(struct layer *target)
+unsigned long gui_get_height(struct layer *target)
 {
 	unsigned long retval = 0;
 	struct layer *layer;
@@ -178,7 +178,7 @@ unsigned long GUI_get_height(struct layer *target)
 }
 
 /*change the position of the layer*/
-long int GUI_set_position(struct layer *layer, long x, long y)
+long int gui_set_position(struct layer *layer, long x, long y)
 {
 	/**先保存旧的坐标信息*/
 	long old_x = layer->x, old_y = layer->y;
@@ -206,13 +206,13 @@ long int GUI_set_position(struct layer *layer, long x, long y)
 			if (y < (old_y + layer->height))
 			{
 				/**一体刷新*/
-				GUI_refresh_block(old_x, old_y, layer->width, ((y - old_y) + layer->height));
+				gui_refresh_block(old_x, old_y, layer->width, ((y - old_y) + layer->height));
 
 			/**无重叠的情况*/
 			}else{
 				/**分别刷新*/
-				GUI_refresh_block(old_x, old_y, layer->width, layer->height);
-				GUI_refresh_block(x, y, layer->width, layer->height);
+				gui_refresh_block(old_x, old_y, layer->width, layer->height);
+				gui_refresh_block(x, y, layer->width, layer->height);
 			}
 
 		/**老区域在下边*/
@@ -223,24 +223,24 @@ long int GUI_set_position(struct layer *layer, long x, long y)
 			if (old_y < (y + layer->height))
 			{
 				/**一体刷新*/
-				GUI_refresh_block(x, y, layer->width, ((old_y - y) + layer->height));
+				gui_refresh_block(x, y, layer->width, ((old_y - y) + layer->height));
 
 			/**无重叠的情况*/
 			}else{
 				/**分别刷新*/
-				GUI_refresh_block(old_x, old_y, layer->width, layer->height);
-				GUI_refresh_block(x, y, layer->width, layer->height);
+				gui_refresh_block(old_x, old_y, layer->width, layer->height);
+				gui_refresh_block(x, y, layer->width, layer->height);
 			}
 		}
 	}else{
 		/**刷新相关区域*/
-		GUI_refresh_block(old_x, old_y, layer->width, layer->height);
-		GUI_refresh_block(x, y, layer->width, layer->height);
+		gui_refresh_block(old_x, old_y, layer->width, layer->height);
+		gui_refresh_block(x, y, layer->width, layer->height);
 	}
 }
 
 /*change the resolution of the layer*/
-long int GUI_set_resolution(struct layer *layer, unsigned long width, unsigned long height)
+long int gui_set_resolution(struct layer *layer, unsigned long width, unsigned long height)
 {
 	unsigned long ptr;
 
@@ -273,7 +273,7 @@ clean:
  * 图层贴图函数
  * 向layer图层以flag方式在位置(x,y)贴上图片(在length和width范围之内贴图)
  */
-long int GUI_map(struct layer *layer, struct GUI_image *image, unsigned long x, unsigned long y, unsigned long width, unsigned long height, int flag)
+long int gui_map(struct layer *layer, struct gui_image *image, unsigned long x, unsigned long y, unsigned long width, unsigned long height, int flag)
 {
 	unsigned int *data = image->data;
 	unsigned long offset_x, offset_y;
@@ -310,5 +310,5 @@ long int GUI_map(struct layer *layer, struct GUI_image *image, unsigned long x, 
 	}
 
 	/**对图层块刷新*/
-	GUI_refresh_block(layer->x, layer->y, layer->width, layer->height);
+	gui_refresh_block(layer->x, layer->y, layer->width, layer->height);
 }

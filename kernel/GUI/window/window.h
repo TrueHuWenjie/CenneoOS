@@ -32,7 +32,7 @@ extern unsigned long window_Date_length;
 #define TIME_COLOR			0xff000000
 
 /**GUI控制台窗口*/
-struct window *GUI_control;
+struct window *gui_control;
 
 /**窗口结构体辨识特殊数*/
 #define WINDOW_IDENT	11262
@@ -69,7 +69,7 @@ struct window{
 };
 
 /**加载图片函数*/
-struct GUI_image *window_load_image(char *filename);
+struct gui_image *window_load_image(char *filename);
 
 /**初始化窗口系统*/
 void init_Window(void);
@@ -80,7 +80,7 @@ void init_Window(void);
  * 当x = 0且y = 0时，窗口会创建在最中间
  * 窗口中有效内容尺寸为length*width
  */
-struct window *GUI_window(char *title, char style, unsigned long x, unsigned long y, unsigned long width, unsigned long height);
+struct window *gui_window(char *title, char style, unsigned long x, unsigned long y, unsigned long width, unsigned long height);
 
 /**纠正绘制参数函数
  * 窗体有无边框、边框风格不同时

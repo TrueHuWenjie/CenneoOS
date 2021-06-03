@@ -48,10 +48,10 @@ struct window *new_window_2;
 struct window *drag_window = NULL;
 unsigned long drag_x, drag_y;
 
-union thread *task_GUI_mouse_handle;
+union thread *task_gui_mouse_handle;
 
 /**鼠标光标点阵图转化成Explorer GUI 内部抽象图片结构*/
-struct GUI_image pointer_recourse =
+struct gui_image pointer_recourse =
 {
 	.width = 12,
 	.height = 20,
@@ -61,7 +61,7 @@ struct GUI_image pointer_recourse =
 };
 
 /**窗口相关资源*/
-struct GUI_image *close_f_button, *close_p_button, *mini_f_button, *mini_p_button;
+struct gui_image *close_f_button, *close_p_button, *mini_f_button, *mini_p_button;
 
 /**鼠标消息的处理函数*/
 bool mouse_press = false;
@@ -215,10 +215,10 @@ void init_Window(void)
 	/**初始化任务栏*/
 	init_taskbar();
 
-	task_GUI_mouse_handle = task(&GUI_mouse_handle, NULL);
+	task_gui_mouse_handle = task(&GUI_mouse_handle, NULL);
 
 	/**注册鼠标侦听*/
-	set_mouse_interception(task_GUI_mouse_handle);
+	set_mouse_interception(task_gui_mouse_handle);
 
 	/**加载相关资源*/
 	// close_f_button = window_load_image("CLOSE_F_.BMP");
@@ -227,13 +227,13 @@ void init_Window(void)
 	// mini_p_button = window_load_image("MINI_P_.BMP");
 
 	/**GUI控制台窗口*/
-	GUI_control = GUI_window("Explorer GUI Control", WINDOW_NORMAL, 0, 0, 480, 320);
+	gui_control = gui_window("Explorer GUI Control", WINDOW_NORMAL, 0, 0, 480, 320);
 
 	/**加载背景*/
 	//task(&load_background, "WALLPAP2.BMP");
 
 	/**窗口测试*/
-	new_window_2 = GUI_window("Cenneo OS", WINDOW_NORMAL, 0, 0, 300, 300);
+	new_window_2 = gui_window("Cenneo OS", WINDOW_NORMAL, 0, 0, 300, 300);
 	window_string(new_window_2, 0, 50, "Explorer 0.84 Window system testing...");
 	unit_new_button(new_window_2, 125, 200, 60, 25, "Button1");
 }
@@ -243,7 +243,7 @@ void init_attach_layer(void)
 {
 	/**创建附加图层*/
 	for (attach_layer = NULL; attach_layer == NULL;)
-		attach_layer = GUI_new_layer(0, 0, 8, 8);
+		attach_layer = gui_new_layer(0, 0, 8, 8);
 
 	/**将该附加图层隐藏起来*/
 	attach_layer->visiable = false;
@@ -260,7 +260,7 @@ void init_attach_layer(void)
 }
 
 /**背景资源*/
-struct GUI_image *wallpaper;
+struct gui_image *wallpaper;
 
 /**加载图片线程
  * filename是要加载的背景文件
@@ -273,7 +273,7 @@ int load_background(void *filename)
 	wallpaper = window_load_image(filename);
 
 	/**映射图片*/
-	GUI_map(background_layer, wallpaper, 0, 0, 0, 0, 0);
+	gui_map(background_layer, wallpaper, 0, 0, 0, 0, 0);
 }
 
 
@@ -282,19 +282,19 @@ void init_background(void)
 {
 	/*initialization picture layer*/
 	for (background_layer = NULL; background_layer == NULL;)
-		background_layer = GUI_new_layer(0, 0, vbe_info.xres, vbe_info.yres);
+		background_layer = gui_new_layer(0, 0, vbe_info.xres, vbe_info.yres);
 
 	/**相关参数设置*/
 	background_layer->visiable = true;
 
 	/**填充灰色*/
-	GUI_put_square(background_layer, 0xffa0a0a0, 0, 0, vbe_info.xres, vbe_info.yres);
-	//GUI_put_square(background_layer, 0x80ffffff, 0, 0, 800, 600);
+	gui_put_square(background_layer, 0xffa0a0a0, 0, 0, vbe_info.xres, vbe_info.yres);
+	//gui_put_square(background_layer, 0x80ffffff, 0, 0, 800, 600);
 
 	/**加载图片*/
 	// task(&load_background, "BACKDROP.PIC");
 
-	GUI_update(background_layer);
+	gui_update(background_layer);
 }
 
 /**软系数，用来确定软鼠标的跟随灵敏度
@@ -333,11 +333,11 @@ void refresh_pointer(void)
 		/**判断是否在拖拽状态*/
 		if (drag_window != NULL){
 			/**设置窗口坐标，因为窗口通常大于鼠标，所以窗口先移动，再移动鼠标，得出最好效果*/
-			GUI_set_position(drag_window->layer, drag_x + mouse_x, drag_y + mouse_y);
+			gui_set_position(drag_window->layer, drag_x + mouse_x, drag_y + mouse_y);
 		}
 
 		/**设置鼠标的坐标*/
-		GUI_set_position(pointer_layer,
+		gui_set_position(pointer_layer,
 			(((mouse_x - pointer_layer->x) / MOUSE_SOFT_INDEX) + pointer_layer->x),
 			(((mouse_y - pointer_layer->y) / MOUSE_SOFT_INDEX) + pointer_layer->y));
 }
@@ -347,7 +347,7 @@ void init_pointer(void)
 {
 	/**创建个新图层*/
 	for (pointer_layer = NULL; pointer_layer == NULL;)
-		pointer_layer = GUI_new_layer((vbe_info.xres / 2), (vbe_info.yres / 2), 12, 20);
+		pointer_layer = gui_new_layer((vbe_info.xres / 2), (vbe_info.yres / 2), 12, 20);
 
 	/**从图层链表中脱离出来*/
 	pointer_layer->top->bottom = pointer_layer->bottom;
@@ -360,7 +360,7 @@ void init_pointer(void)
 	pointer_layer->bottom->top = pointer_layer;
 
 	/**将光标点阵图映射到图层上*/
-	GUI_map(pointer_layer, &pointer_recourse, 0, 0, pointer_layer->width, pointer_layer->height, 0);
+	gui_map(pointer_layer, &pointer_recourse, 0, 0, pointer_layer->width, pointer_layer->height, 0);
 
 	/**使图层可以看到*/
 	pointer_layer->visiable = true;
@@ -377,7 +377,7 @@ void init_taskbar(void)
 {
 	/**初始化任务栏图层*/
 	for (taskbar_layer = NULL; taskbar_layer == NULL;)
-		taskbar_layer = GUI_new_layer(0, vbe_info.yres - 20, vbe_info.xres, 20);
+		taskbar_layer = gui_new_layer(0, vbe_info.yres - 20, vbe_info.xres, 20);
 
 	/**将任务栏图层从图层链表中脱离出来*/
 	taskbar_layer->top->bottom = taskbar_layer->bottom;
@@ -394,8 +394,8 @@ void init_taskbar(void)
 
 
 	/**绘制任务栏*/
-	GUI_put_square(taskbar_layer, TASKBAR_COLOR, 0, 0, vbe_info.xres, 20);			/**任务区*/
-	GUI_line(taskbar_layer, TASKBAR_LINE_COLOR, 0, 0, vbe_info.xres, 0);				/**边际线*/
+	gui_put_square(taskbar_layer, TASKBAR_COLOR, 0, 0, vbe_info.xres, 20);			/**任务区*/
+	gui_line(taskbar_layer, TASKBAR_LINE_COLOR, 0, 0, vbe_info.xres, 0);				/**边际线*/
 
 	/**设定定时器定时刷新时钟*/
 	settimer(&window_refresh_date, 500, 0);
@@ -406,7 +406,7 @@ void init_taskbar(void)
 	/**显示Application*/
 	window_draw_Application(TASKBAR_COLOR, 0xff000000);
 
-	GUI_update(taskbar_layer);
+	gui_update(taskbar_layer);
 }
 
 /**绘制窗体边框函数*/
@@ -416,18 +416,18 @@ void window_draw(struct window *target, unsigned int title_color, unsigned int f
 	if (target->style != WINDOW_NORMAL) return;
 
 	/**绘制窗体边框*/
-	GUI_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, 0, target->length - (close_f_button->width + mini_f_button->width), WINDOW_NORMAL_HEADER_WIDTH);
-	// GUI_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, 0, target->length, WINDOW_NORMAL_HEADER_WIDTH);
+	gui_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, 0, target->length - (close_f_button->width + mini_f_button->width), WINDOW_NORMAL_HEADER_WIDTH);
+	// gui_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, 0, target->length, WINDOW_NORMAL_HEADER_WIDTH);
 
 	/**左右边框*/
-	GUI_put_square(target->layer, frame_color, 0, 0, WINDOW_NORMAL_FRAME_WIDTH, target->layer->height);
-	GUI_put_square(target->layer, frame_color, target->layer->width - WINDOW_NORMAL_FRAME_WIDTH, 0, WINDOW_NORMAL_FRAME_WIDTH, target->layer->height);
+	gui_put_square(target->layer, frame_color, 0, 0, WINDOW_NORMAL_FRAME_WIDTH, target->layer->height);
+	gui_put_square(target->layer, frame_color, target->layer->width - WINDOW_NORMAL_FRAME_WIDTH, 0, WINDOW_NORMAL_FRAME_WIDTH, target->layer->height);
 
 	/**下边框*/
-	GUI_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, target->layer->height - WINDOW_NORMAL_FRAME_WIDTH, target->length, WINDOW_NORMAL_FRAME_WIDTH);
+	gui_put_square(target->layer, frame_color, WINDOW_NORMAL_FRAME_WIDTH, target->layer->height - WINDOW_NORMAL_FRAME_WIDTH, target->length, WINDOW_NORMAL_FRAME_WIDTH);
 
 	/**窗体标题*/
-	GUI_put_string(target->layer, title_color, 5, 8, 0, 0, font("simsun"), target->title);
+	gui_put_string(target->layer, title_color, 5, 8, 0, 0, font("simsun"), target->title);
 }
 
 /**活动窗口指针*/
@@ -465,7 +465,7 @@ void window_set_active(struct window *target)
 			target->layer->bottom->top = target->layer;
 
 			/**这里没有依据风格判断实际上有效的部分，在后期需要改正*/
-			GUI_refresh_block(target->layer->x, target->layer->y, target->layer->width, target->layer->height);
+			gui_refresh_block(target->layer->x, target->layer->y, target->layer->width, target->layer->height);
 		}
 
 		/**将新窗口绘制成活动窗口*/

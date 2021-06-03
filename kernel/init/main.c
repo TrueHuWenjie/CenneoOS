@@ -73,7 +73,7 @@ void main(void)
 	init_FAT32();
 
 	// Graphical User Interface
-	init_GUI();
+	init_gui();
 
 	// Operating System Moniter
 	extern int osm_open(void);

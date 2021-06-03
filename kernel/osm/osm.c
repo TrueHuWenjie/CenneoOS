@@ -25,7 +25,7 @@ void osm_display(void)
     static union thread *entry;
     float usage;
 
-    GUI_put_square(layer, 0xffd1eeee, 245, 32, 240, 320);
+    gui_put_square(layer, 0xffd1eeee, 245, 32, 240, 320);
 
     // All the strings
     window_string(osm_win, 8, 8, "Performance:");
@@ -34,7 +34,7 @@ void osm_display(void)
     "Name        Status  CPU  tid");
     window_string(osm_win, 8, 32, "Memory:");
     window_string(osm_win, 8, (OSM_WIN_HEIGHT / 2) + 8, "CPU:");
-    GUI_put_square(layer, 0xffffffff, 13, 164, 213, 32);
+    gui_put_square(layer, 0xffffffff, 13, 164, 213, 32);
     sprintf(buf, "user:%.1fMB", 0.0);
     window_string(osm_win, 8, 132, buf);
     sprintf(buf, "kernel:%.1fMB", 256.0 - ((double)kmm_info_free() / 1048576.0));
@@ -43,20 +43,20 @@ void osm_display(void)
     window_string(osm_win, 124, 132, buf);
 
     // Memory usage
-    GUI_put_square(layer, 0xdd8470ff, 20, 96, 200 - \
+    gui_put_square(layer, 0xdd8470ff, 20, 96, 200 - \
         (200 * pmb_info_free() / pmb_info_total()), 60);
-    GUI_put_square(layer, 0x80000000, 220 - (200 * pmb_info_free() / \
+    gui_put_square(layer, 0x80000000, 220 - (200 * pmb_info_free() / \
     pmb_info_total()), 96, 200 * pmb_info_free() / pmb_info_total(), 60);
-    GUI_line(layer, 0xff191970, 20, 96, 220, 96);
-    GUI_line(layer, 0xff191970, 20, 156, 220, 156);
-    GUI_line(layer, 0xff191970, 20, 96, 20, 156);
-    GUI_line(layer, 0xff191970, 220, 96, 220, 157);
+    gui_line(layer, 0xff191970, 20, 96, 220, 96);
+    gui_line(layer, 0xff191970, 20, 156, 220, 156);
+    gui_line(layer, 0xff191970, 20, 96, 20, 156);
+    gui_line(layer, 0xff191970, 220, 96, 220, 157);
 
     // CPU usage
-    GUI_line(layer, 0xff191970, 20, 246, 220, 246);
-    GUI_line(layer, 0xff191970, 20, 306, 220, 306);
-    GUI_line(layer, 0xff191970, 20, 246, 20, 306);
-    GUI_line(layer, 0xff191970, 220, 246, 220, 307);
+    gui_line(layer, 0xff191970, 20, 246, 220, 246);
+    gui_line(layer, 0xff191970, 20, 306, 220, 306);
+    gui_line(layer, 0xff191970, 20, 246, 20, 306);
+    gui_line(layer, 0xff191970, 220, 246, 220, 307);
 
     // Thread info
     entry = current;
@@ -86,7 +86,7 @@ void osm_display(void)
     }
 
     // Update
-    GUI_update(layer);
+    gui_update(layer);
 }
 
 void osm_update(void)
@@ -117,7 +117,7 @@ int osm_open(void)
     task_name("OS Moniter");
 
     // Create window
-    osm_win = GUI_window("Operating System Moniter", WINDOW_NORMAL, 0, 0, \
+    osm_win = gui_window("Operating System Moniter", WINDOW_NORMAL, 0, 0, \
     OSM_WIN_WIDTH, OSM_WIN_HEIGHT);
 
 

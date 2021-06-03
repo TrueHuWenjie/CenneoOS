@@ -15,9 +15,9 @@
 #include "layer.h"
 
 // Update a whole layer
-void GUI_update(struct layer *target)
+void gui_update(struct layer *target)
 {
-	GUI_refresh_block(target->x, target->y, target->width, target->height);
+	gui_refresh_block(target->x, target->y, target->width, target->height);
 }
 
 
@@ -26,7 +26,7 @@ void GUI_update(struct layer *target)
  * 该函数为通用函数，仅为兼容性考虑。
  * 在具体平台上建议用相应的汇编语言实现该函数以获得最大效能
  */
-long inline int GUI_refresh_pixel(unsigned long int x, unsigned long int y)
+long inline int gui_refresh_pixel(unsigned long int x, unsigned long int y)
 {
 	unsigned int new_color;
 	unsigned char alpha = 0xff, alpha_cal = 0xff, red = 0, green = 0, blue = 0;
@@ -39,7 +39,7 @@ long inline int GUI_refresh_pixel(unsigned long int x, unsigned long int y)
 		if (layer->visiable == true)
 		{
 			/**获取图层的该位置像素颜色*/
-			new_color = GUI_get_pixel(layer, x - layer->x, y - layer->y);
+			new_color = gui_get_pixel(layer, x - layer->x, y - layer->y);
 
 			/**获取透明度*/
 			alpha = (alpha_cal * (new_color >> 24)) / 0xff;
@@ -70,7 +70,7 @@ long inline int GUI_refresh_pixel(unsigned long int x, unsigned long int y)
 }
 
 /**GUI块刷新函数*/
-void GUI_refresh_block(long x, long y, unsigned long width, unsigned long height)
+void gui_refresh_block(long x, long y, unsigned long width, unsigned long height)
 {
 	unsigned long offset_x, offset_y;
 
@@ -81,20 +81,20 @@ void GUI_refresh_block(long x, long y, unsigned long width, unsigned long height
 		for (offset_x = 0; offset_x < width; offset_x ++)
 		{
 			/**刷新像素*/
-			GUI_refresh_pixel(x + offset_x, y + offset_y);
+			gui_refresh_pixel(x + offset_x, y + offset_y);
 		}
 	}
 }
 
 /*refresh all the layer_control*/
-long int GUI_refresh(void)
+long int gui_refresh(void)
 {
 	unsigned long x, y;
 	for (x = 0; x < vbe_info.xres; x ++)
 	{
 		for (y = 0; y < vbe_info.yres; y ++)
 		{
-			GUI_refresh_pixel(x, y);
+			gui_refresh_pixel(x, y);
 		}
 	}
 }

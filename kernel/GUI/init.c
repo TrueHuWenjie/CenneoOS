@@ -26,7 +26,7 @@ struct layer *layer_root = NULL;
 char buf[GUI_INFO_BUF_LEN];
 
 /**initialization GUI*/
-void init_GUI(void)
+void init_gui(void)
 {
 	// Close kvi
 	kvi_disable();
@@ -52,15 +52,15 @@ void init_GUI(void)
 	layer_root->winptr = NULL;
 
 	/**填充矩形*/
-	GUI_put_square(layer_root, 0x400000ff, 0, 0, LAYER_ROOT_LENGTH, LAYER_ROOT_WIDTH);
+	gui_put_square(layer_root, 0x400000ff, 0, 0, LAYER_ROOT_LENGTH, LAYER_ROOT_WIDTH);
 
 	/**信息输出*/
 	sprintf(buf, "Resolution:%ldx%ld %ldbits", vbe_info.xres, vbe_info.yres, vbe_info.bpp);
-	GUI_put_string(layer_root, 0xffffffff, 0, 00, 0, 0, font("simsun"), "Graphical User Interface");
-	GUI_put_string(layer_root, 0xffffffff, 0, 16, 0, 0, font("simsun"), buf);
-	GUI_put_string(layer_root, 0xffffffff, 0, 32, 0, 0, font("simsun"), COPYRIGHT);
+	gui_put_string(layer_root, 0xffffffff, 0, 00, 0, 0, font("simsun"), "Graphical User Interface");
+	gui_put_string(layer_root, 0xffffffff, 0, 16, 0, 0, font("simsun"), buf);
+	gui_put_string(layer_root, 0xffffffff, 0, 32, 0, 0, font("simsun"), COPYRIGHT);
 
-	GUI_update(layer_root);
+	gui_update(layer_root);
 
 	/**This function in window.c*/
 	init_Window();

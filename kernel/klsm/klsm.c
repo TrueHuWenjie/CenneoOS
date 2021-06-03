@@ -17,7 +17,7 @@ int klsm_open(void)
     task_name("Kernel Log System Moniter");
 
     // Create window
-    klsm_win = GUI_window("Kernel Log System Moniter", WINDOW_NORMAL, 0, 0, \
+    klsm_win = gui_window("Kernel Log System Moniter", WINDOW_NORMAL, 0, 0, \
     KLSM_WIN_WIDTH, KLSM_WIN_HEIGHT);
 
 

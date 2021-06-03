@@ -15,7 +15,7 @@
 #define NEW_WINDOW	1
 
 /**GUI API调用函数*/
-void sys_GUI_API(struct context context)
+void sys_gui_api(struct context context)
 {
 	/**不允许调度*/
 	disable_schedule();
@@ -35,7 +35,7 @@ void sys_GUI_API(struct context context)
 new_window:
 
 	/**调用程序*/
-	context.eax = (int) GUI_window((char *)context.ecx, context.edx,0 , 0, context.esi, context.edi);
+	context.eax = (int) gui_window((char *)context.ecx, context.edx,0 , 0, context.esi, context.edi);
 	goto finish;
 	
 /**结束系统调用*/

@@ -30,7 +30,7 @@
  * 当x = 0且y = 0时，窗口会创建在最中间
  * 窗口中有效内容尺寸为length*width
  */
-struct window *GUI_window(char *title, char style, unsigned long x, unsigned long y, unsigned long width, unsigned long height)
+struct window *gui_window(char *title, char style, unsigned long x, unsigned long y, unsigned long width, unsigned long height)
 {
 	unsigned long real_width, real_height;
 	/**根据不同的风格，进行不同的初始化*/
@@ -85,7 +85,7 @@ struct window *GUI_window(char *title, char style, unsigned long x, unsigned lon
 	}
 
 	/**创建、初始化图层*/
-	new_window->layer = GUI_new_layer(x, y, real_width, real_height);
+	new_window->layer = gui_new_layer(x, y, real_width, real_height);
 
 	/**将该图层从图层链表中脱离*/
 	new_window->layer->top->bottom = new_window->layer->bottom;
@@ -107,7 +107,7 @@ struct window *GUI_window(char *title, char style, unsigned long x, unsigned lon
 	if (style == WINDOW_NONE)
 	{
 		/**无边框*/
-		GUI_put_square(new_window->layer, 0xffffffff, 0, 0, width, height);
+		gui_put_square(new_window->layer, 0xffffffff, 0, 0, width, height);
 
 	/**判断是不是正常风格*/
 	}else if (style == WINDOW_NORMAL)
@@ -116,15 +116,15 @@ struct window *GUI_window(char *title, char style, unsigned long x, unsigned lon
 		window_set_active(new_window);
 
 		/**绘制按钮*/
-		GUI_map(new_window->layer, close_f_button, new_window->layer->width - close_f_button->width - WINDOW_NORMAL_FRAME_WIDTH, 0, 0, 0, 0);
-		GUI_map(new_window->layer, mini_f_button, new_window->layer->width - (close_f_button->width + mini_f_button->width) - WINDOW_NORMAL_FRAME_WIDTH, 0, 0, 0, 0);
+		gui_map(new_window->layer, close_f_button, new_window->layer->width - close_f_button->width - WINDOW_NORMAL_FRAME_WIDTH, 0, 0, 0, 0);
+		gui_map(new_window->layer, mini_f_button, new_window->layer->width - (close_f_button->width + mini_f_button->width) - WINDOW_NORMAL_FRAME_WIDTH, 0, 0, 0, 0);
 
 		// /**建立单元*/
-		GUI_new_unit(new_window->layer, UNIT_CLOSE, new_window->layer->width - close_f_button->width - WINDOW_NORMAL_FRAME_WIDTH, 0, close_f_button->width, close_f_button->height);
-		GUI_new_unit(new_window->layer, UNIT_MINI, new_window->layer->width - (close_f_button->width + mini_f_button->width) - WINDOW_NORMAL_FRAME_WIDTH, 0, mini_f_button->width, mini_f_button->height);
+		gui_new_unit(new_window->layer, UNIT_CLOSE, new_window->layer->width - close_f_button->width - WINDOW_NORMAL_FRAME_WIDTH, 0, close_f_button->width, close_f_button->height);
+		gui_new_unit(new_window->layer, UNIT_MINI, new_window->layer->width - (close_f_button->width + mini_f_button->width) - WINDOW_NORMAL_FRAME_WIDTH, 0, mini_f_button->width, mini_f_button->height);
 
 		/**主体*/
-		GUI_put_square(new_window->layer, 0xffffffff, WINDOW_NORMAL_FRAME_WIDTH, WINDOW_NORMAL_HEADER_WIDTH, width, height);
+		gui_put_square(new_window->layer, 0xffffffff, WINDOW_NORMAL_FRAME_WIDTH, WINDOW_NORMAL_HEADER_WIDTH, width, height);
 	}
 
 	/**返回新窗口的指针*/
@@ -132,10 +132,10 @@ struct window *GUI_window(char *title, char style, unsigned long x, unsigned lon
 }
 
 /**释放窗口函数*/
-void GUI_free_window(struct window *target)
+void gui_free_window(struct window *target)
 {
 	/**释放窗口使用的图层资源*/
-	GUI_free_layer(target->layer);
+	gui_free_layer(target->layer);
 
 	/**释放窗口*/
 	kfree(target);
@@ -178,7 +178,7 @@ void window_string(struct window *target, unsigned long x, unsigned long y, char
 	correct_para(target, &x, &y, &length, &width);
 
 	/**输出字符串*/
-	GUI_put_string(target->layer, 0xff000000, x, y, length, width, font("Standard Font"), s);
+	gui_put_string(target->layer, 0xff000000, x, y, length, width, font("Standard Font"), s);
 }
 
 /**窗口信息输出函数*/

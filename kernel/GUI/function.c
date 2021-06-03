@@ -13,18 +13,18 @@
 #include "layer.h"
 
 /**在指定图层的指定位置显示一个字符串*/
-void GUI_put_string(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height, struct font_info *font_info, const char *string)
+void gui_put_string(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height, struct font_info *font_info, const char *string)
 {
 	while (*string != 0x00)
 	{
-		GUI_put_word(layer, color, x, y, width, height, font_info, *string);
+		gui_put_word(layer, color, x, y, width, height, font_info, *string);
 		string ++;
 		x += font_info->length;
 	}
 }
 
 /**put word to layer*/
-void GUI_put_word(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height, struct font_info *font_info, unsigned char ascii)
+void gui_put_word(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height, struct font_info *font_info, unsigned char ascii)
 {
 	unsigned long p, i, font_offset;/*offset in font*/
 	unsigned char d;
@@ -35,19 +35,19 @@ void GUI_put_word(struct layer *layer, unsigned int color, unsigned long x, unsi
 		d = font_info->addr[font_offset + i];
 		
 		/**对每行点阵进行逻辑计算后判断*/
-		if ((d & 0x80) != 0) { GUI_put_pixel(layer, color, x + 0, y + i, width, height); }
-		if ((d & 0x40) != 0) { GUI_put_pixel(layer, color, x + 1, y + i, width, height); }
-		if ((d & 0x20) != 0) { GUI_put_pixel(layer, color, x + 2, y + i, width, height); }
-		if ((d & 0x10) != 0) { GUI_put_pixel(layer, color, x + 3, y + i, width, height); }
-		if ((d & 0x08) != 0) { GUI_put_pixel(layer, color, x + 4, y + i, width, height); }
-		if ((d & 0x04) != 0) { GUI_put_pixel(layer, color, x + 5, y + i, width, height); }
-		if ((d & 0x02) != 0) { GUI_put_pixel(layer, color, x + 6, y + i, width, height); }
-		if ((d & 0x01) != 0) { GUI_put_pixel(layer, color, x + 7, y + i, width, height); }
+		if ((d & 0x80) != 0) { gui_put_pixel(layer, color, x + 0, y + i, width, height); }
+		if ((d & 0x40) != 0) { gui_put_pixel(layer, color, x + 1, y + i, width, height); }
+		if ((d & 0x20) != 0) { gui_put_pixel(layer, color, x + 2, y + i, width, height); }
+		if ((d & 0x10) != 0) { gui_put_pixel(layer, color, x + 3, y + i, width, height); }
+		if ((d & 0x08) != 0) { gui_put_pixel(layer, color, x + 4, y + i, width, height); }
+		if ((d & 0x04) != 0) { gui_put_pixel(layer, color, x + 5, y + i, width, height); }
+		if ((d & 0x02) != 0) { gui_put_pixel(layer, color, x + 6, y + i, width, height); }
+		if ((d & 0x01) != 0) { gui_put_pixel(layer, color, x + 7, y + i, width, height); }
 	}
 }
 
 /**draw a line in the layer*/
-void GUI_line(struct layer *layer, unsigned int color, unsigned long x0, unsigned long y0, unsigned long x1, unsigned long y1)
+void gui_line(struct layer *layer, unsigned int color, unsigned long x0, unsigned long y0, unsigned long x1, unsigned long y1)
 {
 	int dx, dy, n, k, i, f;
 	int x, y;
@@ -76,34 +76,34 @@ void GUI_line(struct layer *layer, unsigned int color, unsigned long x0, unsigne
 		if (f >= 0)
 		switch (k)
 		{
-			case 1:GUI_put_pixel(layer, color, x++, y, 0, 0);f -= dy;break;
-			case 2:GUI_put_pixel(layer, color, x, y++, 0, 0);f -= dx;break;
-			case 3:GUI_put_pixel(layer, color, x--, y, 0, 0);f -= dy;break;
-			case 4:GUI_put_pixel(layer, color, x, y--, 0, 0);f -= dx;break;
+			case 1:gui_put_pixel(layer, color, x++, y, 0, 0);f -= dy;break;
+			case 2:gui_put_pixel(layer, color, x, y++, 0, 0);f -= dx;break;
+			case 3:gui_put_pixel(layer, color, x--, y, 0, 0);f -= dy;break;
+			case 4:gui_put_pixel(layer, color, x, y--, 0, 0);f -= dx;break;
 		}else
 		switch(k)
 		{
-			case 1:GUI_put_pixel(layer, color, x, y++, 0, 0);f += dx;break;
-			case 2:GUI_put_pixel(layer, color, x--, y, 0, 0);f += dy;break;
-			case 3:GUI_put_pixel(layer, color, x, y--, 0, 0);f += dx;break;
-			case 4:GUI_put_pixel(layer, color, x++, y, 0, 0);f += dy;break;
+			case 1:gui_put_pixel(layer, color, x, y++, 0, 0);f += dx;break;
+			case 2:gui_put_pixel(layer, color, x--, y, 0, 0);f += dy;break;
+			case 3:gui_put_pixel(layer, color, x, y--, 0, 0);f += dx;break;
+			case 4:gui_put_pixel(layer, color, x++, y, 0, 0);f += dy;break;
 		}
 }
 
 /**draw a square in the layer*/
-long int GUI_put_square(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height)
+long int gui_put_square(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height)
 {
 	/**Two pointers to determine coordinates*/
 	unsigned long int x_point, y_point;
 	/**
 	 * Don't worried about the square overflow the buffer
-	 * because every pixel check in the GUI_put_pixel function
+	 * because every pixel check in the gui_put_pixel function
 	 */
 	for (y_point = 0; y_point < height; y_point++)
 	{
 		for (x_point = 0; x_point < width; x_point++)
 		{
-			GUI_put_pixel(layer, color, (x + x_point), (y + y_point), 0, 0);
+			gui_put_pixel(layer, color, (x + x_point), (y + y_point), 0, 0);
 		}
 	}
 }
@@ -120,7 +120,7 @@ long int GUI_put_square(struct layer *layer, unsigned int color, unsigned long x
  * 角度出发，不光要有边界判断(因为边界判断仅仅判断是否会溢出到右边或下边)，还要
  * 在一开始就对整体绘制元素的坐标进行纠正，以不会溢出到左边和上边。
  */
-void GUI_put_pixel(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height)
+void gui_put_pixel(struct layer *layer, unsigned int color, unsigned long x, unsigned long y, unsigned long width, unsigned long height)
 {
 	/**判断是否需要人为边界判断*/
 	if ((width != 0) && (height != 0))
@@ -140,7 +140,7 @@ void GUI_put_pixel(struct layer *layer, unsigned int color, unsigned long x, uns
 }
 
 /**get pixel from layer*/
-unsigned int GUI_get_pixel(struct layer *layer, unsigned long x, unsigned long y)
+unsigned int gui_get_pixel(struct layer *layer, unsigned long x, unsigned long y)
 {
 	/**There is a judgement about if the pixel in the layer*/
 	/**If there isn't a judgement,the pixel may be overflow the buffer*/

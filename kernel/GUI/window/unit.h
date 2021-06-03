@@ -42,7 +42,7 @@ void unit_close_handle(struct layer *target, unsigned long x, unsigned long y, v
 void unit_mini_handle(struct layer *target, unsigned long x, unsigned long y, void *ptr);
 
 /**创建新单元函数*/
-struct layer_unit *GUI_new_unit(struct layer *target, unsigned int type, unsigned long x, unsigned long y, unsigned long width, unsigned long height);
+struct layer_unit *gui_new_unit(struct layer *target, unsigned int type, unsigned long x, unsigned long y, unsigned long width, unsigned long height);
 
 
 #endif
