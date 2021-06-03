@@ -16,6 +16,7 @@ static struct window *osm_win;
 static float *cpu_usage;
 static int cpu_update_index;
 static int invalid;
+static union thread *osm_id;
 
 void osm_display(void)
 {
@@ -96,6 +97,8 @@ void osm_update(void)
     if (cpu_update_index >= 200) cpu_update_index %= 200;
 
     invalid = 1;
+
+    wakeup(osm_id);
 }
 
 void osm_loop(void)
@@ -106,13 +109,15 @@ void osm_loop(void)
         {
             invalid = 0;
             osm_display();
-            //sleep();
+            sleep();
         }
     }
 }
 
 int osm_open(void)
 {
+    osm_id = current;
+
     // Set name
     task_name("OS Moniter");
 
