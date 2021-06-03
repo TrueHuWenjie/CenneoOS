@@ -20,7 +20,7 @@
 #define MOUSE_CMD_DISABLE_PACKET_STREAM 0xf5
 #define MOUSE_CMD_ENABLE_PACKET_STREAM 0xf4
 #define MOUSE_CMD_SET_SAMPLE_RATE 0xf3
-#define MOUSE_CMD_GET_ID 0xf2
+#define MOUSE_CMD_GET_MOUSEID 0xf2
 #define MOUSE_CMD_REQ_SINGLE_PACKET 0xeb
 #define MOUSE_CMD_REQUEST_STATUS 0xe9
 #define MOUSE_CMD_SET_RES 0xe8
@@ -55,27 +55,33 @@ void init_mouse(void)
 	/**open mouse*/
 	i8042_mouse_enable();
 
-	i8042_mouse_cmd(0xF2);
-	i8042_mouse_cmd(0xF3);
+	// Now MouseID = 0
+
+	// Change MouseID from 0 to 3
+	// The number of bytes in the mouse packets changes
+	// to 4, the scroll wheel enabled.
+	i8042_mouse_cmd(MOUSE_CMD_GET_MOUSEID);
+	i8042_mouse_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
 	i8042_mouse_cmd(200);
-	i8042_mouse_cmd(0xF3);
+	i8042_mouse_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
 	i8042_mouse_cmd(100);
-	i8042_mouse_cmd(0xF3);
+	i8042_mouse_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
 	i8042_mouse_cmd(80);
 
-	i8042_mouse_cmd(0xF2);
-
-	i8042_mouse_cmd(0xF3);
+	// Change MouseID from 3 to 4
+	// The 4th and 5th mouse buttons enabled
+	i8042_mouse_cmd(MOUSE_CMD_GET_MOUSEID);
+	i8042_mouse_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
 	i8042_mouse_cmd(200);
-	i8042_mouse_cmd(0xF3);
+	i8042_mouse_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
 	i8042_mouse_cmd(200);
-	i8042_mouse_cmd(0xF3);
+	i8042_mouse_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
 	i8042_mouse_cmd(80);
 
-	i8042_mouse_cmd(0xF2);
+	i8042_mouse_cmd(MOUSE_CMD_GET_MOUSEID);
 
-	/**allow mouse send info to CPU*/
-	i8042_mouse_cmd(0xF4);
+	// Allow mouse send packets to CPU
+	i8042_mouse_cmd(MOUSE_CMD_ENABLE_PACKET_STREAM);
 
 	mouse_info_point -= 3;
 }
