@@ -30,7 +30,7 @@ int gui_free_layer(struct layer *target);
  * 返回值 = 1：根图层(无意义)
  * 返回值为其他值时，代表正常返回，成功改变
  */
-unsigned long gui_set_height(struct layer *target, unsigned long int height);
+unsigned long gui_layer_set_z(struct layer *target, unsigned long int height);
 
 long int gui_set_position(struct layer *layer, long x, long y);
 long int gui_set_resolution(struct layer *layer, unsigned long width, unsigned long height);
