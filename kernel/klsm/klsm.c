@@ -20,5 +20,8 @@ int klsm_open(void)
     klsm_win = gui_window("Kernel Log System Moniter", WINDOW_NORMAL, 0, 0, \
     KLSM_WIN_WIDTH, KLSM_WIN_HEIGHT);
 
+    gui_set_position(klsm_win->layer, 500, 360);
 
+    // Update
+    gui_update(klsm_win->layer);
 }

@@ -138,6 +138,8 @@ int osm_open(void)
 
     invalid = 1;
 
+    gui_set_position(osm_win->layer, 10, 360);
+
     //
     osm_loop();
 }
