@@ -65,7 +65,7 @@ struct gui_image *close_f_button, *close_p_button, *mini_f_button, *mini_p_butto
 
 /**鼠标消息的处理函数*/
 bool mouse_press = false;
-int GUI_mouse_handle(void *arg)
+int gui_mouse_handle(void *arg)
 {
 	unsigned char cmd;
 	struct layer *layer;
@@ -215,7 +215,7 @@ void init_Window(void)
 	/**初始化任务栏*/
 	init_taskbar();
 
-	task_gui_mouse_handle = task(&GUI_mouse_handle, NULL);
+	task_gui_mouse_handle = task(&gui_mouse_handle, NULL);
 
 	/**注册鼠标侦听*/
 	set_mouse_interception(task_gui_mouse_handle);
