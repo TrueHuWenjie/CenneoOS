@@ -10,7 +10,7 @@
 #include "interrupt.h"
 #include "../include/x86mmd.h"
 #include "../include/function.h"
-#include <stdlib.h>
+#include <stddef.h>
 #include <types.h>
 
 void clean_IDT(void)

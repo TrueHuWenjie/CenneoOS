@@ -10,7 +10,7 @@
 #include <GUI.h>
 #include <time.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <stddef.h>
 #include <stdbool.h>
 #include <lib/graphics.h>
 #include <video.h>
