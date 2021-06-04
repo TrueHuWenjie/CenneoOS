@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <mpt.h>
 #include <types.h>
-#include "time.h"
+#include <time.h>
 #include "../include/cmos.h"
 #include "../include/io.h"
 #include "../include/i8254.h"
