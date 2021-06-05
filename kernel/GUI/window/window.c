@@ -145,7 +145,7 @@ press:
 		}
 
 		/**设置当前活动窗口为非活动窗口*/
-		window_cancel_active();
+		window_set_inactive();
 
 		/**继续判断信息*/
 		goto cmp_info;;
@@ -196,7 +196,7 @@ press:
 	}
 
 	/**取消活动窗口*/
-	window_cancel_active();
+	window_set_inactive();
 	goto cmp_info;
 }
 
@@ -479,7 +479,7 @@ void window_set_active(struct window *target)
 }
 
 /**取消活动窗口函数*/
-void window_cancel_active(void)
+void window_set_inactive(void)
 {
 	/**首先判断是否有活动窗口*/
 	if (window_active == NULL) return;
