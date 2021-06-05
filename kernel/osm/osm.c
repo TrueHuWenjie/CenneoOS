@@ -29,19 +29,19 @@ void osm_display(void)
     gui_put_square(layer, 0xffd1eeee, 245, 32, 240, 320);
 
     // All the strings
-    window_string(osm_win, 8, 8, "Performance:");
-    window_string(osm_win, (OSM_WIN_WIDTH / 2) + 8, 8, "Threads:");
-    window_string(osm_win, (OSM_WIN_WIDTH / 2) + 8, 24, \
+    window_put_string(osm_win, 8, 8, "Performance:");
+    window_put_string(osm_win, (OSM_WIN_WIDTH / 2) + 8, 8, "Threads:");
+    window_put_string(osm_win, (OSM_WIN_WIDTH / 2) + 8, 24, \
     "Name        Status  CPU  tid");
-    window_string(osm_win, 8, 32, "Memory:");
-    window_string(osm_win, 8, (OSM_WIN_HEIGHT / 2) + 8, "CPU:");
+    window_put_string(osm_win, 8, 32, "Memory:");
+    window_put_string(osm_win, 8, (OSM_WIN_HEIGHT / 2) + 8, "CPU:");
     gui_put_square(layer, 0xffffffff, 13, 164, 213, 32);
     sprintf(buf, "user:%.1fMB", 0.0);
-    window_string(osm_win, 8, 132, buf);
+    window_put_string(osm_win, 8, 132, buf);
     sprintf(buf, "kernel:%.1fMB", 256.0 - ((double)kmm_info_free() / 1048576.0));
-    window_string(osm_win, 8, 148, buf);
+    window_put_string(osm_win, 8, 148, buf);
     sprintf(buf, "free:%.1fMB", (double)pmb_info_free() / 256.0);
-    window_string(osm_win, 124, 132, buf);
+    window_put_string(osm_win, 124, 132, buf);
 
     // Memory usage
     gui_put_square(layer, 0xdd8470ff, 20, 96, 200 - \
@@ -80,7 +80,7 @@ void osm_display(void)
             buf[10] = '.';
             buf[11] = '.';
         }
-        window_string(osm_win, (OSM_WIN_WIDTH / 2) + 8, 40 + i * 16, buf);
+        window_put_string(osm_win, (OSM_WIN_WIDTH / 2) + 8, 40 + i * 16, buf);
 
         entry = entry->info.next;
         if (entry == current) break;

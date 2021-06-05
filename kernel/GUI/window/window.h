@@ -89,7 +89,7 @@ struct window *gui_window(char *title, char style, unsigned long x, unsigned lon
 void correct_para(struct window *target, unsigned long *x, unsigned long *y, unsigned long *width, unsigned long *height);
 
 /**输出字符串到窗口*/
-void window_string(struct window *target, unsigned long x, unsigned long y, char *s);
+void window_put_string(struct window *target, unsigned long x, unsigned long y, const char *s);
 
 /**窗口信息输出函数*/
 int window_print(struct window *target, const char *fmt, ...);

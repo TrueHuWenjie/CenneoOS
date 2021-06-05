@@ -171,7 +171,7 @@ void correct_para(struct window *target, unsigned long *x, unsigned long *y, uns
 }
 
 /**输出字符串到窗口*/
-void window_string(struct window *target, unsigned long x, unsigned long y, char *s)
+void window_put_string(struct window *target, unsigned long x, unsigned long y, const char *s)
 {
 	unsigned long length = 0xffffffff, width = 0xffffffff;
 	/**纠正参数*/
@@ -197,7 +197,7 @@ int window_print(struct window *target, const char *fmt, ...)
 	n = vsprintf(buffer, fmt, arg);
 
 	/**输出字符串到窗口*/
-	window_string(target, target->print_x, target->print_y, buffer);
+	window_put_string(target, target->print_x, target->print_y, buffer);
 
 	/**指针指向新区域*/
 	target->print_y += 16;
