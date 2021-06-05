@@ -119,7 +119,7 @@ void init_taskbar(void);
 void window_set_active(struct window *target);
 
 /**取消活动窗口函数*/
-void window_cancel_active(void);
+void window_set_inactive(void);
 
 /**window系统时钟刷新函数*/
 void window_refresh_date(void);
