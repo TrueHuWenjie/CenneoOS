@@ -1,18 +1,17 @@
-# Cenneo Opreating System Kernel#
-# 玄鸟操作系统内核 #
+# Kernel of the Cenneo OS#
 
-*版权所有 2020 玄鸟股份有限公司*
+*Copyright 2020 CENNEO Ltd.*
 
-## 目录及文件结构描述 ##
+## Description of File and Directory ##
 
 
-|    目录    |            全称             |               描述               |
+| Directory  |          Full name          |           Description            |
 | ---------- | --------------------------- | -------------------------------- |
 |    arch    |        Architecture         | 硬件架构层，用来抽象底层硬件细节 |
 |    cpp     |         C Plus Plus         |         对C++语言的支持          |
 |  drivers   |      Device's drivers       |             设备驱动             |
 |     fs     |         File System         |             文件系统             |
-|    GUI     |  Graphical User Interface   |           图形用户界面           |
+|    gui     |  Graphical User Interface   |           图形用户界面           |
 |  include   |           include           | C\C++语言的函数、常量、结构声明  |
 |    init    |       Initialization        |            初始化代码            |
 |    ipc     | Inter Process Communication |            进程间通讯            |
