@@ -173,12 +173,12 @@ void correct_para(struct window *target, unsigned long *x, unsigned long *y, uns
 /**输出字符串到窗口*/
 void window_put_string(struct window *target, unsigned long x, unsigned long y, const char *s)
 {
-	unsigned long length = 0xffffffff, width = 0xffffffff;
+	unsigned long width = 0xffffffff, height = 0xffffffff;
 	/**纠正参数*/
-	correct_para(target, &x, &y, &length, &width);
+	correct_para(target, &x, &y, &width, &height);
 
 	/**输出字符串*/
-	gui_put_string(target->layer, 0xff000000, x, y, length, width, font("Standard Font"), s);
+	gui_put_string(target->layer, 0xff000000, x, y, width, height, font("Standard Font"), s);
 }
 
 /**窗口信息输出函数*/
