@@ -160,7 +160,7 @@ void int_mouse_handle(void)
 		mouse_cmd = mouse_info[0];
 		mouse_x  += mouse_info[1];
 		mouse_y  -= mouse_info[2];
-	printk("value:%x      %x     %x      %x\n", mouse_info[0],mouse_info[1],mouse_info[2],mouse_info[3]);
+		
 		/**判断此时缓冲区是否已满*/
 		if (untreated < SIZE_OF_BUFFER_MOUSE)
 		{
