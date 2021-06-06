@@ -7,8 +7,8 @@
  * 7/10/2014 8:30 AM
  */
 
-#ifndef VEDIO_H_
-#define VEDIO_H_
+#ifndef VIDEO_H_
+#define VIDEO_H_
 
 struct vbe_info{
 	unsigned char *vram;
