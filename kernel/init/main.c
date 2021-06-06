@@ -81,8 +81,8 @@ void main(void)
 
 	// Kernel Log System Monitor
 	extern int klsm_open(void);
-	task(&klsm_open, NULL);
-
+	klsm_open();
+	
 	// Idle now
 	task_name("Idle");
 
