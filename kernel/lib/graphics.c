@@ -89,32 +89,32 @@ void rectangle(unsigned long x, unsigned long y, unsigned long width, unsigned l
 
 void line(unsigned long x0, unsigned long y0, unsigned long x1, unsigned long y1, unsigned int color)
 {
-	int dx,dy,n,k,i,f;
-	int x,y;
-	dx=abs(x1-x0);
-	dy=abs(y1-y0);
-	n=dx+dy;
+	int dx, dy, n, k, i, f;
+	int x, y;
+	dx = abs(x1 - x0);
+	dy = abs(y1 - y0);
+	n = dx + dy;
 
 	/**根据x1和x0的关系，选择合适的k运算方法*/
 	if (x1 == x0)
 	{
-		k=2;
-		x=x0;
-		y=y0;
-	}else if(x1>=x0)
+		k = 2;
+		x = x0;
+		y = y0;
+	}else if (x1 >= x0)
 	{
-		k=y1>=y0?1:4;
-		x=x0;
-		y=y0;
+		k = y1 >= y0 ? 1 : 4;
+		x = x0;
+		y = y0;
 	}else{
-		k=y1>=y0?2:4;
-		x=x0;
-		y=y0;
+		k = y1 >= y0 ? 2 : 4;
+		x = x0;
+		y = y0;
 	}
 
-	for(i=0,f=0;i<n;i++)
-		if(f>=0)
-		switch(k)
+	for (i = 0, f = 0; i < n; i ++)
+		if (f >= 0)
+		switch (k)
 		{
 			case 1:putpixel(x++, y, color);f-=dy;break;
 			case 2:putpixel(x, y++, color);f-=dx;break;
