@@ -4628,8 +4628,8 @@ struct font_info STDFONT =
 {
 	.name = "Standard Font",
 	.addr = standard_font,
-	.length = 8,
-	.width = 16,
+	.width = 8,
+	.height = 16,
 	.copr = "Console Standard Font (from Linux)"
 };
 

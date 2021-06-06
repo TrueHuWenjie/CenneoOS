@@ -1596,8 +1596,8 @@ void Register_simsun(void)
 	struct font_info MS_simsun;
 	MS_simsun.name = "simsun";
 	MS_simsun.addr = simsun;
-	MS_simsun.length = 8;
-	MS_simsun.width = 16;
+	MS_simsun.width = 8;
+	MS_simsun.height = 16;
 	MS_simsun.copr = "from Microsoft Windows";
 	register_font(&MS_simsun);
 }

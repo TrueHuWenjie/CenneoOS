@@ -19,7 +19,7 @@ void gui_put_string(struct layer *layer, unsigned int color, unsigned long x, un
 	{
 		gui_put_word(layer, color, x, y, width, height, font_info, *string);
 		string ++;
-		x += font_info->length;
+		x += font_info->width;
 	}
 }
 

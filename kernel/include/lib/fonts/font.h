@@ -14,7 +14,7 @@
 /**字库信息描述结构体*/
 struct font_info{
 	char *name, *addr, *copr;
-	unsigned long length, width;
+	unsigned long width, height;
 };
 
 /**初始化字库管理函数*/
