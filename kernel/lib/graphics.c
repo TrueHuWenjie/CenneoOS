@@ -116,17 +116,17 @@ void line(unsigned long x0, unsigned long y0, unsigned long x1, unsigned long y1
 		if (f >= 0)
 		switch (k)
 		{
-			case 1:putpixel(x++, y, color);f-=dy;break;
-			case 2:putpixel(x, y++, color);f-=dx;break;
-			case 3:putpixel(x--, y, color);f-=dy;break;
-			case 4:putpixel(x, y--, color);f-=dx;break;
+			case 1:putpixel(x++, y, color);f -= dy;break;
+			case 2:putpixel(x, y++, color);f -= dx;break;
+			case 3:putpixel(x--, y, color);f -= dy;break;
+			case 4:putpixel(x, y--, color);f -= dx;break;
 		}else
 		switch(k)
 		{
-			case 1:putpixel(x, y++, color);f+=dx;break;
-			case 2:putpixel(x--, y, color);f+=dy;break;
-			case 3:putpixel(x, y--, color);f+=dx;break;
-			case 4:putpixel(x++, y, color);f+=dy;break;
+			case 1:putpixel(x, y++, color);f += dx;break;
+			case 2:putpixel(x--, y, color);f += dy;break;
+			case 3:putpixel(x, y--, color);f += dx;break;
+			case 4:putpixel(x++, y, color);f += dy;break;
 		}
 }
 
@@ -136,7 +136,7 @@ unsigned int getpixel24(unsigned int x, unsigned int y)
 	unsigned int i;
 
 	/**先判断该像素是否在屏幕上*/
-	if (x < vbe_info.xres & y < vbe_info.yres)
+	if (x < vbe_info.xres && y < vbe_info.yres)
 	{
 		i = ((y * vbe_info.xres) + x) * 3;
 		return (vbe_info.vram[i] + (vbe_info.vram[i+1] << 8) + (vbe_info.vram[i+2] << 16));
@@ -147,7 +147,7 @@ unsigned int getpixel24(unsigned int x, unsigned int y)
 unsigned int getpixel32(unsigned int x, unsigned int y)
 {
 	/**先判断该像素是否在屏幕上*/
-	if (x < vbe_info.xres & y < vbe_info.yres)
+	if (x < vbe_info.xres && y < vbe_info.yres)
 	{
 		return ((unsigned int *)vbe_info.vram)[(y * vbe_info.xres) + x];
 	}
