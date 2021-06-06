@@ -17,8 +17,8 @@ static struct font_info *font_info;
 
 static void klsm_listener(const char level, const char *log)
 {
-    unsigned long i;
-    unsigned int color=0xffffffff;
+    unsigned long i = 0;
+    unsigned int color;
     
     // Different color for different level of logs
     if (level == KLS_LOGLEVEL_ERROR)      color = 0xffff0000;
