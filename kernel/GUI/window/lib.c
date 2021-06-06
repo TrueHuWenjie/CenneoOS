@@ -181,6 +181,18 @@ void window_put_string(struct window *target, unsigned long x, unsigned long y, 
 	gui_put_string(target->layer, 0xff000000, x, y, width, height, font("Standard Font"), s);
 }
 
+// Put character into Window
+void window_put_char(struct window *target, unsigned int color, \
+struct font_info *font_info, unsigned long x, unsigned long y, const char c)
+{
+	unsigned long width = 0xffffffff, height = 0xffffffff;
+	/**纠正参数*/
+	correct_para(target, &x, &y, &width, &height);
+
+	/**输出字符串*/
+	gui_put_word(target->layer, color, x, y, width, height, font_info, c);
+}
+
 /**窗口信息输出函数*/
 int window_print(struct window *target, const char *fmt, ...)
 {

@@ -91,6 +91,10 @@ void correct_para(struct window *target, unsigned long *x, unsigned long *y, uns
 /**输出字符串到窗口*/
 void window_put_string(struct window *target, unsigned long x, unsigned long y, const char *s);
 
+// Put character into Window
+void window_put_char(struct window *target, unsigned int color, \
+struct font_info *font_info, unsigned long x, unsigned long y, const char c);
+
 /**窗口信息输出函数*/
 int window_print(struct window *target, const char *fmt, ...);
 
