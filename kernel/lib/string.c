@@ -11,6 +11,21 @@
 #include <lib/mem.h>
 #include <stddef.h>
 
+// Get the address in string s1 when match string s2
+char *strstr(const char *s1, const char *s2)
+{
+    const char *p = s1;
+    const size_t len = strlen(s2);
+    for(; (p = strchr(p, *s2)) != 0;p ++)
+    {
+        if(strncmp(p, s2, len) == 0)
+            return (char*)p;
+    }
+    return(0);
+}
+
+size_t strcspn(const char * str1, const char * str2);
+
 /*
 char *strchr(string, chr) - search a string for a character
 Purpose:

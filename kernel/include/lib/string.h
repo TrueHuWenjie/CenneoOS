@@ -12,6 +12,9 @@
 
 #include <stddef.h>
 
+// Get the address in string s1 when match string s2
+char *strstr(const char *s1, const char *s2);
+
 char *strchr(const char *string, int chr);
 char *strcpy(char *dest, const char *src);
 char *strncpy(char *dest, const char *src, size_t count);
