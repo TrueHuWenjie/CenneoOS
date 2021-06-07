@@ -111,7 +111,7 @@ void init_pmb(void)
     X86U32 n;
     X86U32 BaseAddr, Length;
 
-    // Assuming all physical memory been used first
+    // Assuming all physical memory have been used first
 	for (n = 0; n < (MMD_PMB_SIZE / sizeof(X86U32)); n ++)
 		pmb[n] = 0xffffffff;
 
