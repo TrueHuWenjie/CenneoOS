@@ -29,13 +29,19 @@ static void klsm_listener(const char level, const char *log)
 
     while (log[i])
     {
-        window_put_char(klsm_win, color, font_info, x, y, log[i]);
-        x += font_info->width;
-        
-        if (x >= KLSM_WIN_WIDTH)
+        switch (log[i])
         {
-            x = 0;
-            y += font_info->height;
+            case '\n': x = 0; y += font_info->height; break;
+            default:
+                window_put_char(klsm_win, color, font_info, x, y, log[i]);
+                x += font_info->width;
+                
+                if (x >= KLSM_WIN_WIDTH)
+                {
+                    x = 0;
+                    y += font_info->height;
+                }
+                break;
         }
 
         i ++;
