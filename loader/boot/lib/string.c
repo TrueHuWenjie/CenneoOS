@@ -115,13 +115,13 @@ int strncmp(const char *cs, const char *ct, unsigned long count)
 
 	while (count)
 	{
-		c1 = *cs++;
-		c2 = *ct++;
+		c1 = *cs ++;
+		c2 = *ct ++;
 		if (c1 != c2)
 			return c1 < c2 ? -1 : 1;
 		if (!c1)
 			break;
-		count--;
+		count --;
 	}
 	return 0;
 }
@@ -135,7 +135,7 @@ char *strcpy(char *dest, const char *src)
 {
 	char *tmp = dest;
 
-	while ((*dest++ = *src++) != '\0')
+	while ((*dest++ = *src ++) != '\0')
 		/*nothing */;
 	return tmp;
 }
@@ -157,10 +157,10 @@ char *strncpy(char *dest, const char *src, unsigned long count)
 {
 	char *tmp = dest;
 
-	while (count--) {
+	while (count --) {
 		if ((*tmp = *src) != 0)
-			src++;
-		tmp++;
+			src ++;
+		tmp ++;
 	}
 	return dest;
 }
@@ -196,7 +196,7 @@ unsigned long strlen(const char *s)
 {
 	const char *sc;
 
-	for (sc = s; *sc != '\0'; ++sc)
+	for (sc = s; *sc != '\0'; ++ sc)
 		/* nothing */;
 	return sc - s;
 }
@@ -210,7 +210,7 @@ unsigned long strnlen(const char *s, unsigned long count)
 {
 	const char *sc;
 
-	for (sc = s; count-- && *sc != '\0'; ++sc)
+	for (sc = s; count -- && *sc != '\0'; ++ sc)
 		/* nothing */;
 	return sc - s;
 }
@@ -227,13 +227,13 @@ unsigned long strspn(const char *s, const char *accept)
 	unsigned long count = 0;
 
 	for (p = s; *p != '\0'; ++p) {
-		for (a = accept; *a != '\0'; ++a) {
+		for (a = accept; *a != '\0'; ++ a) {
 			if (*p == *a)
 				break;
 		}
 		if (*a == '\0')
 			return count;
-		++count;
+		++ count;
 	}
 	return count;
 }
