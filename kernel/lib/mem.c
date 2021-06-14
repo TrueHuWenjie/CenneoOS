@@ -10,6 +10,12 @@
 #include <stddef.h>
 #include <lib/mem.h>
 
+// Find a value in memory field
+void *memchr(void * ptr, int value, size_t num)
+{
+
+}
+
 /**
  * memset - Fill a region of memory with the given value
  * @buffer: Pointer to the start of the area.

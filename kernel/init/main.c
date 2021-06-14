@@ -83,6 +83,8 @@ void main(void)
 	extern int klsm_open(void);
 	klsm_open();
 	
+	acpi_rsdp_locate();
+
 	// Idle now
 	task_name("Idle");
 
