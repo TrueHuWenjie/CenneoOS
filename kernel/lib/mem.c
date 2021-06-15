@@ -44,12 +44,23 @@ void *memset(void *buffer, int c, size_t count)
  */
 void *memcpy(void *dest, const void *src, size_t count)
 {
-	char *tmp = dest;  
-	const char *s = src;  
+	char *dest_c;
+	const char *src_c;
+	long *dest_l = dest;
+	const long *src_l = src;
 
-    while (count--)  
-		*tmp++ = *s++;  
-	return dest;  
+	size_t count_l = count / sizeof(long);
+	count = count % sizeof(long);
+
+	while (count_l --)
+		*dest_l ++ = *src_l ++;  
+
+	dest_c = (char *)dest_l;
+	src_c = (const char *) src_l;
+
+    while (count   --)
+		*dest_c ++ = *src_c ++;
+	return dest;
 }
 
 /**
@@ -69,7 +80,7 @@ void *memmove(void *dest, const void *src, size_t count)
 		tmp = dest;
 		s = src;
 		while (count--)
-			*tmp++ = *s++;
+			*tmp ++ = *s ++;
 	} else {
 		tmp = dest;
 		tmp += count;
