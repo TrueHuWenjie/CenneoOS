@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <GUI.h>
 #include <lib/gpl.h>
-#include <video.h>
+#include <graphics.h>
 #include "layer.h"
 
 // Update a whole layer

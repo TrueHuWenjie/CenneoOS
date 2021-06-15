@@ -13,7 +13,7 @@
 #include <lib/mem.h>
 #include <lib/gpl.h>
 #include <info.h>
-#include <video.h>
+#include <graphics.h>
 #include "layer.h"
 
 /**GUI根图层*/

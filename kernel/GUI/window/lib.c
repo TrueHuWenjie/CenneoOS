@@ -9,7 +9,7 @@
 
 #include <lib/string.h>
 #include <lib/gpl.h>
-#include <video.h>
+#include <graphics.h>
 #include <GUI.h>
 #include <kmm.h>
 #include <stdlib.h>

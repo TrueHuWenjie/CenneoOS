@@ -5,7 +5,7 @@
 #include <lib/mem.h>
 #include <lib/fonts/font.h>
 #include <lib/math.h>
-#include <video.h>
+#include <graphics.h>
 #include <lib/gpl.h>
 
 /**显示像素函数*/

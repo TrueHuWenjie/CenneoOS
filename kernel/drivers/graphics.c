@@ -1,16 +1,11 @@
-/**
- * Copyright 2013-2015 by Explorer Developers.
- * made by Lab Explorer Developers<1@GhostBirdOS.org>
- * Explorer Standard Video Support
- * Explorer/drivers/video.c
- * version:Alpha
- * 7/10/2014 8:30 AM
- */
+// Cenneo OS
+// /kernel/drivers/graphics.c
+// Graphics Card support
 
 #include "../arch/x86/include/x86ebi.h"
 #include <types.h>
 #include <kmm.h>
-#include <video.h>
+#include <graphics.h>
 
 struct vbe_info vbe_info;
 

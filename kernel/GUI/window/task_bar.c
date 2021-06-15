@@ -13,7 +13,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <lib/gpl.h>
-#include <video.h>
+#include <graphics.h>
 #include "window.h"
 #include "../layer.h"
 

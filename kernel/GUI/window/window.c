@@ -16,7 +16,7 @@
 #include <kmm.h>
 #include <arch.h>
 #include <lib/gpl.h>
-#include <video.h>
+#include <graphics.h>
 #include "window.h"
 #include "unit.h"
 #include "../recourse.h"

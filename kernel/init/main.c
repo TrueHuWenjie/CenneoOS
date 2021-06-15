@@ -24,7 +24,7 @@
 #include <arch.h> // Architecture - 架构层
 #include <keyboard.h>
 #include <kmm.h>
-#include <video.h>
+#include <graphics.h>
 #include <kvi.h>
 
 /**内核主函数*/

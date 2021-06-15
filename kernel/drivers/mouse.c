@@ -10,7 +10,7 @@
 #include <mouse.h>
 #include <keyboard.h>
 #include <arch.h>
-#include <video.h>
+#include <graphics.h>
 #include <GUI.h>
 #include "i8042.h"
 

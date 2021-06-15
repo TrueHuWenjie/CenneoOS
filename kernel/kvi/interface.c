@@ -5,7 +5,7 @@
 #include "../include/kvi.h"
 #include "theme.h"
 #include <stdbool.h>
-#include <video.h>
+#include <graphics.h>
 #include <lib/gpl.h>
 #include <info.h>
 
