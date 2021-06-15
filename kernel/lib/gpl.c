@@ -1,18 +1,12 @@
-/**
- * Copyright 2013-2015 by Explorer Developers.
- * made by Lab Explorer Developers<1@GhostBirdOS.org>
- * Smilodon Project - Rose<roselyu@163.com>
- * Explorer Graphics Library
- * Explorer/lib/graphics.c
- * version:Alpha
- * 11/1/2014 11:56 AM
- */
+// Cenneo OS
+// /kernel/lib/gpi.c
+// Graphical Programming Library
 
 #include <lib/mem.h>
 #include <lib/fonts/font.h>
 #include <lib/math.h>
 #include <video.h>
-#include <lib/graphics.h>
+#include <lib/gpl.h>
 
 /**显示像素函数*/
 void (*putpixel)(unsigned int x, unsigned int y, unsigned int color);

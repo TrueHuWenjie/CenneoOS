@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <cfs.h>
 #include <kmm.h>
-#include <lib/graphics.h>
+#include <lib/gpl.h>
 #include "window.h"
 #include "../layer.h"
 

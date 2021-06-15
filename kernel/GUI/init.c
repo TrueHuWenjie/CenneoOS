@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <GUI.h>
 #include <lib/mem.h>
-#include <lib/graphics.h>
+#include <lib/gpl.h>
 #include <info.h>
 #include <video.h>
 #include "layer.h"

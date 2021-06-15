@@ -15,7 +15,7 @@
 #include <GUI.h>
 #include <kmm.h>
 #include <arch.h>
-#include <lib/graphics.h>
+#include <lib/gpl.h>
 #include <video.h>
 #include "window.h"
 #include "unit.h"

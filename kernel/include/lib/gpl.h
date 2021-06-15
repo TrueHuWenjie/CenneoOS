@@ -1,11 +1,6 @@
-/**
- * Copyright 2013-2015 by Explorer Developers.
- * made by Lab Explorer Developers<1@GhostBirdOS.org>
- * Explorer Graphics Library Definition
- * Explorer/include/lib/graphics.h
- * version:Alpha
- * 11/1/2014 12:09 AM
- */
+// Cenneo OS
+// /kernel/include/lib/gpi.h
+// Graphical Programming Library
 
 #ifndef GRAPHICS_H_
 #define GRAPHICS_H_

@@ -6,7 +6,7 @@
 #include "theme.h"
 #include <stdbool.h>
 #include <video.h>
-#include <lib/graphics.h>
+#include <lib/gpl.h>
 #include <info.h>
 
 #define WIDTH_MAX 100

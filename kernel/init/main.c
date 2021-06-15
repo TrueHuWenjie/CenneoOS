@@ -13,7 +13,7 @@
  */
 
 #include <lib/mem.h>
-#include <lib/graphics.h>
+#include <lib/gpl.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <../fs/fat32/fat32.h>

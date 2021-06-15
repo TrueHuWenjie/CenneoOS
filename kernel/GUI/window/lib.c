@@ -8,7 +8,7 @@
  */
 
 #include <lib/string.h>
-#include <lib/graphics.h>
+#include <lib/gpl.h>
 #include <video.h>
 #include <GUI.h>
 #include <kmm.h>
