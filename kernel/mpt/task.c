@@ -1,5 +1,5 @@
 // Cenneo OS
-// /kernel/multitask/task.c
+// /kernel/mpt/task.c
 // Multiple Process and Task support
 
 #include <kmm.h>

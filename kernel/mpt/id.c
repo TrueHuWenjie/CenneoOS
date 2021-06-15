@@ -1,3 +1,3 @@
 // Cenneo OS
-// /kernel/multitask/id.c
+// /kernel/mpt/id.c
 // Multiple process and task support
