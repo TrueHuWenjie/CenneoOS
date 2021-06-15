@@ -2,8 +2,8 @@
 // /kernel/include/lib/gpi.h
 // Graphical Programming Library
 
-#ifndef GRAPHICS_H_
-#define GRAPHICS_H_
+#ifndef GPL_H_
+#define GPL_H_
 
 #include <lib/fonts/font.h>
 
