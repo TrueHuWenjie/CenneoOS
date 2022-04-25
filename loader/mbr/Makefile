@@ -4,18 +4,24 @@
 
 # compile all the MBR
 
-TARGET = MBR.BIN
+sinclude $(CURDIR)/../../Makefile.variable
+
+TARGET = mbr.bin
 
 
-$(TARGET): $(TARGET:.BIN=.ASM)
-	$(NS) $< -o $@
+$(TARGET): $(TARGET:.bin=.asm)
+	@echo [NS] $<
+	@$(NS) $< -o $@
 	
+$(image): $(TARGET)
+	@$(GFR) -ws $(TARGET) $(image) 1
+
 all:
-	make MBR.BIN
+	@make $(TARGET)
 	
-install:$(TARGET)
-	$(GFR) -ws $(TARGET) $(image) 1
+install:$(image)
+	
 	
 clean:
-	$(RM) $(TARGET)
+	@$(RM) $(TARGET)
 	

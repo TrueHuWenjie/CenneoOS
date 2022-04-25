@@ -8,11 +8,14 @@
  * 11/1/2014 11:56 AM
  */
 
-#include "../head.h"
-#include "mem.h"
-#include "font.h"
-//#include <lib/math.h>
-#include "graphics.h"
+#include <head.h>
+#include <lib/math.h>
+#include <lib/mem.h>
+#include <lib/font.h>
+#include <math.h>
+#include <lib/graphics.h>
+
+struct vbe_info vbe_info;
 
 /**显示像素函数*/
 void (*putpixel)(unsigned int x, unsigned int y, unsigned int color);

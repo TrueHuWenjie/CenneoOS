@@ -6,5 +6,7 @@
 
 void init_acpi(void)
 {
-    
+    printk("Initializing ACPI...\n");
+    printk("Finding RSDP...\n");
+	acpi_rsdp_locate();
 }

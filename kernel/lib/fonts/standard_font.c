@@ -8,7 +8,7 @@
  */
 
 
-#include <lib/fonts/font.h>
+#include <lib/font.h>
 
 #define FONTDATAMAX 4096
 
@@ -4635,5 +4635,5 @@ struct font_info STDFONT =
 
 void Register_standard_font(void)
 {
-	register_font(&STDFONT);
+	font_register(&STDFONT);
 }

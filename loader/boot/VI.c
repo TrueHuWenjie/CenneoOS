@@ -8,15 +8,17 @@
  * 7/5/2014 7:08 PM
  */
 
-#include "lib/stdarg.h"
-#include "lib/stdlib.h"
-#include "lib/stdbool.h"
-#include "lib/string.h"
-#include "lib/mem.h"
-#include "lib/font.h"
-#include "lib/graphics.h"
 #include "../configure.h"
-#include "VI.h"
+#include <lib/stdarg.h>
+#include <lib/stdlib.h>
+#include <lib/stdbool.h>
+#include <lib/string.h>
+#include <lib/stdio.h>
+#include <lib/mem.h>
+#include <lib/font.h>
+#include <lib/graphics.h>
+#include <mmu.h>
+#include <vi.h>
 
 /**各种定义集合*/
 

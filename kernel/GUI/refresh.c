@@ -9,7 +9,7 @@
  */
 
 #include <stdlib.h>
-#include <GUI.h>
+#include <gui.h>
 #include <lib/gpl.h>
 #include <graphics.h>
 #include "layer.h"

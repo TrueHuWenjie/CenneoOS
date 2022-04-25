@@ -7,62 +7,73 @@
 #include <kmm.h>
 #include <kls.h>
 #include <types.h>
+#include <acpi.h>
 
-char *main_bios;
-
-union acpi_rsdp_descriptor *rsdp;
+char *mem_main_bios;
+char *mem_rsdt;
 
 // Root System Description Pointer
+union acpi_rsdp_descriptor *rsdp;
+struct acpi_rsdt *rsdt;
 
-#pragma pack(push)
-#pragma pack(1)
-
-// ACPI Version 1.0
-struct acpi_rsdp_descriptor_10
+// Find any kind of System Descriptor Tables
+// #Notice: In this place we asuming that all the sdts are located
+// at the same 4KB physical page with the RSDT.
+struct acpi_sdt_header *acpi_sdt_locate(const char *signature)
 {
-    char        signature[8];
-    uint8_t     checksum;
-    char        oem_id[6];
-    uint8_t     revision;
-    uint32_t    rsdt_addr;
-};
+    struct acpi_sdt_header *header;
+    int entries = ACPI_RSDT_LIST_SIZE;
+    
+    for (int i = 0; i < entries; i ++)
+    {
+        header = (struct acpi_sdt_header *) ((uint32_t)mem_rsdt + (rsdt->sdt_list[i] & 0xfff));
 
-// ACPI Version 2.0
-struct acpi_rsdp_descriptor_20
-{
-    struct acpi_rsdp_descriptor_10 first_part;
+        if(!strncmp(header->Signature, signature, 4))
+            return header;
+    }
 
-    uint32_t    Length;
-    uint64_t    XsdtAddress;
-    uint8_t     ExtendedChecksum;
-    uint8_t     reserved[3];
-};
-
-// ACPI Root System Description Pointer
-union acpi_rsdp_descriptor
-{
-    struct acpi_rsdp_descriptor_10 v10;
-    struct acpi_rsdp_descriptor_20 v20;
-};
-
-#pragma pack(pop)
+    // No such SDT
+    return NULL;
+}
 
 // Find the RSDP
 void acpi_rsdp_locate(void)
 {
-    main_bios = vmalloc(0xfffff - 0xe0000, VM_MAPD + VM_WAIT);
-    vmap(0xe0000, main_bios, 0xfffff - 0xe0000);
+    mem_main_bios = vmalloc(0xfffff - 0xe0000, VM_MAPD + VM_WAIT);
+    vmap((void *)0xe0000, mem_main_bios, 0xfffff - 0xe0000);
     char *p;
 
-    for (p = main_bios; p < main_bios + 0xfffff - 0xe0000; p ++)
+    for (p = mem_main_bios; p < mem_main_bios + 0xfffff - 0xe0000; p ++)
     {
         if(!strncmp(p, "RSD PTR ", 8))
         {
             rsdp = (union acpi_rsdp_descriptor *) p;
 
+            // Cheeck the revision of RSD
+
             // Checksum validation
 
-            return;
+            // Output
+            if (rsdp->v10.revision == 0)
+            {
+                printk("RSDP revision:%d, OEM:%s\n", rsdp->v10.revision, rsdp->v10.oem_id);
+
+                mem_rsdt = vmalloc(4096, VM_MAPD + VM_WAIT);
+                vmap((void *)(rsdp->v10.rsdt_addr & 0xfffff000), mem_rsdt, 4096);
+
+                rsdt = (struct acpi_rsdt *) ((rsdp->v10.rsdt_addr - \
+                (uint32_t)(rsdp->v10.rsdt_addr & 0xfffff000)) + (uint32_t)mem_rsdt);
+
+                printk("Mapping RSDT from physical address %#x to virtual address %#x\n", \
+                rsdp->v10.rsdt_addr, rsdt);
+
+                return;
+            }
+            else
+            {
+                error("Unsupported revision of RSDP.");
+            }
+            
         }
     }
 

@@ -2,18 +2,21 @@
 // /boot/bootc.c
 // C file of the Explorer Boot
 
-#include "lib/stdlib.h"
 #include "../configure.h"
 #include "../problem.h"
-#include "head.h"
-#include "MMU.h"
-#include "lib/mem.h"
-#include "lib/graphics.h"
-#include "storage.h"
-#include "fs.h"
-#include "VI.h"
-#include "script.h"
+#include <lib/stdlib.h>
+#include <lib/mem.h>
+#include <lib/graphics.h>
+#include <head.h>
+#include <mmu.h>
+#include <storage.h>
+#include <vi.h>
+#include <script.h>
+#include <fs.h>
 #include <io.h>
+#include <irq.h>
+
+struct boot_info *boot_info;
 
 // A pointer that push argument, eip and jump to the start of kernel
 void (*kernel_start)(const struct boot_info *boot_info) = KERNEL_ADDR;
@@ -171,37 +174,59 @@ int callback(int n, int type)
 		switch (n)
 		{
 			case 0:
-				printi("A muti-task, Graphical Operating System with window support.");
+				printi("Explorer Kernel with GUI");
 				break;
 			case 1:
-				printi("A mysterious Operating System.");
+				printi("Explorer Kernel with basic Kernel Visual Interface");
 				break;
 			case 2:
-				printi("Another mysterious Operating System.");
+				printi("Explorer Kernel with Console");
 				break;
 		}
 	}else{
 		switch (n)
 		{
 			case 0:
-				printk("Select Cenneo OS 0.02(Explorer kernel).\n");
+				printk("Starting Cenneo OS for Desktop\n");
+				boot_info->mode = BOOT_MODE_DESKTOP;
 				break;
 			case 1:
-				printk("Select Dragon 0.40 Beta.\n");
+				printk("Starting Cenneo OS for Embedded\n");
+				boot_info->mode = BOOT_MODE_EMBEDDED;
 				break;
 			case 2:
-				printk("Select DolphinOS.\n");
+				printk("Starting Cenneo OS for Server\n");
+				boot_info->mode = BOOT_MODE_SERVER;
 				break;
 		}
 		VI_active(VI_page_output);
+
+		// Full kernel's address and size
+		file_info kernel_file;
+		kernel_file = read_file_info(0, 0, KERNEL_NAME);
+		boot_info->kernel_size = kernel_file.size;
+		boot_info->kernel_addr = (unsigned int)KERNEL_ADDR;
+
+		printak("Kernel Size: %d KB\n", kernel_file.size);
+
+		/**加载内核*/
+		read_file(0, 0, KERNEL_NAME, KERNEL_ADDR, 1);
+
+		interrupt_close();
+		deinit_VI();
+
+		/**运行内核*/
+		kernel_start(boot_info);
 	}
 }
 
 /**configure文件储存内存指针*/
 static char *config_buf;
 /**保留扇区引导程序的主函数*/
-void BOOT_main(struct boot_info *boot_info)
+void BOOT_main(struct boot_info *ebi)
 {
+	boot_info = ebi;
+
 	/**判断是否成功获取启动信息*/
 	if (boot_info->flag[0] != 'E' |
 		boot_info->flag[1] != 'B' |
@@ -219,7 +244,7 @@ void BOOT_main(struct boot_info *boot_info)
 	/**初始化图形模式*/
 	init_graphics
 		(boot_info->ModeInfoBlock.XResolution , boot_info->ModeInfoBlock.YResolution,
-		 boot_info->ModeInfoBlock.BitsPerPixel, boot_info->ModeInfoBlock.PhysBasePtr);
+		 boot_info->ModeInfoBlock.BitsPerPixel, (char *)boot_info->ModeInfoBlock.PhysBasePtr);
 
 	/**初始化可视化界面*/
 	init_VI();
@@ -240,7 +265,7 @@ void BOOT_main(struct boot_info *boot_info)
 	printk("Active storage partition:%d\n", storage_active_partition());
 
 	/**初始化文件系统*/
-	init_FS();
+	init_fs();
 
 	/**分配放置configure的内存*/
 	struct file_info loaderconfig_file_info;
@@ -274,25 +299,12 @@ void BOOT_main(struct boot_info *boot_info)
 
 	/**配置启动项*/
 	printak("<0xaaaaff>Hello, This is Explorer loader!\n</>");
-	select_register(0, callback, "Cenneo OS 0.02(Explorer kernel)");
-	select_register(1, callback, "Dragon 0.40 Beta");
-	select_register(2, callback, "DolphinOS");
+	select_register(0, callback, "Cenneo OS for Desktop");
+	select_register(1, callback, "Cenneo OS for Embedded");
+	select_register(2, callback, "Cenneo OS for Server");
 
 	/**切换到启动项选择界面*/
 	VI_active(VI_page_select);
-
-	// Full kernel's address and size
-	file_info kernel_file;
-	kernel_file = read_file_info(0, 0, KERNEL_NAME);
-	boot_info->kernel_size = kernel_file.size;
-	boot_info->kernel_addr = KERNEL_ADDR;
-
-	/**加载内核*/
-	read_file(0, 0, KERNEL_NAME, KERNEL_ADDR, 1);
-
-	interrupt_close();
-	deinit_VI();
-
-	/**运行内核*/
-	kernel_start(boot_info);
+ 
+	idle();
 }

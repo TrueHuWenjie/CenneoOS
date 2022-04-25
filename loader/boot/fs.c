@@ -7,13 +7,13 @@
  * 7/18/2014 12:06 AM
  */
 
-#include "fs.h"
-#include "lib/mem.h"
-#include "lib/stdlib.h"
-#include "MMU.h"
-#include "VI.h"
-#include "storage.h"
 #include "../problem.h"
+#include <lib/mem.h>
+#include <lib/stdlib.h>
+#include <mmu.h>
+#include <VI.h>
+#include <storage.h>
+#include <fs.h>
 
 struct PBR
 {
@@ -74,7 +74,7 @@ struct FAT32_PBR
 
 #pragma pack(pop)					//恢复原来的对齐单位
 
-void init_FS(void)
+void init_fs(void)
 {
 	char *point;
 	point = bmalloc(512);

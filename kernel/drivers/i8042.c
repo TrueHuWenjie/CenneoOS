@@ -8,90 +8,152 @@
  */
 
 #include <arch.h>
-#include "i8042.h"
+#include <drivers/i8042.h>
 
-#define PORT_8042_DATA		0x60
-#define PORT_8042_COMMAND	0x64
+#define I8042_PORT_DATA		0x60
+#define I8042_PORT_CMD		0x64
 
-// Wait for Intel 8042
-void i8042_wait(void)
+#define I8042_REG_STATUS_OBUF_FULL		0x01
+#define I8042_REG_STATUS_IBUF_FULL		0x02
+#define I8042_REG_STATUS_SYS_FLAG		0x04
+#define I8042_REG_STATUS_CMD_DATA		0x08
+#define I8042_REG_STATUS_KYBD_INH		0x10
+#define I8042_REG_STATUS_TRANS_TMOUT	0x20
+#define I8042_REG_STATUS_RCV_TMOUT		0x40
+#define I8042_REG_STATUS_PARITY_EVEN	0x80
+
+// Read Status Register
+unsigned char i8042_read_status(void)
+{
+	return io_in8(I8042_PORT_CMD);
+}
+
+// Waiting until Output Buffer empty
+void i8042_wait_obuf_full(void)
 {
 	while (1)
-		if ((io_in8(PORT_KEYSTA) & KEYSTA_SEND_NOTREADY) == 0)
-			break;
-			
-	return;
+		if ((i8042_read_status() & I8042_REG_STATUS_OBUF_FULL) == 1)
+			return;
 }
 
-// Send command to Intel 8042
-void i8042_cmd(char command)
+// Waiting until Input Buffer empty
+void i8042_wait_ibuf_empty(void)
 {
-	i8042_wait();
-	io_out8(PORT_8042_COMMAND, command);
+	while (1)
+		if ((i8042_read_status() & I8042_REG_STATUS_IBUF_FULL) == 0)
+			return;
 }
 
-// Read data from Intel 8042
-char i8042_read(void)
+// Read data from Output Buffer
+unsigned char i8042_read_obuf(void)
 {
-	i8042_wait();
-	return io_in8(PORT_8042_DATA);
+	i8042_wait_obuf_full();
+	return io_in8(I8042_PORT_DATA);
 }
 
-// Write to Intel 8042
-void i8042_write(char b)
+// Write data to Input Buffer as command
+void i8042_controller_cmd(char command)
 {
-	i8042_wait();
-	io_out8(PORT_8042_DATA, b);
-}
-
-// Read command byte
-char i8042_read_cmd_byte(void)
-{
-	i8042_cmd(0x20);
-	return i8042_read();
-}
-
-// Write command byte
-void i8042_write_cmd_byte(char b)
-{
-	i8042_cmd(0x60);
-	i8042_write(b);
-	return ;
+	i8042_wait_ibuf_empty();
+	io_out8(I8042_PORT_CMD, command);
 }
 
 // Send command to keyboard
 void i8042_keyboard_cmd(char command)
 {
-	i8042_write(command);
-	i8042_wait();
+	i8042_wait_ibuf_empty();
+	io_out8(I8042_PORT_DATA, command);
 }
 
 // Send command to mouse
 void i8042_mouse_cmd(char command)
 {
-	i8042_cmd(0xD4);/**8042 knows that the command is send for mouse*/
-	i8042_write(command);
+	i8042_controller_cmd(0xD4);/**8042 knows that the command is send for mouse*/
+	i8042_wait_ibuf_empty();
+	io_out8(I8042_PORT_DATA, command);
 }
 
 // Enable mouse
 void i8042_mouse_enable(void)
 {
-	char b;
-	b = i8042_read_cmd_byte();
-	b = (b & 0b11011111);
-	b = (b | 0b10);
-	i8042_write_cmd_byte(b);
-	i8042_cmd(0xA8);
+	i8042_controller_cmd(0xa8);
+	//i8042_read_obuf();
 }
 
 // Disable Mouse
 void i8042_mouse_disable(void)
 {
-	i8042_write_cmd_byte(i8042_read_cmd_byte() | 0b100000);
+	i8042_controller_cmd(0xa7);
 }
 
 // Enable Keyboard
 void i8042_keyboard_enable(void)
 {
-	i8042_write_cmd_byte(i8042_read_cmd_byte() & 0b11101111);
+	i8042_controller_cmd(0xae);
+}
+
+// Disable Keyboard
+void i8042_keyboard_disable(void)
+{
+	i8042_controller_cmd(0xad);
+}
+
+// Initialization of PS/2 Controller
+void init_i8042(void)
+{
+	unsigned char cfg_byte;
+
+	// Check if PS/2 controller exists
+
+	// Disable Devices
+	i8042_mouse_disable();
+	i8042_keyboard_disable();
+
+	// Flush the output buffer
+	while (1)
+		if ((i8042_read_status() & I8042_REG_STATUS_OBUF_FULL) == 1)
+			io_in8(I8042_PORT_DATA);
+		else
+			break;
+
+	// Set the Controller Configuration Byte
+	// Disable all IRQs and disable translation
+	i8042_controller_cmd(0x20);
+	cfg_byte = i8042_read_obuf() & 0xbc;
+	printk("4 cfg_byte:%#x\n", cfg_byte);
+	i8042_controller_cmd(0x60);
+	i8042_controller_cmd(cfg_byte);
+
+
+	// Self Test
+	i8042_controller_cmd(0xaa);
+	if (i8042_read_obuf() != 0x55)
+	{
+		printk("PS/2: Intel 8042 self test failed.\n");
+		return;
+	}
+
+	// Keyboard
+	init_keyboard();
+	
+	// Mouse
+	//init_mouse();
+
+	//i8042_keyboard_enable();
+	//i8042_mouse_enable();
+
+	// Set the Controller Configuration Byte
+	// Enable all IRQs
+	
+	i8042_controller_cmd(0x20);
+	cfg_byte = i8042_read_obuf() | 0x43;
+	printk("5 cfg_byte:%#x\n", cfg_byte);
+	i8042_controller_cmd(0x60);
+	i8042_controller_cmd(cfg_byte);
+
+	i8042_controller_cmd(0x20);
+	cfg_byte = i8042_read_obuf();
+	printk("final cfg_byte:%#x\n", cfg_byte);
+
+	//while(1);
 }

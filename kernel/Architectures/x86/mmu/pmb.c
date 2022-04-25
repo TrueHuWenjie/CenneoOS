@@ -1,0 +1,190 @@
+// Cenneo OS
+// /kernel/arch/x86/mmu/pmb.c
+// Physical Memory Bitmap
+
+#include "../include/x86types.h"
+#include "../include/x86mmd.h"
+#include "../include/x86ebi.h"
+#include <kvi.h>
+#include "../include/mmu.h"
+
+X86U32 *pmb = (X86U32 *) MMD_PMB_ADDR;
+
+struct pmb_sm pmb_sm;
+
+#define PMB_PAGE_FREE 0
+#define PMB_PAGE_USED 1
+
+// Set page as used
+#define PMB_SETUSED(addr) pmb[addr >> 17] |= (1 << ((addr >> 12) & 0b11111))
+
+// Set page as free
+#define PMB_SETFREE(addr) pmb[addr >> 17] &= ~(1 << ((addr >> 12) & 0b11111))
+
+// Check if a page is free
+#define PMB_IS_FREE(addr) \
+	pmb[(X86U32)addr >> 17] >> (((X86U32)addr >> 12) & 0b11111) & 1
+
+// Return the number of free physical page
+unsigned long pmb_info_free(void)
+{
+	return pmb_sm.free;
+}
+
+// Return total number of physical page
+unsigned long pmb_info_total(void)
+{
+	return pmb_sm.total;
+}
+
+// Return the number of reserved physical page
+unsigned long pmb_info_rsvd(void)
+{
+	return pmb_sm.rsvd;
+}
+
+// Lock functions about pmb, cannot be used by any other process/thread
+void pmb_lock(void)
+{
+
+}
+
+// Unlock functions about pmb
+void pmb_unlock(void)
+{
+
+}
+
+// Allocate a free page, return with non-X86A_NULL, otherwise failed.
+X86Addr pmb_alloc(unsigned long amount)
+{
+	unsigned long n, i, j, k, new_page_start;
+	unsigned int bitmap;
+
+	if (!amount) return X86A_NULL;
+
+	j = 0;
+
+	/**先判断phy_mem_bitmap数组中是否有个32位元素不为0xffffffff*/
+	for (n = 0; n < MMD_PMB_SIZE / sizeof(unsigned int); n ++)
+	{
+		if (pmb[n] != 0xffffffff)
+		{
+			/**如果某个元素中表示的页集中有空闲的页，则从中寻找*/
+			bitmap = pmb[n];
+
+			/**循环看这个页集中哪个页是空闲的*/
+			for (i = 0; i < 32; i ++)
+				/**进行判断相应描述的位是否为0*/
+				if (((bitmap >> i) & 1) == PMB_PAGE_FREE)
+				{
+					if (amount == 1)
+					{
+						/**这个页的实际地址计算出来*/
+						new_page_start = (n * 32 * MMU_PAGE_SIZE) + (i * MMU_PAGE_SIZE);
+
+						/**设置这个页为占用*/
+						PMB_SETUSED(new_page_start);
+						pmb_sm.free --;
+
+						/**返回这个页*/
+						return (X86Addr)new_page_start;
+					}else{
+						j ++;
+
+						if (j == 1)
+						{
+							new_page_start = (n * 32 * MMU_PAGE_SIZE) + (i * MMU_PAGE_SIZE);
+						}else if (j == amount)
+						{
+							for (k = 0; k < j; k ++)
+								PMB_SETUSED(new_page_start + k * MMU_PAGE_SIZE);
+
+							pmb_sm.free -= j;
+							
+							return (X86Addr)new_page_start;
+						}
+					}
+				}else{
+					j = 0;
+				}
+		}
+	}
+
+	/**当运行到这里的时候，代表遍历了页位图却无合适的页，暂时只能返回NULL值，以后可以在这里实现页交换*/
+
+	/**无效返回*/
+	return X86A_NULL;
+}
+
+/**释放一个物理页函数*/
+void pmb_free(X86Addr addr)
+{
+	if (PMB_IS_FREE(addr) == PMB_PAGE_FREE) return;
+
+	/**将该页设置为自由*/
+	PMB_SETFREE((unsigned long)addr);
+	pmb_sm.free ++;
+}
+
+// Initialization for Physical Memory Bitmap
+void init_pmb(void)
+{
+    X86U32 n;
+    X86U32 BaseAddr, Length;
+
+    // Assuming all physical memory have been used first
+	for (n = 0; n < (MMD_PMB_SIZE / sizeof(X86U32)); n ++)
+		pmb[n] = 0xffffffff;
+
+    // Generating available memory bitmap by analysing EBI
+    for (n = 0; n < BOOT_ARDS_NUM; n ++)
+    {
+        /**判断是否是高于4GB的范围*/
+        if (ebi.ARDS[n].BaseAddrHigh != 0) break;
+
+        /**4KB对齐*/
+    	ebi.ARDS[n].BaseAddrLow &= 0xfffff000;
+    	ebi.ARDS[n].LengthLow &= 0xfffff000;
+
+		/**判断该ARDS的范围是否为0*/
+		if (!ebi.ARDS[n].LengthLow) continue;
+
+        /**判断该ARDS是否可用*/
+        if (ebi.ARDS[n].Type != ARDS_FREE)
+		{
+			pmb_sm.rsvd += ebi.ARDS[n].LengthLow / MMU_PAGE_SIZE;
+			continue;
+		}else pmb_sm.total += ebi.ARDS[n].LengthLow / MMU_PAGE_SIZE;
+
+        /**归纳信息*/
+        BaseAddr = ebi.ARDS[n].BaseAddrLow;
+        Length = ebi.ARDS[n].LengthLow;
+    	pmb_sm.free += Length / MMU_PAGE_SIZE;
+
+        /**制作相应的物理内存位页图和内核内存字节页图*/
+        while (Length)
+    	{
+            /**设置空闲*/
+            PMB_SETFREE(BaseAddr);
+
+            /**计数增加*/
+            BaseAddr += MMU_PAGE_SIZE;
+            Length -= MMU_PAGE_SIZE;
+        }
+    }
+
+	// Marking the place used by kernel and other system data as 'used'
+	ebi.kernel_addr = ebi.kernel_addr & 0xfffff000;
+	if (ebi.kernel_size % MMU_PAGE_SIZE)
+		ebi.kernel_size = MMU_PAGE_SIZE + ebi.kernel_size & 0xfffff000;
+	else ebi.kernel_size = ebi.kernel_size;
+
+	for (n = 0; n * MMU_PAGE_SIZE < MMD_DATA_SIZE; n ++)
+		PMB_SETUSED(MMD_DATA_ADDR + n * MMU_PAGE_SIZE);
+
+	for (n = 0; n * MMU_PAGE_SIZE < ebi.kernel_size; n ++)
+		PMB_SETUSED(ebi.kernel_addr + n * MMU_PAGE_SIZE);
+
+	pmb_sm.free -= (ebi.kernel_size + MMD_DATA_SIZE) / MMU_PAGE_SIZE;
+}

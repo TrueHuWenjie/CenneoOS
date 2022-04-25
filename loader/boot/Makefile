@@ -11,6 +11,8 @@
 # Note that there is a boota.asm, which is boota.o in the first element
 # of $(OBJ), because it has entry "_start"
 
+sinclude $(CURDIR)/../../Makefile.variable
+
 DIRS := $(shell find . -maxdepth 9 -type d)
 
 C_SRCS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))
@@ -23,42 +25,52 @@ OBJS := $(filter %_start.o, $(OBJS)) $(filter-out %_start.o %setup.o, $(OBJS))
 OBJCOPYFLAGS := -R .note -R .comment -S
 
 LDFLAGS  := -m elf_i386 -e _start
-CFLAGS   := -m32 -fno-stack-protector -I $(CURDIR)/include
+CFLAGS   := -m32 -fno-stack-protector -I $(CURDIR)/includes
 ASMFLAGS := -f elf
 
 TARGET = BOOT
 
 sinclude $(OBJS:.o=.d)
 
-install:BOOT
+install:$(TARGET)
 	$(GFR) -ws $(TARGET) $(image) 2
-
+	
 all: $(TARGET)
 
 # compile files
 
 $(TARGET):setup.bin boot.bin
+	@echo [CAT] $@
 	cat setup.bin boot.bin > $(TARGET)
 
 boot.bin:boot.o
-	$(OBJCOPY) $(OBJCOPYFLAGS) -O binary boot.o boot.bin
+	@echo [OBJCOPY] $@
+	@$(OBJCOPY) $(OBJCOPYFLAGS) -O binary boot.o boot.bin
 
 boot.o:$(OBJS)
-	$(LD) $(LDFLAGS) -o $@ -Ttext 0x11000 $(OBJS)
+	@echo [LD] $@
+	@$(LD) $(LDFLAGS) -o $@ -Ttext 0x11000 $(OBJS)
 
 setup.bin:setup.asm
-	$(NS) -o $@ $<
+	@echo [NS] $@
+	@$(NS) -o $@ $<
 
 %.o: %.asm
-	$(NS) $(ASMFLAGS) -o $@ $<
+	@echo [NS] $@
+	@$(NS) $(ASMFLAGS) -o $@ $<
+
+%.o: %.c
+	@echo [CC] $@
+	$(CC) -c $(CFLAGS) $< -o $@
 
 %.d: %.asm
 	@$(NS) -M $(ASMFLAGS) $< > $@; \
-	sed -i 's,^:,$*.o $@:,g' $@;
+	$(SED) -i 's,^:,$*.o $@:,g' $@;
 
 %.d: %.c
 	@$(CC) -M $(CFLAGS) $< > $@; \
-	sed -i 's,$(notdir $*)\.o[ :]*,$*.o $@ : ,g' $@;
+	$(SED) -i 's,$(notdir $*)\.o[ :]*,$*.o $@ : ,g' $@;
 
 clean:
-	$(RM) BOOT $(OBJS) $(OBJS:.o=.d) boot.o *.bin
+	@echo [RM] Removing files...
+	@$(RM) BOOT $(OBJS) $(OBJS:.o=.d) *.bin

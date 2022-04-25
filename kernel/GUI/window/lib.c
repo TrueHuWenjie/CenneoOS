@@ -10,7 +10,7 @@
 #include <lib/string.h>
 #include <lib/gpl.h>
 #include <graphics.h>
-#include <GUI.h>
+#include <gui.h>
 #include <kmm.h>
 #include <stdlib.h>
 #include <stdarg.h>

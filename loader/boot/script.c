@@ -7,11 +7,11 @@
  * 7/8/2018 23:06
  */
 
-#include "script.h"
 #include "../problem.h"
-#include "VI.h"
-#include "lib/string.h"
-#include "lib/stdio.h"
+#include <script.h>
+#include <vi.h>
+#include <lib/string.h>
+#include <lib/stdio.h>
 
 #define SCRIPT_BUF_SIZE 256
 

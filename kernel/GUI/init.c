@@ -9,8 +9,8 @@
 
 #include <kmm.h>
 #include <stdlib.h>
-#include <GUI.h>
-#include <lib/mem.h>
+#include <gui.h>
+#include <lib/string.h>
 #include <lib/gpl.h>
 #include <info.h>
 #include <graphics.h>

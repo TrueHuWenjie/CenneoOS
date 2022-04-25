@@ -111,8 +111,8 @@ setup:
 	mov		di, ModeInfoBlock_struc
 	int		0x10
 	; init for video
-	mov		ax, 0x4F02		;VBE/set video mode
-	mov		bx, vbe_mode		;800*600*24bit
+	mov		ax, 0x4F02			; VBE/set video mode
+	mov		bx, vbe_mode		; 800*600*24bit
 	int		0x10
 
 	; close the interruption
@@ -165,9 +165,9 @@ boot_info:
 	dd		boot_info_end - boot_info
 
 	; 32-bit 0-4GB Code Segment Descriptor Seletor
-	code_sel resw	1
+	code_sel dw	0x0000
 	; 32-bit 0-4GB Data Segment Descriptor Seletor
-	data_sel resw	1
+	data_sel dw	0x0000
 
 	; Address Range DescriptorStructure
 	ARDS0 istruc Address_Range_Descriptor_Structure
@@ -196,8 +196,10 @@ boot_info:
 	ModeInfoBlock_struc	times 256 db 0x00
 
 	; kernel file info
-	kernel_addr	resd 1
-	kernel_size	resd 1
+	kernel_addr	dd 0x00000000
+	kernel_size	dd 0x00000000
+
+	mode		dd 0x00000000
 boot_info_end:
 
 ; Global Descriptor Table,GDT

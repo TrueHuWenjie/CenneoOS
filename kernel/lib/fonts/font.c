@@ -7,7 +7,7 @@
  * 18/10/2014
  */
 
-#include <lib/fonts/font.h>
+#include <lib/font.h>
 #include <lib/string.h>
 #include <stdlib.h>
 
@@ -30,7 +30,7 @@ void init_font(void)
 }
 
 /**注册字库函数*/
-long register_font(struct font_info *font_info)
+long font_register(struct font_info *font_info)
 {
 	unsigned long n;
 

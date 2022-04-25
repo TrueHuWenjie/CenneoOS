@@ -8,7 +8,7 @@
  */
 
 #include <syscalls.h>
-#include <GUI.h>
+#include <gui.h>
 #include "window/window.h"
 
 /**API列表*/

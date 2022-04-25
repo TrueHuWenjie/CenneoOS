@@ -7,7 +7,7 @@
  * 12/6/2014 11:10 AM
  */
 
-#include "math.h"
+#include <math.h>
 
 /**取一个有符号数的绝对值函数*/
 long abs(long number)

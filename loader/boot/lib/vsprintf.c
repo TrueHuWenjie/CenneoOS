@@ -40,10 +40,10 @@
  * SUCH DAMAGE.
  */ 
 
-#include "string.h"
-#include "stdlib.h"
-#include "stdarg.h"
-#include "mem.h"
+#include <lib/string.h>
+#include <lib/stdlib.h>
+#include <lib/stdarg.h>
+#include <lib/mem.h>
 
 #ifdef KERNEL
 #define NOFLOAT

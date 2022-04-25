@@ -7,8 +7,6 @@
  * 11/8/2014 7:37 PM
  */
 
-#include "mem.h"
-
 /**
  * memset - Fill a region of memory with the given value
  * @buffer: Pointer to the start of the area.

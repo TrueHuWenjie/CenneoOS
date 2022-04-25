@@ -2,16 +2,22 @@
 // /kernel/drivers/graphics.c
 // Graphics Card support
 
-#include "../arch/x86/include/x86ebi.h"
+#include "../Architectures/x86/include/x86ebi.h"
 #include <types.h>
 #include <kmm.h>
 #include <graphics.h>
 
 struct vbe_info vbe_info;
 
+gfx_switchbuffer()
+{
+	
+}
+
 /**Initialize for vesa*/
 void init_vesa(void)
 {
+	urm_create("/devices", "fb0");
 	vbe_info.xres = ebi.ModeInfoBlock.XResolution;
 	vbe_info.yres = ebi.ModeInfoBlock.YResolution;
 	vbe_info.bpp = ebi.ModeInfoBlock.BitsPerPixel;
@@ -19,4 +25,9 @@ void init_vesa(void)
 	vbe_info.vram = vmalloc(vbe_info.vram_length, VM_MAPD + VM_WAIT);
 	if (!vbe_info.vram) reset();
 	vmap(ebi.ModeInfoBlock.PhysBasePtr, vbe_info.vram, vbe_info.vram_length);
+}
+
+void init_gfx(void)
+{
+	
 }

@@ -7,8 +7,8 @@
  * 8/16/2014 9:08 AM
  */
 
-#include <GUI.h>
-#include <lib/fonts/font.h>
+#include <gui.h>
+#include <lib/font.h>
 #include <lib/math.h>
 #include "layer.h"
 

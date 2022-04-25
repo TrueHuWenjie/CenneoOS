@@ -46,7 +46,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <lib/string.h>
-#include <lib/mem.h>
 
 #ifdef KERNEL
 #define NOFLOAT

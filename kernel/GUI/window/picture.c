@@ -7,7 +7,7 @@
  * 2/16/2015 7:55 PM
  */
 
-#include <GUI.h>
+#include <gui.h>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>

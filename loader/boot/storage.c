@@ -9,14 +9,14 @@
 #define STORAGE_C_
 #include "../configure.h"
 #include "../problem.h"
-#include "lib/stdlib.h"
-#include "lib/stdbool.h"
-#include "MMU.h"
-#include "storage.h"
-#include "VI.h"
-#include "head.h"
-#include "lib/mem.h"
-#include "lib/color.h"
+#include <lib/stdlib.h>
+#include <lib/stdbool.h>
+#include <mmu.h>
+#include <storage.h>
+#include <vi.h>
+#include <head.h>
+#include <lib/mem.h>
+#include <lib/color.h>
 #include <io.h>
 
 

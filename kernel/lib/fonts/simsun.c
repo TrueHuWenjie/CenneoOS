@@ -7,7 +7,7 @@
  * 19/10/2014
  */
 
-#include <lib/fonts/font.h>
+#include <lib/font.h>
 
 #define FONTDATAMAX 2048
 
@@ -1599,5 +1599,5 @@ void Register_simsun(void)
 	MS_simsun.width = 8;
 	MS_simsun.height = 16;
 	MS_simsun.copr = "from Microsoft Windows";
-	register_font(&MS_simsun);
+	font_register(&MS_simsun);
 }

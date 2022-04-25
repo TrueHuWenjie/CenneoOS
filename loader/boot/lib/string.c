@@ -7,8 +7,7 @@
  * 7/20/2014
  */
 
-#include "string.h"
-#include "mem.h"
+#include <lib/mem.h>
 
 /**将字符串转换为大写函数*/
 char *strupr(char *str)
@@ -141,6 +140,19 @@ char *strcpy(char *dest, const char *src)
 }
 
 /**
+ *strlen - Find the length of a string
+ *@s: The string to be sized
+ */
+unsigned long strlen(const char *s)
+{
+	const char *sc;
+
+	for (sc = s; *sc != '\0'; ++ sc)
+		/* nothing */;
+	return sc - s;
+}
+
+/**
  *strncpy - Copy a length-limited, %NUL-terminated string
  *@dest: Where to copy the string to
  *@src: Where to copy the string from
@@ -189,19 +201,6 @@ unsigned long strlcpy(char *dest, const char *src, unsigned long size)
 }
 
 /**
- *strlen - Find the length of a string
- *@s: The string to be sized
- */
-unsigned long strlen(const char *s)
-{
-	const char *sc;
-
-	for (sc = s; *sc != '\0'; ++ sc)
-		/* nothing */;
-	return sc - s;
-}
-
-/**
  * strnlen - Find the length of a length-limited string
  * @s: The string to be sized
  * @count: The maximum number of bytes to search
@@ -238,7 +237,7 @@ unsigned long strspn(const char *s, const char *accept)
 	return count;
 }
 
-char *strnstr(const char *big, const char *little, unsigned long len)
+const char *strnstr(const char *big, const char *little, unsigned long len)
 {
 	const char *p;
 

@@ -7,7 +7,7 @@
  * 2/15/2015 7:58 PM
  */
 
-#include <GUI.h>
+#include <gui.h>
 #include "kmm.h"
 #include "window.h"
 #include "unit.h"

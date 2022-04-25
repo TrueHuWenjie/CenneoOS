@@ -8,6 +8,8 @@
 # Copyright (c) 2017, Ghost Bird Operating System Project Developers.
 # All rights reserved.
 
+sinclude $(CURDIR)/../../Makefile.variable
+
 DIRS := $(shell find . -maxdepth 9 -type d)
 SRCS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))
 OBJS := $(patsubst %.c, %.o, $(SRCS))
@@ -23,11 +25,15 @@ all: $(EXEC_NAME)
 
 
 $(EXEC_NAME): $(OBJS)
-	$(CC) $(LDFLAGS) -o $(EXEC_NAME) $(OBJS)
+	$(TOOLS_CC) $(LDFLAGS) -o $(EXEC_NAME) $(OBJS)
+
+%.o: %.c
+	@echo [TOOLS_CC] $@
+	$(TOOLS_CC) -c $(CFLAGS) $< -o $@
 
 %.d: %.c
-	@$(CC) -M $(CFLAGS) $< > $@; \
-	sed -i 's,$(notdir $*)\.o[ :]*,$*.o $@ : ,g' $@;
+	@$(TOOLS_CC) -M $(CFLAGS) $< > $@; \
+	$(SED) -i 's,$(notdir $*)\.o[ :]*,$*.o $@ : ,g' $@;
 
 clean:
 	$(RM) $(EXEC_NAME) *.exe $(OBJS) $(SRCS:.c=.d)

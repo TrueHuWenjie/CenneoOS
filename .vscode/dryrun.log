@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/huwenjie/Documents/cenneo-os-project'
+echo x86_64-elf-gcc
+echo OSXXXXX
+make: Leaving directory `/Users/huwenjie/Documents/cenneo-os-project'
+ 

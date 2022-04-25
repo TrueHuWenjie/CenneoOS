@@ -8,8 +8,90 @@
  */
 
 #include <lib/string.h>
-#include <lib/mem.h>
 #include <stddef.h>
+#include <kmm.h>
+
+// Find a value in memory field
+void *memchr(void * ptr, int value, size_t num)
+{
+
+}
+
+/**
+ * memset - Fill a region of memory with the given value
+ * @buffer: Pointer to the start of the area.
+ * @c: The byte to fill the area with
+ * @count: The size of the area.
+ *
+ * Do not use memset() to access IO space, use memset_io() instead.
+ */
+void *memset(void *buffer, int c, size_t count)
+{
+	char *xs = buffer;
+
+	while (count--)
+		*xs++ = c;
+	return buffer;
+}
+
+/**
+ * memcpy - Copy one area of memory to another
+ * @dest: Where to copy to
+ * @src: Where to copy from
+ * @count: The size of the area.
+ *
+ * You should not use this function to access IO space, use memcpy_toio()
+ * or memcpy_fromio() instead.
+ */
+void *memcpy(void *dest, const void *src, size_t count)
+{
+	char *dest_c;
+	const char *src_c;
+	long *dest_l = dest;
+	const long *src_l = src;
+
+	size_t count_l = count / sizeof(long);
+	count = count % sizeof(long);
+
+	while (count_l --)
+		*dest_l ++ = *src_l ++;  
+
+	dest_c = (char *)dest_l;
+	src_c = (const char *) src_l;
+
+    while (count   --)
+		*dest_c ++ = *src_c ++;
+	return dest;
+}
+
+/**
+ * memmove - Copy one area of memory to another
+ * @dest: Where to copy to
+ * @src: Where to copy from
+ * @count: The size of the area.
+ *
+ * Unlike memcpy(), memmove() copes with overlapping areas.
+ */
+void *memmove(void *dest, const void *src, size_t count)
+{
+	char *tmp;
+	const char *s;
+
+	if (dest <= src) {
+		tmp = dest;
+		s = src;
+		while (count --)
+			*tmp ++ = *s ++;
+	} else {
+		tmp = dest;
+		tmp += count;
+		s = src;
+		s += count;
+		while (count --)
+			*--tmp = *--s;
+	}
+	return dest;
+}
 
 // Get the address in string s1 when match string s2
 char *strstr(const char *s1, const char *s2)
@@ -35,10 +117,25 @@ Purpose:
 char *strchr(const char *string, int chr)
 {
     while (*string && *string != chr)
-        string++;
+        string ++;
     if (*string == chr)
         return(string);
     return((char *)0);
+}
+
+int strcmp(const char *s1, const char *s2)
+{
+	int i;
+
+	for (i = 0; ; i ++)
+	{
+		if (s1[i] != s2[i])
+			return -1;
+		
+		if (!s1[i]) return 0;
+	}
+		
+		
 }
 
 /**
@@ -94,10 +191,11 @@ char *strncpy(char *dest, const char *src, size_t count)
 {
 	char *tmp = dest;
 
-	while (count--) {
+	while (count --)
+	{
 		if ((*tmp = *src) != 0)
-			src++;
-		tmp++;
+			src ++;
+		tmp ++;
 	}
 	return dest;
 }
@@ -133,7 +231,7 @@ size_t strlen(const char *s)
 {
 	const char *sc;
 
-	for (sc = s; *sc != '\0'; ++sc)
+	for (sc = s; *sc != '\0'; ++ sc)
 		/* nothing */;
 	return sc - s;
 }
@@ -173,4 +271,25 @@ size_t strspn(const char *s, const char *accept)
 		++count;
 	}
 	return count;
+}
+
+char *strndup(const char *src, size_t count)
+{
+	char *dst;
+	int len = strlen(src);
+	if (len > count) len = count;
+	dst = kmalloc(len + 1, 0);
+	strncpy(dst, src, count);
+	dst[len] = '\0';
+	return dst;
+}
+
+char *strdup(const char *src)
+{
+	char *dst;
+	int len = strlen(src);
+	dst = kmalloc(len + 1, 0);
+	strcpy(dst, src);
+	dst[len] = '\0';
+	return dst;
 }

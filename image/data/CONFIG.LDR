@@ -1,0 +1,38 @@
+; Date:2018/7/7 13:40
+; Author:HuWenjie<1@hwj.me>
+; Explorer Loader
+; loaderconfig
+; 
+; BSD 2-Clause License
+; 
+; Copyright (c) 2018, Ghost Bird Operating System Project Developers.
+; All rights reserved.
+
+; Examples
+
+[list]
+	[item]
+		[name]Ghost Bird OS[end]
+		[description]No description[end]
+		[location]/GhostBird/kernel.bin[end]
+		[address]0x10000[end]
+	[end]
+	
+	[item]
+		[name]Dragon OS[end]
+		[description]No description[end]
+		[location]/Dragon/kernel.bin[end]
+		[address]0x10000[end]
+	[end]
+	
+	[item]
+		[name]Dolphin OS[end]
+		[description]No description[end]
+		[location]/Dolphin/kernel.bin[end]
+		[address]0x10000[end]
+	[end]
+[end]
+
+[settings]
+	
+[end]

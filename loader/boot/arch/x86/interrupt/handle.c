@@ -2,6 +2,8 @@
 // /boot/arch/x86/interrupt/handle.c
 // Interruption's handle funcions in C language
 
+#include <lib/mem.h>
+#include <mmu.h>
 #include "../include/types.h"
 #include "../include/interrupt.h"
 

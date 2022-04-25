@@ -12,16 +12,16 @@
 
 
 all:
-	cd mbr && make all
-	cd boot && make all
+	@cd mbr && make all
+	@cd boot && make all
 	
 install:
-	cd mbr && make install
-	cd boot && make install
+	@cd mbr && make install
+	@cd boot && make install
 	
 clean:
-	cd mbr && make clean
-	cd boot && make clean
+	@cd mbr && make clean
+	@cd boot && make clean
 	
 	
 # part of functions

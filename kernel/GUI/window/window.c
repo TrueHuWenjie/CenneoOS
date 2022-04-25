@@ -7,12 +7,12 @@
  * 8/16/2014 9:08 AM
  */
 
-#include <lib/fonts/font.h>
+#include <lib/font.h>
 #include <time.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdarg.h>
-#include <GUI.h>
+#include <gui.h>
 #include <kmm.h>
 #include <arch.h>
 #include <lib/gpl.h>
@@ -22,7 +22,7 @@
 #include "../recourse.h"
 #include "../layer.h"
 #include <mouse.h>
-#include <mpt.h>
+#include <mpt/mpt.h>
 
 /**
  * 图层顺序：
@@ -43,6 +43,8 @@ struct layer *background_layer = NULL, *pointer_layer = NULL, *taskbar_layer = N
 
 /**测试窗口*/
 struct window *new_window_2;
+
+struct window *gui_control;
 
 /**拖动窗口描述体*/
 struct window *drag_window = NULL;
@@ -339,6 +341,7 @@ void refresh_pointer(void)
 		/**判断是否在拖拽状态*/
 		if (drag_window != NULL){
 			/**设置窗口坐标，因为窗口通常大于鼠标，所以窗口先移动，再移动鼠标，得出最好效果*/
+
 			gui_set_position(drag_window->layer, drag_x + mouse_x, drag_y + mouse_y);
 		}
 
@@ -449,46 +452,53 @@ void window_set_active(struct window *target)
 	 * 如果当前还没有活动窗口，就省略这个步骤
 	 */
 	if (window_active != NULL)
+		window_set_inactive();
+
+	/**设置新窗口为活动窗口*/
+	window_active = target;
+
+	/**判断新窗口是否位于所有窗口之上(上一个图层是任务栏)*/
+	if (target->layer->top != taskbar_layer)
 	{
-		/**有则需要将当前活动窗口设置为非活动窗口*/
-		window_draw(window_active, WINDOW_INACTIVE_TITLE_COLOR, WINDOW_INACTIVE_FRAME_COLOR);
+		/**将新窗口从图层链表中剥离出来*/
+		target->layer->top->bottom = target->layer->bottom;
+		target->layer->bottom->top = target->layer->top;
+
+		/**将新窗口移动到所有窗口之上*/
+		target->layer->top = taskbar_layer;
+		target->layer->bottom = taskbar_layer->bottom;
+		taskbar_layer->bottom = target->layer;
+		target->layer->bottom->top = target->layer;
+
+		/**这里没有依据风格判断实际上有效的部分，在后期需要改正*/
+		gui_refresh_block(target->layer->x, target->layer->y, target->layer->width, target->layer->height);
 	}
 
-		/**设置新窗口为活动窗口*/
-		window_active = target;
+	/**将新窗口绘制成活动窗口*/
+	window_draw(target, WINDOW_ACTIVE_TITLE_COLOR, WINDOW_ACTIVE_FRAME_COLOR);
 
-		/**判断新窗口是否位于所有窗口之上(上一个图层是任务栏)*/
-		if (target->layer->top != taskbar_layer)
-		{
-			/**将新窗口从图层链表中剥离出来*/
-			target->layer->top->bottom = target->layer->bottom;
-			target->layer->bottom->top = target->layer->top;
-
-			/**将新窗口移动到所有窗口之上*/
-			target->layer->top = taskbar_layer;
-			target->layer->bottom = taskbar_layer->bottom;
-			taskbar_layer->bottom = target->layer;
-			target->layer->bottom->top = target->layer;
-
-			/**这里没有依据风格判断实际上有效的部分，在后期需要改正*/
-			gui_refresh_block(target->layer->x, target->layer->y, target->layer->width, target->layer->height);
-		}
-
-		/**将新窗口绘制成活动窗口*/
-		window_draw(target, WINDOW_ACTIVE_TITLE_COLOR, WINDOW_ACTIVE_FRAME_COLOR);
+	// Refresh
+	gui_update(target->layer);
 }
 
 /**取消活动窗口函数*/
 void window_set_inactive(void)
 {
+	struct layer *target;
+
 	/**首先判断是否有活动窗口*/
 	if (window_active == NULL) return;
+
+	target = window_active->layer;
 
 	/**绘制成非活动窗口*/
 	window_draw(window_active, WINDOW_INACTIVE_TITLE_COLOR, WINDOW_INACTIVE_FRAME_COLOR);
 
 	/**指针清空*/
 	window_active = NULL;
+
+	// Refresh
+	gui_update(target);
 
 	/**正常返回*/
 	return;

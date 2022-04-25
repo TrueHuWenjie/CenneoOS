@@ -32,7 +32,7 @@ extern unsigned long window_Date_length;
 #define TIME_COLOR			0xff000000
 
 /**GUI控制台窗口*/
-struct window *gui_control;
+extern struct window *gui_control;
 
 /**窗口结构体辨识特殊数*/
 #define WINDOW_IDENT	11262

@@ -3,9 +3,9 @@
 
 #include "../configure.h"
 #include "../problem.h"
-#include "MMU.h"
-#include "VI.h"
-#include "lib/stdlib.h"
+#include <lib/stdlib.h>
+#include <vi.h>
+#include <mmu.h>
 
 /**未分配内存指针*/
 unsigned long unalloc_ptr = mem_start;

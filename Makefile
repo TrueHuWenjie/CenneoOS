@@ -8,21 +8,7 @@
 # Copyright (c) 2017, Ghost Bird Operating System Project Developers.
 # All rights reserved.
 
-CC      = gcc
-CXX     = g++
-NS      = nasm
-LD      = ld
-OBJCOPY = objcopy
-GFR     = gfr
-qemu = qemu-system-i386
-image = $(CURDIR)/image/image.vhd
-compress = zip
-depress = unzip
-
-export CC NS LD OBJCOPY GFR
-export image qemu
-
-export PATH += :$(CURDIR)/tools/gfr
+sinclude $(CURDIR)/Makefile.variable
 
 .PHONY:gfr
 .PHONY:loader kernel
@@ -31,49 +17,107 @@ export PATH += :$(CURDIR)/tools/gfr
 .PHONY:clean
 .PHONY:all install run
 
+
+
+test:
+	echo $(CC)
+
+ifeq ($(PLATFORM), OSX)
+	@echo OSXXXXX
+endif
+
+ifeq ($(PLATFORM), LINUX)
+	@echo LINUXXXXX
+endif
+
+
+run:install
+	@echo Starting Virtual Machine...
+	@$(qemu) -net nic,model=rtl8139 -net user -drive file=$(image),format=vpc -m 9
+
+# tools
+
 gfr:
-	cd tools/gfr && make all
+	@cd tools/gfr && make all
+
+clean_gfr:
+	@cd tools/gfr && make clean
+
+# loader
 
 loader:
-	cd loader && make all
+	@cd loader && make all
+
+clean_loader:
+	@cd loader && make clean
+
+# kernel
 
 kernel:
-	cd kernel && make all
+	@cd kernel && make all
+
+clean_kernel:
+	@cd kernel && make clean
+
+# appbase
+
+appbase:
+	@cd tools/appbase && make all
+
+# applications
+
+console:
+	@cd applications/Console && make all
+
+clean_console:
+	@cd applications/Console && make clean
+
+gui:
+	@cd applications/GUI && make all
 
 prepare:$(image:.vhd = .zip) $(image)
 	$(depress) $(image:.vhd=.zip)
 
-clean_loader:
-	cd loader && make clean
-
-clean_gfr:
-	cd tools/gfr && make clean
-
-clean_kernel:
-	cd kernel && make clean
-
 clean:
-	cd loader && make clean
-	cd tools/gfr && make clean
-	cd kernel && make clean
+	@echo Cleaning temporary files...
+	@cd loader && make clean
+	@cd tools/gfr && make clean
+	@cd kernel && make clean
 
 dist:clean
-	$(compress) -m -r -j $(image:.vhd=.zip) $(image)
+	@echo Compressing Image...
+	@$(compress) -m -r -j $(image:.vhd=.zip) $(image)
 
-install:
-	cd loader && make install
-	cd kernel && make install
-all:
-	make loader
-	make kernel
-run:all install
-	$(qemu) -drive file=$(image),format=vpc -m 9
+all:loader kernel
 
-help:
-	clear
-	@echo Ghost Bird Project Makefile - Help
-	@echo target		introduction
-	@echo gfr		make Ghost Bird File System Reader
-	@echo loader		make Explorer Loader
-	@echo clean		make cl
-	@echo loader		make Explorer Loader
+sync:
+	@echo Synchronizing...
+
+ifeq ($(PLATFORM), LINUX)
+	@modprobe nbd
+	@qemu-nbd -c /dev/nbd0 $(image) -f vpc
+	@sleep 0.2
+	@mount /dev/nbd0p1 /mnt
+	@rsync -rtopgDl $(CURDIR)/image/data/ /mnt/ --delete
+	@umount /mnt
+	@qemu-nbd -d /dev/nbd0
+	@sleep 0.2
+	@rmmod nbd
+endif
+
+ifeq ($(PLATFORM), OSX)
+	@hdiutil attach -imagekey diskimage-class=CRawDiskImage $(image)
+	@rsync -rtopgDl $(CURDIR)/image/data/ /Volumes/CENNEOOS/ --delete
+	@sudo umount /Volumes/CENNEOOS
+#	@hdiutil detach /dev/disk3
+endif
+
+install:all
+	@make sync
+
+install_loader:
+	@echo Installing Loader...
+	@cd loader && make install
+	
+#$(qemu) -net nic,model=rtl8139 -drive file=$(image),format=vpc -m 9
+# $(qemu) -device virtio-net-pci,mac=11:22:33:44:55:66 -drive file=$(image),format=vpc -m 9

@@ -2,37 +2,19 @@
 // /kernel/lib/gpi.c
 // Graphical Programming Library
 
-#include <lib/mem.h>
-#include <lib/fonts/font.h>
+#include <lib/string.h>
+#include <lib/font.h>
 #include <lib/math.h>
 #include <graphics.h>
 #include <lib/gpl.h>
+
+
 
 /**显示像素函数*/
 void (*putpixel)(unsigned int x, unsigned int y, unsigned int color);
 
 /**获取像素函数*/
 unsigned int (*getpixel)(unsigned int x, unsigned int y);
-
-/**graphical initialization*/
-void init_graph(void)
-{
-	extern void init_vesa(void);
-
-	/**初始化VBE模式*/
-	init_vesa();
-
-	/**根据BPP判断所需要的相应显示像素函数*/
-	if (vbe_info.bpp == 24)
-	{
-		putpixel = putpixel24;
-		getpixel = getpixel24;
-	}else if (vbe_info.bpp == 32)
-	{
-		putpixel = putpixel32;
-		getpixel = getpixel32;
-	}
-}
 
 /**put a string in screen*/
 void outtextxy(unsigned long x, unsigned long y, unsigned int color, unsigned char *string)
@@ -176,4 +158,24 @@ void putpixel32(unsigned int x, unsigned int y, unsigned int color)
 void clear_screen(void)
 {
 	memset(vbe_info.vram, 0, vbe_info.vram_length);
+}
+
+/**graphical initialization*/
+void init_graph(void)
+{
+	extern void init_vesa(void);
+
+	/**初始化VBE模式*/
+	init_vesa();
+
+	/**根据BPP判断所需要的相应显示像素函数*/
+	if (vbe_info.bpp == 24)
+	{
+		putpixel = putpixel24;
+		getpixel = getpixel24;
+	}else if (vbe_info.bpp == 32)
+	{
+		putpixel = putpixel32;
+		getpixel = getpixel32;
+	}
 }

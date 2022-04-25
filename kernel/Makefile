@@ -8,6 +8,8 @@
 # Copyright (c) 2017, Ghost Bird Operating System Project Developers.
 # All rights reserved.
 
+sinclude $(CURDIR)/../Makefile.variable
+
 DIRS := $(shell find . -maxdepth 9 -type d)
 
 C_SRCS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.c))
@@ -23,47 +25,48 @@ OBJCOPYFLAGS := binary -R .note -R .comment -S \
 --set-section-flags .bss=alloc,load,contents
 
 LDFLAGS  := -m elf_i386
-CFLAGS   := -m32 -fno-stack-protector -I $(CURDIR)/include
-CPPFLAGS := -m32 -fno-stack-protector -I $(CURDIR)/include
+CFLAGS   := -m32 -fno-stack-protector -I $(CURDIR)/includes
+CPPFLAGS := -m32 -fno-stack-protector -I $(CURDIR)/includes
 ASMFLAGS := -f elf
 
-TARGET = KERNEL.BIN
+TARGET = ../image/data/KERNEL.BIN
 
 sinclude $(OBJS:.o=.d)
-
-install:$(TARGET)
-	modprobe nbd
-	qemu-nbd -c /dev/nbd0 $(image) -f vpc
-	sleep 0.2
-	mount /dev/nbd0p1 /mnt
-	cp $(TARGET) /mnt
-	umount /mnt
-	qemu-nbd -d /dev/nbd0
-	sleep 0.2
-	rmmod nbd
 
 all: $(TARGET)
 
 $(TARGET): kernel.o
-	$(OBJCOPY) -O $(OBJCOPYFLAGS) kernel.o $(TARGET)
+	@echo [OBJCOPY] $@
+	@$(OBJCOPY) -O $(OBJCOPYFLAGS) kernel.o $(TARGET)
 
 kernel.o: $(OBJS)
-	$(LD) $(LDFLAGS) -o kernel.o -Ttext 0x400000 $(OBJS)
+	@echo [LD] $@
+	@$(LD) $(LDFLAGS) -o kernel.o -Ttext 0x400000 $(OBJS)
 
 %.o: %.asm
-	$(NS) $(ASMFLAGS) -o $@ $<
+	@echo [CC] $<
+	@$(NS) $(ASMFLAGS) -o $@ $<
+
+%.o: %.c
+	@echo [CC] $@
+	@$(CC) -c $(CFLAGS) $< -o $@
+
+%.o: %.cpp
+	@echo [C++] $@
+	@$(CXX) -c $(CPPFLAGS) $< -o $@
 
 %.d: %.asm
 	@$(NS) -M $(ASMFLAGS) $< > $@; \
-	sed -i 's,^:,$*.o $@:,g' $@;
+	$(SED) -i 's,^:,$*.o $@:,g' $@;
 
 %.d: %.c
 	@$(CC) -M $(CFLAGS) $< > $@; \
-	sed -i 's,$(notdir $*)\.o[ :]*,$*.o $@ : ,g' $@;
+	$(SED) -i 's,$(notdir $*)\.o[ :]*,$*.o $@ : ,g' $@;
 
 %.d: %.cpp
 	@$(CXX) -M $(CPPFLAGS) $< > $@; \
-	sed -i 's,$(notdir $*)\.o[ :]*,$*.o $@ : ,g' $@;
+	$(SED) -i 's,$(notdir $*)\.o[ :]*,$*.o $@ : ,g' $@;
 
 clean:
-	$(RM) $(TARGET) kernel.o *.exe $(OBJS) $(OBJS:.o=.d)
+	@echo [RM] Removing files...
+	@$(RM) $(TARGET) kernel.o $(OBJS) $(OBJS:.o=.d)

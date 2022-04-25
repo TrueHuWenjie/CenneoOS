@@ -1,7 +1,6 @@
 #include <stddef.h>
 #include <kmm.h>
 #include <lib/string.h>
-#include <lib/mem.h>
 
 #ifdef __cplusplus
 	extern "C"
@@ -10,18 +9,8 @@
 		void test_C_plus_plus(void);
 	}
 #endif
-/**
-void *operator new (size_t size)
-{
-	void *ptr;
-	ptr = (void *) kmalloc(size, 0);
-	if (!ptr) return ptr;
-	memset(ptr, '\0', size);
-	return ptr;
-}
-*/
 /*
-void *operator new[](size_t size)
+void *operator new (unsigned int size)
 {
 	void *ptr;
 	ptr = (void *) kmalloc(size, 0);
@@ -29,7 +18,17 @@ void *operator new[](size_t size)
 	memset(ptr, '\0', size);
 	return ptr;
 }
-*/
+
+
+void *operator new[](unsigned int size)
+{
+	void *ptr;
+	ptr = (void *) kmalloc(size, 0);
+	if (!ptr) return ptr;
+	memset(ptr, '\0', size);
+	return ptr;
+}*/
+
 void operator delete(void* p)
 {
 	kfree(p);
