@@ -5,6 +5,23 @@
 #ifndef TYPES_H_
 #define TYPES_H_
 
+typedef long long int           intmax_t;
+typedef unsigned long long int  uintmax_t;
+
+#ifdef IA32
+typedef long int                intptr_t;
+typedef unsigned long int       uintptr_t;
+#endif
+
+#ifdef AMD64
+typedef int                     intptr_t;
+typedef unsigned int            uintptr_t;
+#endif
+
+#ifdef ARM
+
+#endif
+
 typedef unsigned char           uint8_t;
 typedef unsigned short int      uint16_t;
 typedef unsigned int            uint32_t;
