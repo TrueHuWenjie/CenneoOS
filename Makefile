@@ -22,15 +22,6 @@ sinclude $(CURDIR)/Makefile.variable
 test:
 	echo $(CC)
 
-ifeq ($(PLATFORM), OSX)
-	@echo OSXXXXX
-endif
-
-ifeq ($(PLATFORM), LINUX)
-	@echo LINUXXXXX
-endif
-
-
 run:install
 	@echo Starting Virtual Machine...
 	@$(qemu) -net nic,model=rtl8139 -net user -drive file=$(image),format=vpc -m 9
