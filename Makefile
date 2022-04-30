@@ -18,10 +18,6 @@ sinclude $(CURDIR)/Makefile.variable
 .PHONY:all install run
 
 
-
-test:
-	echo $(CC)
-
 run:install
 	@echo Starting Virtual Machine...
 	@$(qemu) -net nic,model=rtl8139 -net user -drive file=$(image),format=vpc -m 9
