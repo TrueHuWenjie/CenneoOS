@@ -9,3 +9,5 @@
 .DS_Store
 image.vhd
 image.zip
+.vscode/c_cpp_properties.json
+.vscode/configurationCache.log
