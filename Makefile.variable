@@ -1,8 +1,14 @@
 
+# For which one architecture
 TARGET_ARCH = x86
 # TARGET_ARCH = AMD64
 # TARGET_ARCH = ARM
 
+# Current global directory of cenneo-os-project
+current_dir = /Users/huwenjie/Documents/cenneo-os-project
+image = $(current_dir)/image/image.vhd
+tools = $(current_dir)/tools
+appbase = $(tools)/appbase
 
 # Detecting Platform and Architecture
 ifeq ($(OS), Windows_NT)
@@ -54,35 +60,22 @@ endif
 
 ifeq ($(PLATFORM), OSX)
 
-CC       = x86_64-elf-gcc
-CXX      = x86_64-elf-g++
-TOOLS_CC = gcc
-NS       = nasm
-LD       = x86_64-elf-ld
-AR       = x86_64-elf-ar
-OBJCOPY  = x86_64-elf-objcopy
-SED      = gsed
-GFR      = $(tools)/gfr/gfr
+CC       = x86_64-elf-gcc       # C Compiler
+CXX      = x86_64-elf-g++       # C++ Compiler
+TOOLS_CC = gcc                  # C Compiler for compiling tools
+NS       = nasm                 # Assembler
+LD       = x86_64-elf-ld        # Linker
+AR       = x86_64-elf-ar        # 
+OBJCOPY  = x86_64-elf-objcopy   # Objcopy
+SED      = gsed                 # Sed Command
+GFR      = $(tools)/gfr/gfr     # GhostBird File System Reader
 
 endif
 
-qemu = qemu-system-x86_64
-compress = zip
-depress = unzip
+qemu = qemu-system-x86_64       # QEMU Emulator
+compress = zip                  # Compress Command
+depress = unzip                 # Depress Command
 
-ifeq ($(PLATFORM), LINUX)
-
-current_dir = /media/psf/Home/Documents/cenneo-os-project
-
-endif
-
-ifeq ($(PLATFORM), OSX)
-
-current_dir = /Users/huwenjie/Documents/cenneo-os-project
-
-endif
-
-image = $(current_dir)/image/image.vhd
-tools = $(current_dir)/tools
-appbase = $(tools)/appbase
-
+# MACRO for building kernel
+#kernel_macro = \
+ -D __DOXYGEN__=1
