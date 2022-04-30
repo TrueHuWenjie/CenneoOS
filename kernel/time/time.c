@@ -11,6 +11,11 @@
 
 struct ktime_def ktime;
 
+unsigned long sys_now(void)
+{
+	return ktime.system_runtime;
+}
+
 void init_time(void)
 {
 	// Read time from CMOS
