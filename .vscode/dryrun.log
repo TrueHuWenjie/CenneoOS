@@ -1,6 +1,9 @@
 make --dry-run --always-make --keep-going --print-directory
 make: Entering directory `/Users/huwenjie/Documents/cenneo-os-project'
-echo x86_64-elf-gcc
-echo OSXXXXX
+cd loader && make all
+cd kernel && make all
+make sync
+echo Starting Virtual Machine...
+qemu-system-x86_64        -net nic,model=rtl8139 -net user -drive file=/Users/huwenjie/Documents/cenneo-os-project/image/image.vhd,format=vpc -m 9
 make: Leaving directory `/Users/huwenjie/Documents/cenneo-os-project'
  
