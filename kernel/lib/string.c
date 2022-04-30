@@ -12,10 +12,10 @@
 #include <kmm.h>
 
 // Find a value in memory field
-void *memchr(void * ptr, int value, size_t num)
-{
+//void *memchr(void * ptr, int value, size_t num)
+//{
 
-}
+//}
 
 /**
  * memset - Fill a region of memory with the given value
@@ -91,6 +91,32 @@ void *memmove(void *dest, const void *src, size_t count)
 			*--tmp = *--s;
 	}
 	return dest;
+}
+
+
+int memcmp(const void *cs, const void *ct, size_t count)
+{
+	const unsigned char *su1, *su2;
+	int res = 0;
+/*
+	if (count >= sizeof(unsigned long)) {
+		const unsigned long *u1 = cs;
+		const unsigned long *u2 = ct;
+		do {
+			if (get_unaligned(u1) != get_unaligned(u2))
+				break;
+			u1++;
+			u2++;
+			count -= sizeof(unsigned long);
+		} while (count >= sizeof(unsigned long));
+		cs = u1;
+		ct = u2;
+	}
+*/
+	for (su1 = cs, su2 = ct; 0 < count; ++su1, ++su2, count--)
+		if ((res = *su1 - *su2) != 0)
+			break;
+	return res;
 }
 
 // Get the address in string s1 when match string s2

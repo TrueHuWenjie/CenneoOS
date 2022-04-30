@@ -79,7 +79,7 @@ static int is_space(int ch)
     return (unsigned long)(ch - 9) < 5u || ' ' == ch;
 }
 
-static int atoi(char *str)
+int atoi(char *str)
 {
    int sign;
    int n;

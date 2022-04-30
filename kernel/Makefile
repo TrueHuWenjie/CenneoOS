@@ -25,8 +25,8 @@ OBJCOPYFLAGS := binary -R .note -R .comment -S \
 --set-section-flags .bss=alloc,load,contents
 
 LDFLAGS  := -m elf_i386
-CFLAGS   := -m32 -fno-stack-protector -D $(ARCH) -D $(PLATFORM) -I $(CURDIR)/includes
-CPPFLAGS := -m32 -fno-stack-protector -D $(ARCH) -D $(PLATFORM) -I $(CURDIR)/includes
+CFLAGS   := -m32 -fno-stack-protector $(kernel_macro) -D $(TARGET_ARCH) -D $(ARCH) -D $(PLATFORM) -I $(CURDIR)/includes
+CPPFLAGS := -m32 -fno-stack-protector $(kernel_macro) -D $(TARGET_ARCH) -D $(ARCH) -D $(PLATFORM) -I $(CURDIR)/includes
 ASMFLAGS := -f elf
 
 TARGET = ../image/data/KERNEL.BIN

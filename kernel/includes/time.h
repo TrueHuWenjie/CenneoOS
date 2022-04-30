@@ -25,6 +25,8 @@ struct ktime_def
 
 extern struct ktime_def ktime;
 
-#include <time.h>
+unsigned long sys_now(void);
+
+void init_time(void);
 
 #endif

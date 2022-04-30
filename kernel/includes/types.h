@@ -8,12 +8,12 @@
 typedef long long int           intmax_t;
 typedef unsigned long long int  uintmax_t;
 
-#ifdef IA32
+#ifdef AMD64
 typedef long int                intptr_t;
 typedef unsigned long int       uintptr_t;
 #endif
 
-#ifdef AMD64
+#ifdef IA32
 typedef int                     intptr_t;
 typedef unsigned int            uintptr_t;
 #endif

@@ -12,9 +12,12 @@
 
 #include <stddef.h>
 
+// Find a value in memory field
+void *memchr(void * ptr, int value, size_t num);
 void *memset(void *s, int c, size_t count);
 void *memcpy(void *dest, const void *src, size_t count);
 void *memmove(void *dest, const void *src, size_t count);
+int memcmp(const void *str1, const void *str2, size_t n);
 
 // Get the address in string s1 when match string s2
 char *strstr(const char *s1, const char *s2);
