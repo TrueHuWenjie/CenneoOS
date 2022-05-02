@@ -95,7 +95,7 @@ void init_i8042(void)
 	// Flush the output buffer
 	while (1)
 		if ((i8042_read_status() & I8042_REG_STATUS_OBUF_FULL) == 1)
-			printk("Flush:%#x ", io_in8(I8042_PORT_DATA));
+			io_in8(I8042_PORT_DATA);
 		else
 			break;
 
