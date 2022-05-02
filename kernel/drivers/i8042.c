@@ -81,32 +81,6 @@ void i8042_mouse_send_cmd(char command)
 	io_out8(I8042_PORT_DATA, command);
 }
 
-// Enable mouse
-void i8042_mouse_enable(void)
-{
-	unsigned char cfg_byte;
-
-	i8042_controller_send_cmd(0x20);
-	cfg_byte = i8042_read_obuf() | 0x02;
-	i8042_controller_send_cmd(0x60);
-	i8042_controller_send_data(cfg_byte);
-
-	i8042_controller_send_cmd(0xa8);
-}
-
-// Enable Keyboard
-void i8042_keyboard_enable(void)
-{
-	unsigned char cfg_byte;
-
-	i8042_controller_send_cmd(0x20);
-	cfg_byte = i8042_read_obuf() | 0x01;
-	i8042_controller_send_cmd(0x60);
-	i8042_controller_send_data(cfg_byte);
-	
-	i8042_controller_send_cmd(0xae);
-}
-
 // Initialization of PS/2 Controller
 void init_i8042(void)
 {
