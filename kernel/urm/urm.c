@@ -122,7 +122,7 @@ int urm_delete(URM *path)
 
 }
 
-URM *urm_create(const char *path, const char *name)
+URM *urm_create_dir(const char *path, const char *name)
 {
     URL_PRASE info;
     URM *path_node, *new_node;

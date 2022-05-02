@@ -41,22 +41,22 @@ void main(void)
 
 	init_urm();
 
-	urm_create("/", "kernel");
+	urm_create_dir("/", "kernel");
 
 	// Kernel Log System
 	init_kls();
 
-	urm_create("/", "devices");
+	urm_create_dir("/", "devices");
 
 	init_gfx();
 	
 	init_graph();
 
-	urm_create("/", "system");
+	urm_create_dir("/", "system");
 
-	urm_create("/", "drivers");
-	urm_create("/", "library");
-	
+	urm_create_dir("/", "drivers");
+	urm_create_dir("/", "library");
+
 	// Font
 	init_font();
 

@@ -196,7 +196,7 @@ void init_kls(void)
 
     kls_callback_chain = NULL;
 
-    urm_create("/kernel/", "log");
+    urm_create_dir("/kernel/", "log");
 
     urm_scheme_register("record");
 }

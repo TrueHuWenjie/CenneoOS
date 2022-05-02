@@ -21,7 +21,7 @@ void init_time(void)
 	// Read time from CMOS
 	cmos_readtime();
 
-	urm_create("/system", "time");
+	urm_create_dir("/system", "time");
 
 	printk("time:century:%d year:%d month:%d day:%d week:%d hour:%d min:%d sec:%d\n", \
 	ktime.century, ktime.year, ktime.month, ktime.day, ktime.week_day, ktime.hour, ktime.mintus, ktime.second);

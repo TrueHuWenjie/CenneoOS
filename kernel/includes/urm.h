@@ -31,7 +31,7 @@ extern URM *urm_root;
 
 URM *urm_locate(URM *root_dir, const char *path);
 int urm_delete(URM *path);
-URM *urm_create(const char *path, const char *name);
+URM *urm_create_dir(const char *path, const char *name);
 void init_urm(void);
 
 #endif

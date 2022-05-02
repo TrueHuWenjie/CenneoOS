@@ -17,7 +17,7 @@ gfx_switchbuffer()
 /**Initialize for vesa*/
 void init_vesa(void)
 {
-	urm_create("/devices", "fb0");
+	urm_create_dir("/devices", "fb0");
 	vbe_info.xres = ebi.ModeInfoBlock.XResolution;
 	vbe_info.yres = ebi.ModeInfoBlock.YResolution;
 	vbe_info.bpp = ebi.ModeInfoBlock.BitsPerPixel;
