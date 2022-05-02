@@ -53,6 +53,10 @@ void main(void)
 	init_graph();
 
 	urm_create("/", "system");
+
+	urm_create("/", "drivers");
+	urm_create("/", "library");
+	
 	// Font
 	init_font();
 
@@ -84,9 +88,9 @@ void main(void)
 	init_ide();
 	init_FAT32();
 
-	//init_acpi();
+	init_acpi();
 
-	//init_pci();
+	init_pci();
 
 	// Idle now
 	task_name("Idle");
