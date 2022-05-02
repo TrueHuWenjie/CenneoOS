@@ -79,7 +79,7 @@ void main(void)
 
 	// PS/2 Controller
 	init_i8042();
-
+	
 	// Hard Disk Device
 	init_ide();
 	init_FAT32();

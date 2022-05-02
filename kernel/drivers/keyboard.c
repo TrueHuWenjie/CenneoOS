@@ -75,7 +75,7 @@ static void keyboard_cmd(unsigned char command)
 	scancode_queue[sc_wi] = command;
 	if (!scancode_untreated)
 	{
-		i8042_keyboard_cmd(command);
+		i8042_keyboard_send_cmd(command);
 	}else{
 
 	}
@@ -144,9 +144,7 @@ unsigned char get_key(void)
 
 void int_keyboard_handle(void)
 {
-
 	key_value = i8042_read_obuf();
-printk("key_val:%#x\n", key_value);
 	/**compare if it is a functional key*/
 	switch (key_value)
 	{
@@ -220,8 +218,8 @@ void init_keyboard(void)
 	register_PIC(1, &int_keyboard_handle, "keyboard");
 
 	// Reset Keyboard
-	//i8042_keyboard_cmd(0xff);
-	
+	i8042_keyboard_send_cmd(0xff);
+
 	// ACK
 	//i8042_read_obuf();
 	
@@ -232,10 +230,16 @@ void init_keyboard(void)
 	//}
 
 	// Set LED
-	//i8042_keyboard_cmd(0xED);
-	
-	// All LED turn off
-	//i8042_keyboard_cmd(0x00);
+	i8042_keyboard_send_cmd(0xED);
 
+	// ACK
+	//i8042_read_obuf();
+	// All LED turn off
+	i8042_keyboard_send_cmd(0x00);
+
+	// ACK
+	//i8042_read_obuf();
+	//i8042_read_obuf();
+//while(1);
 	return;
 }

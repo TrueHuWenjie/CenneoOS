@@ -51,51 +51,60 @@ unsigned char i8042_read_obuf(void)
 	return io_in8(I8042_PORT_DATA);
 }
 
-// Write data to Input Buffer as command
-void i8042_controller_cmd(char command)
+// Write command to PS/2 Controller
+void i8042_controller_send_cmd(char command)
 {
 	i8042_wait_ibuf_empty();
 	io_out8(I8042_PORT_CMD, command);
 }
 
+// Write data to PS/2 Controller
+void i8042_controller_send_data(char data)
+{
+	i8042_wait_ibuf_empty();
+	io_out8(I8042_PORT_DATA, data);
+}
+
 // Send command to keyboard
-void i8042_keyboard_cmd(char command)
+void i8042_keyboard_send_cmd(char command)
 {
 	i8042_wait_ibuf_empty();
 	io_out8(I8042_PORT_DATA, command);
+	i8042_wait_ibuf_empty();
 }
 
 // Send command to mouse
-void i8042_mouse_cmd(char command)
+void i8042_mouse_send_cmd(char command)
 {
-	i8042_controller_cmd(0xD4);/**8042 knows that the command is send for mouse*/
-	i8042_wait_ibuf_empty();
+	i8042_controller_send_cmd(0xD4);/**8042 knows that the command is send for mouse*/
+	//i8042_wait_ibuf_empty();
 	io_out8(I8042_PORT_DATA, command);
 }
 
 // Enable mouse
 void i8042_mouse_enable(void)
 {
-	i8042_controller_cmd(0xa8);
-	//i8042_read_obuf();
-}
+	unsigned char cfg_byte;
 
-// Disable Mouse
-void i8042_mouse_disable(void)
-{
-	i8042_controller_cmd(0xa7);
+	i8042_controller_send_cmd(0x20);
+	cfg_byte = i8042_read_obuf() | 0x02;
+	i8042_controller_send_cmd(0x60);
+	i8042_controller_send_data(cfg_byte);
+
+	i8042_controller_send_cmd(0xa8);
 }
 
 // Enable Keyboard
 void i8042_keyboard_enable(void)
 {
-	i8042_controller_cmd(0xae);
-}
+	unsigned char cfg_byte;
 
-// Disable Keyboard
-void i8042_keyboard_disable(void)
-{
-	i8042_controller_cmd(0xad);
+	i8042_controller_send_cmd(0x20);
+	cfg_byte = i8042_read_obuf() | 0x01;
+	i8042_controller_send_cmd(0x60);
+	i8042_controller_send_data(cfg_byte);
+	
+	i8042_controller_send_cmd(0xae);
 }
 
 // Initialization of PS/2 Controller
@@ -106,27 +115,22 @@ void init_i8042(void)
 	// Check if PS/2 controller exists
 
 	// Disable Devices
-	i8042_mouse_disable();
-	i8042_keyboard_disable();
+	i8042_controller_send_cmd(0xa7);
+	i8042_controller_send_cmd(0xad);
 
 	// Flush the output buffer
 	while (1)
 		if ((i8042_read_status() & I8042_REG_STATUS_OBUF_FULL) == 1)
-			io_in8(I8042_PORT_DATA);
+			printk("Flush:%#x ", io_in8(I8042_PORT_DATA));
 		else
 			break;
 
-	// Set the Controller Configuration Byte
-	// Disable all IRQs and disable translation
-	i8042_controller_cmd(0x20);
-	cfg_byte = i8042_read_obuf() & 0xbc;
-	printk("4 cfg_byte:%#x\n", cfg_byte);
-	i8042_controller_cmd(0x60);
-	i8042_controller_cmd(cfg_byte);
-
+	// Get Configuration Byte
+	i8042_controller_send_cmd(0x20);
+	cfg_byte = i8042_read_obuf();
 
 	// Self Test
-	i8042_controller_cmd(0xaa);
+	i8042_controller_send_cmd(0xaa);
 	if (i8042_read_obuf() != 0x55)
 	{
 		printk("PS/2: Intel 8042 self test failed.\n");
@@ -137,23 +141,15 @@ void init_i8042(void)
 	init_keyboard();
 	
 	// Mouse
-	//init_mouse();
+	init_mouse();
 
-	//i8042_keyboard_enable();
-	//i8042_mouse_enable();
+	cfg_byte |= 0x01;
+	cfg_byte |= 0x02;
 
-	// Set the Controller Configuration Byte
-	// Enable all IRQs
-	
-	i8042_controller_cmd(0x20);
-	cfg_byte = i8042_read_obuf() | 0x43;
-	printk("5 cfg_byte:%#x\n", cfg_byte);
-	i8042_controller_cmd(0x60);
-	i8042_controller_cmd(cfg_byte);
+	i8042_controller_send_cmd(0x60);
+	i8042_controller_send_data(cfg_byte);
 
-	i8042_controller_cmd(0x20);
-	cfg_byte = i8042_read_obuf();
-	printk("final cfg_byte:%#x\n", cfg_byte);
-
-	//while(1);
+	// Enable keyboard and mouse
+	i8042_controller_send_cmd(0xae);
+	i8042_controller_send_cmd(0xa8);
 }

@@ -104,9 +104,8 @@ void set_mouse_interception(union thread *target)
 /**鼠标数据处理函数*/
 void int_mouse_handle(void)
 {
-	printk("mouse:\n");
 	mouse_info[mouse_info_point] = i8042_read_obuf();
-	printk("mouse_info:%#x\n", mouse_info[mouse_info_point]);
+	
 	if (mouse_info_point == 3)
 	{
 		/**重新指向数组开始处*/
@@ -117,7 +116,7 @@ void int_mouse_handle(void)
 		mouse_x  += mouse_info[1];
 		mouse_y  -= mouse_info[2];
 		
-		//printk("cmd:%x, x:%x, y:%x\n", mouse_cmd, mouse_x, mouse_y);
+		printk("cmd:%x, x:%x, y:%x\n", mouse_cmd, mouse_x, mouse_y);
 
 		/**判断此时缓冲区是否已满*/
 		if (untreated < SIZE_OF_BUFFER_MOUSE)
@@ -156,56 +155,57 @@ void init_mouse(void)
 	/**register to 8259*/
 	register_PIC(12, &int_mouse_handle, "Mouse");
 
-	//i8042_mouse_cmd(MOUSE_CMD_RESET);
+	i8042_mouse_send_cmd(MOUSE_CMD_RESET);
 	//printk("result1:%#x\n", i8042_read_obuf());
 	//printk("result.1:%#x\n", i8042_read_obuf());
 	//printk("result.1:%#x\n", i8042_read_obuf());
 	// Now MouseID = 0
 
+	
 	// Change MouseID from 0 to 3
 	// The number of bytes in the mouse packets changes
 	// to 4, the scroll wheel enabled.
-	i8042_mouse_cmd(MOUSE_CMD_GET_MOUSEID);
-	printk("result2:%#x\n", i8042_read_obuf());
-	printk("result2:%#x\n", i8042_read_obuf());
-	i8042_mouse_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
-	printk("result3:%#x\n", i8042_read_obuf());
-	i8042_mouse_cmd(200);
-	printk("result4:%#x\n", i8042_read_obuf());
-	i8042_mouse_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
-	printk("result5:%#x\n", i8042_read_obuf());
-	i8042_mouse_cmd(100);
-	printk("result6:%#x\n", i8042_read_obuf());
-	i8042_mouse_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
-	printk("result7:%#x\n", i8042_read_obuf());
-	i8042_mouse_cmd(80);
-	printk("result8:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(MOUSE_CMD_GET_MOUSEID);
+	//printk("result2:%#x\n", i8042_read_obuf());
+	//printk("result2:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
+	//printk("result3:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(200);
+	//printk("result4:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
+	//printk("result5:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(100);
+	//printk("result6:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
+	//printk("result7:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(80);
+	//printk("result8:%#x\n", i8042_read_obuf());
 
 	// Change MouseID from 3 to 4
 	// The 4th and 5th mouse buttons enabled
-	i8042_mouse_cmd(MOUSE_CMD_GET_MOUSEID);
-	printk("result9:%#x\n", i8042_read_obuf());
-	printk("result9:%#x\n", i8042_read_obuf());
-	i8042_mouse_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
-	printk("result10:%#x\n", i8042_read_obuf());
-	i8042_mouse_cmd(200);
-	printk("result11:%#x\n", i8042_read_obuf());
-	i8042_mouse_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
-	printk("result12:%#x\n", i8042_read_obuf());
-	i8042_mouse_cmd(200);
-	printk("result13:%#x\n", i8042_read_obuf());
-	i8042_mouse_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
-	printk("result14:%#x\n", i8042_read_obuf());
-	i8042_mouse_cmd(80);
-	printk("result15:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(MOUSE_CMD_GET_MOUSEID);
+	//printk("result9:%#x\n", i8042_read_obuf());
+	//printk("result9:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
+	//printk("result10:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(200);
+	//printk("result11:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
+	//printk("result12:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(200);
+	//printk("result13:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(MOUSE_CMD_SET_SAMPLE_RATE);
+	//printk("result14:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(80);
+	//printk("result15:%#x\n", i8042_read_obuf());
 
-	i8042_mouse_cmd(MOUSE_CMD_GET_MOUSEID);
-	printk("result16:%#x\n", i8042_read_obuf());
-	printk("result16:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(MOUSE_CMD_GET_MOUSEID);
+	//printk("result16:%#x\n", i8042_read_obuf());
+	//printk("result16:%#x\n", i8042_read_obuf());
 
 	// Allow mouse send packets to CPU
-	i8042_mouse_cmd(MOUSE_CMD_ENABLE_PACKET_STREAM);
-	printk("result17:%#x\n", i8042_read_obuf());
+	i8042_mouse_send_cmd(MOUSE_CMD_ENABLE_PACKET_STREAM);
+	//printk("result17:%#x\n", i8042_read_obuf());
 
-	mouse_info_point -= 3;
+	mouse_info_point = 0;
 }

@@ -21,13 +21,13 @@ void i8042_wait_obuf_full(void);
 void i8042_wait_ibuf_empty(void);
 
 // Write data to Input Buffer as command
-void i8042_controller_cmd(char command);
+void i8042_controller_send_cmd(char command);
 
 // Send command to keyboard
-void i8042_keyboard_cmd(char command);
+void i8042_keyboard_send_cmd(char command);
 
 // Send command to mouse
-void i8042_mouse_cmd(char command);
+void i8042_mouse_send_cmd(char command);
 
 // Read data from Output Buffer
 unsigned char i8042_read_obuf(void);
