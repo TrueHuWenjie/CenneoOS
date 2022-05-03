@@ -76,10 +76,10 @@ void main(void)
 	init_PIT();
 
 	// CPU
-	//init_CPU();
+	init_CPU();
 
 	// Output information about CPU
-	//output_CPU_info();
+	output_CPU_info();
 
 	// PS/2 Controller
 	init_i8042();
@@ -87,6 +87,8 @@ void main(void)
 	// Hard Disk Device
 	init_ide();
 	init_FAT32();
+
+	lwip_init();
 
 	init_acpi();
 

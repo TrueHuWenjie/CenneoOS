@@ -69,43 +69,6 @@ void PIT_handle(void)
 	/**刷新时间*/
 	ktime.system_runtime ++;			/**系统运行时间*/
 
-	/**判断当前是不是999微妙*/
-	if (ktime.ms == 999)
-	{
-		/**微秒归零*/
-		ktime.ms = 0;
-
-		/**判断秒表*/
-		if (ktime.second == 59)
-		{
-			/**秒归零*/
-			ktime.second = 0;
-
-			/**判断分*/
-			if (ktime.mintus == 59)
-			{
-				/**分归零*/
-				ktime.mintus = 0;
-
-				/**剩下的暂时不做判断，直接从CMOS中读取*/
-				ktime.hour = BCD_HEX(cmos_read(CMOS_CUR_HOUR));		/**当前时*/
-				ktime.week_day = BCD_HEX(cmos_read(CMOS_WEEK_DAY));	/**一周中当前天*/
-				ktime.day = BCD_HEX(cmos_read(CMOS_MON_DAY));			/**一月中当前日*/
-				ktime.month = BCD_HEX(cmos_read(CMOS_CUR_MON));			/**当前月*/
-				ktime.year = BCD_HEX(cmos_read(CMOS_CUR_YEAR));		/**当前年*/
-				ktime.century = BCD_HEX(cmos_read(CMOS_CUR_CEN));		/**当前世纪*/
-				/**CMOS中的年份仅仅是从本世纪开始到现在的绝对值，需要加上世纪*/
-				ktime.year += ktime.century * 100;
-			}else{
-				ktime.mintus ++;
-			}
-		}else{
-			ktime.second ++;
-		}
-	}else{
-		ktime.ms ++;					/**微秒计时*/
-	}
-
 /**执行定时任务*/
 	/**判断此时是否有任务链表*/
 	if (current_task != NULL)

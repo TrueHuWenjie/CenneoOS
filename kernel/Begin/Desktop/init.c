@@ -12,9 +12,9 @@ void begin_desktop_mode(void)
 
 	// Operating System Moniter
 	extern int osm_open(void);
-	task(&osm_open, NULL);
+	//task(&osm_open, NULL);
 
 	// Kernel Log System Monitor
 	extern int klsm_open(void);
-	klsm_open();
+	//klsm_open();
 }

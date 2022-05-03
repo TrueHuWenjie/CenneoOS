@@ -20,6 +20,7 @@
 #include <graphics.h>
 #include <kvi.h>
 #include <lib/url.h>
+#include <network/lwip/init.h>
 #include <Console.h>
 
 // Start in Embedded mode

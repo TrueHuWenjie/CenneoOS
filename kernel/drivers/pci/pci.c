@@ -56,7 +56,7 @@ uint16_t pci_config_read(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset
     uint32_t lbus  = (uint32_t)bus;
     uint32_t lslot = (uint32_t)slot;
     uint32_t lfunc = (uint32_t)func;
-    uint16_t tmp = 0;
+    uint16_t tmp;
  
     // Create configuration address
     address = (uint32_t)((lbus << 16) | (lslot << 11) |

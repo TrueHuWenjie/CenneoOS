@@ -9,11 +9,18 @@
 #include <urm.h>
 #include <kvi.h>
 
+// Kernel time
 struct ktime_def ktime;
 
+// Current kernel's runtime
 unsigned long sys_now(void)
 {
 	return ktime.system_runtime;
+}
+
+struct ktime_def time_s2t(void)
+{
+	
 }
 
 void init_time(void)
@@ -23,6 +30,6 @@ void init_time(void)
 
 	urm_create_dir("/system", "time");
 
-	printk("time:century:%d year:%d month:%d day:%d week:%d hour:%d min:%d sec:%d\n", \
-	ktime.century, ktime.year, ktime.month, ktime.day, ktime.week_day, ktime.hour, ktime.mintus, ktime.second);
+	printk("Time:year:%d month:%d day:%d week:%d hour:%d min:%d sec:%d\n", \
+	ktime.year, ktime.month, ktime.day, ktime.week_day, ktime.hour, ktime.mintus, ktime.second);
 }

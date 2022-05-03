@@ -12,10 +12,8 @@
 
 #include <types.h>
 
-// Kernel time
 struct ktime_def
 {
-    ulong century;
     ulong year, month, day;
     ulong hour, mintus, second;
     ulong week_day;

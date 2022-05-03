@@ -5,21 +5,18 @@
 #ifndef CMOS_H_
 #define CMOS_H_
 
-/**CMOS的读写端口*/
-#define CMOS_INDEX		0x70
-#define CMOS_DATA		0x71
 
 /**CMOS中相关信息偏移*/
-#define CMOS_CUR_SEC	0x0			//CMOS中当前秒值(BCD)
-#define CMOS_ALA_SEC	0x1			//CMOS中报警秒值(BCD)
-#define CMOS_CUR_MIN	0x2			//CMOS中当前分钟(BCD)
-#define CMOS_ALA_MIN	0x3			//CMOS中报警分钟(BCD)
-#define CMOS_CUR_HOUR	0x4			//CMOS中当前小时(BCD)
-#define CMOS_ALA_HOUR	0x5			//CMOS中报警小时(BCD)
-#define CMOS_WEEK_DAY	0x6			//CMOS中一周中当前天(BCD)
-#define CMOS_MON_DAY	0x7			//CMOS中一月中当前日(BCD)
-#define CMOS_CUR_MON	0x8			//CMOS中当前月份(BCD)
-#define CMOS_CUR_YEAR	0x9			//CMOS中当前年份(BCD)
+#define CMOS_CUR_SEC	0x00		//CMOS中当前秒值(BCD)
+#define CMOS_ALA_SEC	0x01		//CMOS中报警秒值(BCD)
+#define CMOS_CUR_MIN	0x02		//CMOS中当前分钟(BCD)
+#define CMOS_ALA_MIN	0x03		//CMOS中报警分钟(BCD)
+#define CMOS_CUR_HOUR	0x04		//CMOS中当前小时(BCD)
+#define CMOS_ALA_HOUR	0x05		//CMOS中报警小时(BCD)
+#define CMOS_WEEK_DAY	0x06		//CMOS中一周中当前天(BCD)
+#define CMOS_MON_DAY	0x07		//CMOS中一月中当前日(BCD)
+#define CMOS_CUR_MON	0x08		//CMOS中当前月份(BCD)
+#define CMOS_CUR_YEAR	0x09		//CMOS中当前年份(BCD)
 #define CMOS_DEV_TYPE	0x12		//CMOS中驱动器格式
 #define CMOS_CUR_CEN	0x32		//CMOS中当前世纪(BCD)
 
