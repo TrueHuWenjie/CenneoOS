@@ -126,7 +126,6 @@ int osm_open(void)
     osm_win = gui_window("Operating System Moniter", WINDOW_NORMAL, 0, 0, \
     OSM_WIN_WIDTH, OSM_WIN_HEIGHT);
 
-
     cpu_usage = kmalloc (200 * sizeof(float), 0);
     for (int i = 0; i < 100; i ++)
     {
@@ -138,8 +137,6 @@ int osm_open(void)
     settimer(&osm_update, 1000, 0);
 
     invalid = 1;
-
-    gui_set_position(osm_win->layer, 10, 360);
 
     //
     osm_loop();

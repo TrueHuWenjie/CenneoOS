@@ -55,7 +55,7 @@ void pmb_unlock(void)
 
 }
 
-// Allocate a free page, return with non-X86A_NULL, otherwise failed.
+// Allocate free page(s), return with non-X86A_NULL, otherwise failed.
 X86Addr pmb_alloc(unsigned long amount)
 {
 	unsigned long n, i, j, k, new_page_start;

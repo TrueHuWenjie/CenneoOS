@@ -5,6 +5,7 @@
 ;7/14/2014 1:03 PM
 
 ;输入输出函数
+global	io_nop
 global	io_hlt,io_cli,io_sti			;(在新的硬中断发生之前)停机、关中断、开中断
 global	io_read_PSW,io_restore_PSW		;获取eflags、写eflags
 global	io_in8,io_in16,io_in32			;读端口8位、16位和32位
@@ -13,6 +14,11 @@ global	io_out8,io_out16,io_out32		;写端口8位、16位和32位
 ;代码区
 [section .text]
 [bits 32]
+
+; void io_nop();
+io_nop:
+	nop
+	ret
 
 ;中断操作函数
 io_cli:

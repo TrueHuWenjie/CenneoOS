@@ -8,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This program built for i386-apple-darwin11.3.0
  
 
-# Make data base, printed on Sat Apr 30 20:02:02 2022
+# Make data base, printed on Mon Jun  6 16:26:08 2022
 
 # Variables
 
@@ -45,7 +45,7 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/c6/wqm08jfd6474lmpll47wbl440000gn/T/vscode-ipc-04eace17-8e84-4ec6-b0ae-5ceb3af5f98e.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/c6/wqm08jfd6474lmpll47wbl440000gn/T/vscode-ipc-3a3e77b3-b37c-407d-a420-cf5b1fee8aad.sock
 # environment
 VSCODE_CWD = /
 # environment
@@ -63,7 +63,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.5mCUA1DmNe/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.w28oCiTlna/Listeners
 # automatic
 %F = $(notdir $%)
 # makefile (from `/Users/huwenjie/Documents/cenneo-os-project/Makefile.variable', line 27)
@@ -83,7 +83,7 @@ SED = gsed
 # default
 MAKEFILEPATH = $(shell /usr/bin/xcode-select -print-path 2>/dev/null || echo /Developer)/Makefiles
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/huwenjie/Library/Application Support/Code/CachedData/dfd34e8260c270da74b5c2d86d61aee4b6d56977
+VSCODE_CODE_CACHE_PATH = /Users/huwenjie/Library/Application Support/Code/CachedData/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
 # environment
 LOGNAME = huwenjie
 # environment
@@ -113,7 +113,7 @@ USER = huwenjie
 # environment
 HOMEBREW_BOTTLE_DOMAIN = https://mirrors.ustc.edu.cn/homebrew-bottles
 # makefile (from `/Users/huwenjie/Documents/cenneo-os-project/Makefile.variable', line 80)
-kernel_macro = -D __DOXYGEN__=1 -D NO_SYS=0 -D SYS_LIGHTWEIGHT_PROT=1 -D LWIP_TCPIP_CORE_LOCKING=1 -D LWIP_IPV4=1 -D LWIP_IPV6=1 -D LWIP_ICMP=1 -D LWIP_RAW=1 -D LWIP_DHCP=1 -D LWIP_IPV6_DHCP6=1 -D LWIP_UDPLITE=1 -D LWIP_UDP=1 -D LWIP_IGMP=1 -D LWIP_TCP=1 -D LWIP_ALTCP=1 -D LWIP_ALTCP_TLS=1 -D LWIP_IPV6_SCOPES=1 -D TCP_LISTEN_BACKLOG=1 -D LWIP_SNMP=1 -D SNMP_USE_NETCONN=1 -D SNMP_USE_RAW=1 -D MIB2_STATS=1 -D LWIP_MDNS_RESPONDER=1 -D HTTPD_ENABLE_HTTPS=1 -D LWIP_HTTPD_CGI=1 -D LWIP_HTTPD_SSI=1 -D LWIP_HTTPD_SSI_RAW=1 -D LWIP_HTTPD_SUPPORT_POST=1 -D LWIP_HTTPD_POST_MANUAL_WND=1 -D MEMP_OVERFLOW_CHECK=0 -D MEMP_SANITY_CHECK=1 -D LWIP_ARP=1 -D LWIP_HAVE_LOOPIF=1 -D LWIP_NETIF_HOSTNAME=1 -D LWIP_NETIF_API=1 -D LWIP_NETIF_CALLBACK=1 -D LWIP_NETIF_STATUS_CALLBACK=1 -D LWIP_NETIF_REMOVE_CALLBACK=1 -D LWIP_NETIF_LINK_CALLBACK=1 -D LWIP_NETIF_EXT_STATUS_CALLBACK=1 -D LWIP_NUM_NETIF_CLIENT_DATA=1 -D ENABLE_LOOPBACK=1 -D LWIP_AUTOIP=1 -D ARP_QUEUEING=1 -D LWIP_STATS=1 -D MEM_USE_POOLS=0 -D LWIP_DNS=1 -D LWIP_SOCKET=1 -D LWIP_NETCONN=1 -D IP_SOF_BROADCAST=1 -D IP_SOF_BROADCAST_RECV=1 -D LWIP_NETIF_API=1 -D LWIP_SO_SNDTIMEO=1 -D LWIP_SO_RCVBUF=1 -D LWIP_SO_LINGER=1 -D SO_REUSE=1 -D SO_REUSE_RXTOALL=1 -D LWIP_HAVE_SLIPIF=1 -D SLIP_RX_FROM_ISR=1 -D LWIP_TCP_PCB_NUM_EXT_ARGS=1
+kernel_macro = 
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # makefile (from `/Users/huwenjie/Documents/cenneo-os-project/Makefile.variable', line 9)
@@ -127,7 +127,7 @@ TMPDIR = /var/folders/c6/wqm08jfd6474lmpll47wbl440000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/huwenjie/Library/Application Support/Code/1.66.2-main.sock
+VSCODE_IPC_HOOK = /Users/huwenjie/Library/Application Support/Code/1.67.2-main.sock
 # makefile (from `/Users/huwenjie/Documents/cenneo-os-project/Makefile.variable', line 39)
 ARCH = IA32
 # makefile
@@ -139,7 +139,7 @@ MFLAGS = -Rrqp
 # makefile (from `/Users/huwenjie/Documents/cenneo-os-project/Makefile.variable', line 34)
 UNAME_P := i386
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.27100628.27100634
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.28970243.28970249
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
@@ -181,7 +181,7 @@ tools = $(current_dir)/tools
 # environment
 LANG = C
 # environment
-VSCODE_PID = 74999
+VSCODE_PID = 39398
 # variable set hash-table stats:
 # Load=85/1024=8%, Rehash=0, Collisions=6/136=4%
 
@@ -191,9 +191,9 @@ VSCODE_PID = 74999
 
 # Directories
 
-# . (device 16777223, inode 22717444): 17 files, no impossibilities.
+# . (device 16777223, inode 22717444): 21 files, no impossibilities.
 
-# 17 files, no impossibilities in 1 directories.
+# 21 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -218,10 +218,9 @@ all: loader kernel
 
 install_loader:
 #  Implicit rule search has not been done.
- 
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 105):
+#  commands to execute (from `Makefile', line 106):
 	@echo Installing Loader...
 	@cd loader && make install
 	
@@ -235,7 +234,7 @@ install_loader:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-04-30 19:56:20
+#  Last modified 2022-05-21 22:51:48
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -246,7 +245,7 @@ kernel:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 43):
+#  commands to execute (from `Makefile', line 44):
 	@cd kernel && make all
 	
 
@@ -254,7 +253,7 @@ appbase:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 51):
+#  commands to execute (from `Makefile', line 52):
 	@cd tools/appbase && make all
 	
 
@@ -262,15 +261,16 @@ console:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 56):
+#  commands to execute (from `Makefile', line 57):
 	@cd applications/Console && make all
 	
 
+ 
 prepare: /Users/huwenjie/Documents/cenneo-os-project/image/image.vhd /Users/huwenjie/Documents/cenneo-os-project/image/image.vhd
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 65):
+#  commands to execute (from `Makefile', line 66):
 	$(depress) $(image:.vhd=.zip)
 	
 
@@ -299,7 +299,7 @@ loader:
 # ? := 
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=1/10=10%
-#  commands to execute (from `Makefile', line 35):
+#  commands to execute (from `Makefile', line 36):
 	@cd loader && make all
 	
 
@@ -307,7 +307,7 @@ clean_gfr:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 30):
+#  commands to execute (from `Makefile', line 31):
 	@cd tools/gfr && make clean
 	
 
@@ -315,7 +315,7 @@ sync:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 80):
+#  commands to execute (from `Makefile', line 81):
 	@echo Synchronizing...
 	@hdiutil attach -imagekey diskimage-class=CRawDiskImage $(image)
 	@rsync -rtopgDl $(CURDIR)/image/data/ /Volumes/CENNEOOS/ --delete
@@ -344,7 +344,7 @@ clean_console:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 59):
+#  commands to execute (from `Makefile', line 60):
 	@cd applications/Console && make clean
 	
 
@@ -353,7 +353,7 @@ run: install
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 21):
+#  commands to execute (from `Makefile', line 22):
 	@echo Starting Virtual Machine...
 	@$(qemu) -net nic,model=rtl8139 -net user -drive file=$(image),format=vpc -m 9
 	
@@ -363,7 +363,7 @@ clean:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 68):
+#  commands to execute (from `Makefile', line 69):
 	@echo Cleaning temporary files...
 	@cd loader && make clean
 	@cd tools/gfr && make clean
@@ -374,7 +374,7 @@ dist: clean
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 74):
+#  commands to execute (from `Makefile', line 75):
 	@echo Compressing Image...
 	@$(compress) -m -r -j $(image:.vhd=.zip) $(image)
 	
@@ -383,7 +383,7 @@ gui:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 62):
+#  commands to execute (from `Makefile', line 63):
 	@cd applications/GUI && make all
 	
 
@@ -391,7 +391,7 @@ clean_kernel:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 46):
+#  commands to execute (from `Makefile', line 47):
 	@cd kernel && make clean
 	
 
@@ -399,7 +399,7 @@ clean_loader:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 38):
+#  commands to execute (from `Makefile', line 39):
 	@cd loader && make clean
 	
 
@@ -408,7 +408,7 @@ gfr:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 27):
+#  commands to execute (from `Makefile', line 28):
 	@cd tools/gfr && make all
 	
 
@@ -416,7 +416,7 @@ gfr:
 /Users/huwenjie/Documents/cenneo-os-project/Makefile.variable:
 #  A default, MAKEFILES, or -include/sinclude makefile.
 #  Implicit rule search has been done.
-#  Last modified 2022-04-30 20:00:42
+#  Last modified 2022-05-15 13:24:49
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -427,7 +427,7 @@ install: all
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 102):
+#  commands to execute (from `Makefile', line 103):
 	@make sync
 	
 
@@ -444,6 +444,6 @@ install: all
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4025 / max = 4025 / min = 4025 / avg = 4025
 
-# Finished Make data base on Sat Apr 30 20:02:02 2022
+# Finished Make data base on Mon Jun  6 16:26:08 2022
 
  

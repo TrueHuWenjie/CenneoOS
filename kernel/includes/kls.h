@@ -14,8 +14,6 @@
 /**printk函数，格式化输出字符串到屏幕上*/
 int printk(const char *fmt, ...);
 
-#define DEBUG debug("\n----------Debug Info----------\nFile:     %s\nFunction: %s\nLine:     %d\nCompiled in %s %s\n------------------------------\n", __FILE__, __func__, __LINE__, __DATE__, __TIME__);
-
 int fault(const char *fmt, ...);
 
 int warn(const char *fmt, ...);

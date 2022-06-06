@@ -4,6 +4,7 @@
 
 #include "../begin.h"
 #include <mmu.h>
+
 // Start in Server mode
 void begin_server_mode(void)
 {

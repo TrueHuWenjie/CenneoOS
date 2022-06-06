@@ -77,5 +77,5 @@ compress = zip                  # Compress Command
 depress = unzip                 # Depress Command
 
 # MACRO for building kernel
-#kernel_macro = \
- -D __DOXYGEN__=1
+kernel_macro = \
+# -D __DOXYGEN__=1

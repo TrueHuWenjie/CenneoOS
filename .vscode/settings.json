@@ -3,6 +3,8 @@
         "C/C++": "\"c\"",
         "*.h": "c",
         "*.c": "c",
-        "system_error": "c"
+        "Makefile.*": "makefile",
+        "system_error": "c",
+        "*.bak": "c"
     }
 }

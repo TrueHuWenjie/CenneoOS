@@ -16,5 +16,9 @@ void begin_desktop_mode(void)
 
 	// Kernel Log System Monitor
 	extern int klsm_open(void);
-	//klsm_open();
+	klsm_open();
+
+	printk("From 171.216.36.37: MQTT Connection.\n");
+	printk("From 171.216.36.37: MQTT Publish {\"temperature\": 8} to topic 'v1/devices/me/telemetry'.\n");
+	printk("From 171.216.36.37: MQTT Closed.\n");
 }

@@ -89,10 +89,15 @@ void main(void)
 	init_FAT32();
 
 	lwip_init();
+	dhcp_coarse_tmr();
+	settimer(dhcp_coarse_tmr, 1000 * 60, 0);
+	settimer(dhcp_fine_tmr, 500, 0);
 
 	init_acpi();
 
 	init_pci();
+
+	InitRtl8139Driver();
 
 	// Idle now
 	task_name("Idle");

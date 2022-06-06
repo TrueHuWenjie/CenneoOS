@@ -60,10 +60,10 @@ struct window_menu_one
 #define WINDOW_NUM_MENU		4
 struct window_menu_one window_menu_lib[WINDOW_NUM_MENU] =
 {
-	{"Application1", "PROGRAM1.BIN"},
-	{"Application2", "PROGRAM2.BIN"},
-	{"Application3", "PROGRAM3.BIN"},
-	{"Application4", "PROGRAM4.BIN"}
+	{"IoT Panel", "PROGRAM1.BIN"},
+	{"OS Monitor", "PROGRAM2.BIN"},
+	{"Restart", "PROGRAM3.BIN"},
+	{"Shutdown", "PROGRAM4.BIN"}
 };
 
 /**Menu区域的颜色*/
@@ -72,13 +72,31 @@ struct window_menu_one window_menu_lib[WINDOW_NUM_MENU] =
 
 /**Menu区域的长宽*/
 #define WINDOW_MENU_LENGTH	150
-#define WINDOW_MENU_WIDTH	WINDOW_NUM_MENU * 16
+#define WINDOW_MENU_WIDTH	WINDOW_NUM_MENU * 32
 
 /**Menu的处理函数*/
 void window_menu_handle(unsigned int y)
 {
 	window_print(gui_control, "Clicked:%s", window_menu_lib[y / 16].text);
-	run(window_menu_lib[y / 16].filename, NULL, 0);
+
+	switch (y / 32)
+	{
+		case 0:
+			break;
+		case 1:
+			// Operating System Moniter
+			extern int osm_open(void);
+			task(&osm_open, NULL);
+			break;
+		case 2:
+			reset();
+			break;
+		case 3:
+			poweroff();
+			break;
+	}
+
+	// run(window_menu_lib[y / 16].filename, NULL, 0);
 }
 
 /**绘制Menu函数*/
@@ -105,8 +123,10 @@ void window_show_menu(void)
 		/**绘制全菜单信息*/
 		for (y_count = 0; y_count < WINDOW_NUM_MENU; y_count ++)
 		{
-			gui_put_string(attach_layer, 0xff000000, 10, y_count * 16, 0, 0, font("Standard Font"), window_menu_lib[y_count].text);
+			gui_put_string(attach_layer, 0xff000000, 10, y_count * 32 + 8, 0, 0, font("Standard Font"), window_menu_lib[y_count].text);
 		}
+
+		gui_refresh_block(attach_layer->x, attach_layer->y, attach_layer->width, attach_layer->height);
 }
 
 /**Application是否在工作的标志*/

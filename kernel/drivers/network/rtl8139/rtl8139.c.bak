@@ -1,0 +1,212 @@
+// Cenneo OS
+// /kernel/drivers/network/rtl8139/rtl8139.c
+// RTL8139 Support
+
+#include <arch.h>
+#include <types.h>
+#include <kls.h>
+#include <kmm.h>
+#include <mmu.h>
+#include <network/lwip/netif.h>
+#include <network/lwip/prot/etharp.h>
+#include <drivers/pci.h>
+#include <drivers/rtl8139.h>
+
+struct rtl8139_config
+{
+    uint32_t io_base;
+} rtl8139_config;
+
+// IO
+#define RTL8139_IO_MAC(i)   (0x00 + i)
+#define RTL8139_IO_MAR(i)   (0x08 + i)
+
+// 0x20,0x24,0x28,0x2c transmit start
+// 0x10,0x14,0x18,0x1c status/command
+#define RTL8139_IO_RBSTART  0x30
+#define RTL8139_IO_CMD      0x37
+#define RTL8139_IO_IMR      0x3c
+#define RTL8139_IO_ISR      0x3e
+#define RTL8139_IO_TXCONFIG 0x40
+#define RTL8139_IO_RXCONFIG 0x44
+#define RTL8139_IO_RXMISSED 0x4c
+#define RTL8139_IO_CONFIG_0 0x51
+#define RTL8139_IO_CONFIG_1 0x52
+
+// Bits in IO port of RTL8139_IO_IMR
+#define RTL8139_IMR_RXOK        0x0001
+#define RTL8139_IMR_RXERR       0x0002
+#define RTL8139_IMR_TXOK        0x0004
+#define RTL8139_IMR_TXERR       0x0008
+#define RTL8139_IMR_RXOF        0x0010
+#define RTL8139_IMR_RXUNDERRUN  0x0020
+#define RTL8139_IMR_RXFIFOOVER  0x0040
+#define RTL8139_IMR_PCSTIMEOUT  0x4000
+#define RTL8139_IMR_PCIERR      0x8000
+
+// Bits in IO port of RTL8139_IO_RXCONFIG
+#define RTL8139_RXCONFIG_ACCEPT_ALLPHYS     0x01
+#define RTL8139_RXCONFIG_ACCEPT_MYPHYS      0x02
+#define RTL8139_RXCONFIG_ACCEPT_MULTICAST   0x04
+#define RTL8139_RXCONFIG_ACCEPT_BROADCAST   0x08
+#define RTL8139_RXCONFIG_ACCEPT_RUNT        0x10
+#define RTL8139_RXCONFIG_ACCEPT_ERROR       0x20
+#define RTL8139_RXCONFIG_ACCEPT_ERROR       0x20
+/* Disable packet wrap at end of Rx buffer. (not possible with 64k) */
+#define RTL8139_RXCONFIG_WRAP               0x80
+
+#define RTL8139_RXCONFIG_FIFO_SHIFT         13
+#define RTL8139_RXCONFIG_FIFO_NONE          (7 << RTL8139_RXCONFIG_FIFO_SHIFT)
+
+/* Max DMA burst */
+#define RTL8139_RXCONFIG_DMA_SHIFT          8
+#define RTL8139_RXCONFIG_DMA_UNLIMITED      (7 << RTL8139_RXCONFIG_DMA_SHIFT)
+
+/* rx ring buffer length */
+#define RTL8139_RXCONFIG_RCV_8K             0
+#define RTL8139_RXCONFIG_RCV_16K            (1 << 11)
+#define RTL8139_RXCONFIG_RCV_32K            (1 << 12)
+#define RTL8139_RXCONFIG_RCV_64K            (1 << 11) | (1 << 12)
+
+
+void rtl8139_output(void)
+{
+    printk("rtl_8139_output\n");
+}
+
+void rtl8139_input(void)
+{
+    printk("rtl_8139_input\n");
+}
+
+// Software Reset and check
+void rtl8139_reset(void)
+{
+    io_out8(rtl8139_config.io_base + RTL8139_IO_CMD, 0x10);
+    while ((io_in8(rtl8139_config.io_base + RTL8139_IO_CMD) & 0x10) != 0);
+}
+
+void irq_rtl8139_handle(void)
+{
+    printk("irq rtl8139:%#x.\n", io_in16(rtl8139_config.io_base + RTL8139_IO_ISR));
+    io_out16(rtl8139_config.io_base + RTL8139_IO_ISR, 0x05);
+}
+
+static struct netif netif;
+
+void rtl_8139_init2(void)
+{
+    printk("rtl_8139_init2\n");
+}
+
+void rtl8139_buf_init(void)
+{
+
+}
+
+void rtl8139_hw_init(void)
+{
+    
+    // Software Reset and check
+    rtl8139_reset();
+
+    //Out8(private->ioAddress + CFG9346, CFG9346_UNLOCK);
+    //In8(private->ioAddress + CFG9346);   // flush
+
+    // Open
+    io_out8(rtl8139_config.io_base + RTL8139_IO_CMD, 0x0C); // Sets the RE and TE bits high
+
+    io_out32(rtl8139_config.io_base + RTL8139_IO_RXCONFIG, \
+             RTL8139_RXCONFIG_RCV_32K          |
+             RTL8139_RXCONFIG_WRAP             |
+             RTL8139_RXCONFIG_FIFO_NONE        |
+             RTL8139_RXCONFIG_DMA_UNLIMITED    |
+             RTL8139_RXCONFIG_ACCEPT_ALLPHYS   | 
+             RTL8139_RXCONFIG_ACCEPT_MYPHYS    | 
+             RTL8139_RXCONFIG_ACCEPT_MULTICAST | 
+             RTL8139_RXCONFIG_ACCEPT_BROADCAST);
+
+    io_out32(rtl8139_config.io_base + RTL8139_IO_TXCONFIG, 0);
+
+
+    // Out32(private->ioAddress + TX_CONFIG, rtl8139TxConfig);
+
+    
+
+    //Out8(private->ioAddress + CFG9346, CFG9346_LOCK);
+
+    // Clear Rx Missed
+    io_out32(rtl8139_config.io_base + RTL8139_IO_RXMISSED, 0);
+    
+
+    // Set IMR + ISR(Transmit OK and Receive OK)
+    //io_out16(rtl8139_config.io_base + RTL8139_IO_IMR, RTL8139_IMR_RXOK | RTL8139_IMR_TXOK);
+    io_out16(rtl8139_config.io_base + RTL8139_IO_IMR, 0xff);
+}
+
+void rtl8139_init(uint8_t bus, uint8_t device, uint8_t function)
+{
+    uint32_t bar;
+    uint16_t cmd;
+    void * rx_buffer;
+    char i;
+
+    ip_addr_t ipaddr  = IPADDR4_INIT_BYTES(0, 0, 0, 0);
+    ip_addr_t netmask = IPADDR4_INIT_BYTES(0, 0, 0, 0);
+    ip_addr_t gateway = IPADDR4_INIT_BYTES(0, 0, 0, 0);
+
+    printk("RTL 8139 Network Controller\n");
+
+   // netif_add(struct netif *netif,
+    //                        const ip4_addr_t *ipaddr, const ip4_addr_t *netmask, const ip4_addr_t *gw,
+    //                        void *state, netif_init_fn init, netif_input_fn input);
+
+    // Get the base IO address
+    for (int i = 4; i < 9; i ++)
+    {
+        bar = pci_config_read_dword(bus, device, function, i);
+        printk("    BAR%d:%#x\n", i, bar);
+        if (bar & 0x01)
+        {
+            rtl8139_config.io_base = bar & 0xfffffffc;
+            //break;
+        }
+    }
+
+    // Enable PCI Bus Mastering for this device
+    cmd = pci_config_read_dword(bus, device, function, 1);
+    pci_config_write_dword(bus, device, function, 1, cmd | 0x04);
+
+    // Set the LWAKE + LWPTN to active high
+    io_out8(rtl8139_config.io_base + RTL8139_IO_CONFIG_1, 0x0);
+
+    // Set the receive memory buffer
+    rx_buffer = vmalloc(8192 + 16, VM_CTND | VM_WAIT);
+    io_out32(rtl8139_config.io_base + RTL8139_IO_RBSTART, (u32)paging_virt2phys(rx_buffer));
+
+    printk("Mac addr:%#x:%#x:%#x:%#x:%#x:%#x\n", io_in8(rtl8139_config.io_base + RTL8139_IO_MAC(0)), io_in8(rtl8139_config.io_base + RTL8139_IO_MAC(1)), io_in8(rtl8139_config.io_base + RTL8139_IO_MAC(2)), io_in8(rtl8139_config.io_base + RTL8139_IO_MAC(3)), io_in8(rtl8139_config.io_base + RTL8139_IO_MAC(4)), io_in8(rtl8139_config.io_base + RTL8139_IO_MAC(5)));
+    
+    // Register in LwIP
+    memset(&netif, 0, sizeof(struct netif));
+
+    netif.hwaddr_len = ETHARP_HWADDR_LEN;
+    for (i = 0; i < ETHARP_HWADDR_LEN; i ++)
+        netif.hwaddr[i] = io_in8(rtl8139_config.io_base + RTL8139_IO_MAC(i));
+
+    netif.flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_LINK_UP;
+
+    netif_add(&netif, &ipaddr, &netmask, &gateway, NULL, &rtl_8139_init2, &rtl8139_input);
+
+    netif.mtu = 1500;
+
+    netif_set_default(&netif);
+    netif_set_up(&netif);
+
+    dhcp_start(&netif);
+
+    register_PIC(11, &irq_rtl8139_handle, "RTL8139 Network Controller");
+
+    rtl8139_buf_init();
+
+    rtl8139_hw_init();
+}
