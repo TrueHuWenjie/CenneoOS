@@ -27,11 +27,11 @@
 Clone with SSH
 
 
-    git@git.cenneo.com:HuWenjie/cenneo-os-project.git
+    git@github.com:TrueHuWenjie/CenneoOS.git
 
 Clone with HTTP
 
-    http://git.cenneo.com/HuWenjie/cenneo-os-project.git
+    https://github.com/TrueHuWenjie/CenneoOS.git
 
 ## 引导程序 ##
 
